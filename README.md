@@ -1,0 +1,1 @@
+# Fullstack Data Science Club of Lublin University of Technology GraphQL app
