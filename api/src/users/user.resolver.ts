@@ -1,27 +1,47 @@
-import { Args, Query, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { Roles, UserModel } from '../common/models'
+import { CreateUserInput } from '../common/dtos'
+import { User } from '../common/entities'
+
 import { UserService } from './user.service'
 
 
-const users: UserModel[] = [
-    {
-        displayName: 'witek',
-        fullName: 'Witold Zawada',
-        email: 'wit@email.com',
-        role: Roles.Student,
-        password: 'password'
-    }
-]
-
-@Resolver(_of => UserModel)
+@Resolver(() => User)
 export class UserResolver {
     constructor(
         private readonly userService: UserService
     ) {}
 
-    @Query(() => UserModel)
-    async author(@Args('id', { type: () => String }) id: string) {
-        return
+
+    @Query(() => User)
+    public async getUser(
+        @Args('field') field: string,
+        @Args('value') value: string
+    ): Promise<User> {
+        try {
+            const user = await this.userService.findOneByField(field, value)
+            return user
+        } catch (err) {
+            throw err
+        }
+    }
+
+    @Query(() => [User])
+    public async getUsers(): Promise<User[]> {
+        try {
+            return this.userService.findAll()
+        } catch (err) {
+            throw err
+        }
+    }
+
+    @Mutation(() => User)
+    public async createUser(@Args('createUserInput') data: CreateUserInput): Promise<User> {
+        try {
+            const user = await this.userService.create(data)
+            return user
+        } catch (err) {
+            throw err
+        }
     }
 }
