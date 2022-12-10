@@ -12,12 +12,20 @@ type User {
   email: String!
 }
 
+type AuthResult {
+  user: User
+  token: String
+}
+
 type Query {
   getUser(field: String!, value: String!): User!
   getUsers: [User!]!
 }
 
 type Mutation {
+  register(createUserInput: CreateUserInput!): AuthResult!
+  login(credentialsInput: CredentialsInput!): AuthResult!
+  whoAmI: User!
   createUser(createUserInput: CreateUserInput!): User!
 }
 
@@ -26,4 +34,9 @@ input CreateUserInput {
   password: String!
   displayName: String!
   fullName: String!
+}
+
+input CredentialsInput {
+  email: String!
+  password: String!
 }

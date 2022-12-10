@@ -32,7 +32,9 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
 		methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE']
     })
 
-    app.register(fastifyHelmet)
+    app.register(fastifyHelmet, { 
+        contentSecurityPolicy: (process.env.NODE_ENV === 'production') ? undefined : false 
+    })
 
     app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector))
 

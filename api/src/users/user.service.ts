@@ -8,7 +8,11 @@ import { User } from '../common/entities'
 import { isUniqueError } from '../common/utils'
 
 
-Injectable()
+interface findOneByFieldOptions {
+    throwError?: boolean
+}
+
+@Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User) 
@@ -44,12 +48,14 @@ export class UserService {
         }
     }
 
-    public async findOneByField(field: string, value: string | number) {
+    public async findOneByField(field: string, value: string | number, options?: findOneByFieldOptions) {
         try {
             const user = await this.userRepository.findOne({ where: { [field]: value } })
 
-            if(!user) {
-                throw new NotFoundException(`User with ${field} of value ${value} not found`)
+            if(options && options.throwError) {
+                if(!user) {
+                    throw new NotFoundException(`User with ${field} of value ${value} not found`)
+                }
             }
 
             return user

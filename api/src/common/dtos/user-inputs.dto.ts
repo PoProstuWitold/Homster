@@ -1,5 +1,6 @@
-import { Field, InputType } from '@nestjs/graphql'
+import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { IsNotEmpty, NotContains, Length, Matches, IsEmail } from 'class-validator'
+import { User } from '../entities'
 
 
 @InputType()
@@ -45,4 +46,33 @@ export class CreateUserInput {
     })
     @Field()
     public fullName: string
+}
+
+@InputType()
+export class CredentialsInput {
+    @IsEmail()
+    @Field()
+    public email: string
+
+
+    @IsNotEmpty({
+        message: 'Password cannot be empty or whitespace'
+    })
+    @NotContains(' ', {
+        message: 'Password cannot be empty or whitespace'
+    })
+    @Length(6, 100, {
+        message: 'Password must be between 6 and 100 characters long'
+    })
+    @Field()
+    public password: string
+}
+
+@ObjectType()
+export class AuthResult {
+    @Field(() => User, { nullable: true })
+    public user?: User
+
+    @Field(() => String, { nullable: true })
+    public token?: string
 }

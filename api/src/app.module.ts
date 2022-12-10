@@ -5,8 +5,10 @@ import { GraphQLModule } from '@nestjs/graphql'
 import { MercuriusDriver, MercuriusDriverConfig } from '@nestjs/mercurius'
 import { join } from 'path'
 
-import { UserModule } from './users/user.module'
 import { User } from './common/entities'
+
+import { UserModule } from './users/user.module'
+import { AuthModule } from './auth/auth.module'
 
 
 @Module({
@@ -48,6 +50,7 @@ import { User } from './common/entities'
                 return { statusCode: 500, response: execution }
             }
 		}),
+        AuthModule,
 		UserModule
 	]
 })
