@@ -3,7 +3,6 @@ module.exports = {
 		"./index.html",
 		"./src/**/*.{js,ts,jsx,tsx,css,md,mdx,html,json,scss}",
 	],
-	darkMode: "class",
 	theme: {
 		extend: {},
 	},
@@ -15,4 +14,26 @@ module.exports = {
 		require("daisyui"),
 		require("prettier-plugin-tailwindcss")
 	],
+	daisyui: {
+		styled: true,
+		themes: true,
+		base: true,
+		utils: true,
+		logs: true,
+		rtl: false,
+		themes: [
+			'default',
+			'light',
+			'dark',
+			'emerald',
+			'synthwave',
+			'retro',
+			'halloween',
+			'forest',
+			'winter'
+		]
+	},
+	fontFamily: {
+		'sans': ['Montserrat', 'sans-serif']
+	}
 }

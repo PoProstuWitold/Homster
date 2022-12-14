@@ -1,13 +1,18 @@
-import type { Component } from 'solid-js'
+import { Component } from 'solid-js'
+import { NavBar } from './components/NavBar'
 
 const App: Component = () => {
   	return (
-		<header class="h-screen bg-gradient-to-b from-gray-900 to-slate-800 flex flex-col text-white p-20">
-			<h1 class="text-5xl font-bold text-center mb-2">Create Tailwind</h1>
-			<p class="text-center mb-6 text-xl">
-				If you like this project, consider giving it a star on GitHub!
-			</p>
-		</header>
+		<>
+			<NavBar />
+			<>
+			<main>
+				<div>
+					<h2 class="mb-4 text-2xlfont-bold">Main content</h2>
+				</div>
+			</main>
+			</>
+		</>
   	)
 }
 

@@ -38,6 +38,7 @@ import { AuthModule } from './auth/auth.module'
 			driver: MercuriusDriver,
 			graphiql: true,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+            subscription: true,
             errorFormatter: execution => {
                 const [error] = execution.errors // take first error
                 const originalError = error?.originalError
