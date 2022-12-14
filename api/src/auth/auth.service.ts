@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { verify } from 'argon2'
 
+import { UserService } from '../users/user.service'
+
 import { isUniqueError } from '../common/utils'
 import { AuthResult, CreateUserInput, CredentialsInput } from '../common/dtos'
 import { InvalidCredentials } from '../common/exceptions'
 import { User } from '../common/entities'
 
-import { UserService } from '../users/user.service'
 
 export interface AccessToken {
     sub: {

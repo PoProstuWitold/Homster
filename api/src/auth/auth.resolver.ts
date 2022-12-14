@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
-import { GqlContext, GqlFastifyContext } from '../common/decorators'
 
+import { GqlContext, GqlFastifyContext } from '../common/decorators'
 import { AuthResult, CreateUserInput, CredentialsInput } from '../common/dtos'
 import { JwtGuard } from '../common/guards'
 

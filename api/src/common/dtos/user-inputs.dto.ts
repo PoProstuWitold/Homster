@@ -1,11 +1,22 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql'
-import { IsNotEmpty, NotContains, Length, Matches, IsEmail } from 'class-validator'
+import { IsNotEmpty, NotContains, Length, Matches, IsEmail, ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments, Validate } from 'class-validator'
 import { User } from '../entities'
 
+@ValidatorConstraint({ name: 'customEmail', async: false })
+export class CustomEmail implements ValidatorConstraintInterface {
+    validate(text: string, _args: ValidationArguments) {
+        return text.endsWith('@pollub.pl') || text.endsWith('@pollub.edu.pl')
+    }
+
+    defaultMessage(_args: ValidationArguments) {
+        return 'Email should have domain of "@pollub.pl" or "@pollub.edu.pl"';
+    }
+}
 
 @InputType()
 export class CreateUserInput {
     @IsEmail()
+    @Validate(CustomEmail)
     @Field()
     public email: string
 
