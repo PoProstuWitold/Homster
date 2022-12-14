@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql'
 import { IsNotEmpty, NotContains, Length, Matches, IsEmail } from 'class-validator'
 import { User } from '../entities'
 
@@ -70,9 +70,15 @@ export class CredentialsInput {
 
 @ObjectType()
 export class AuthResult {
+    @Field(() => Int, { nullable: true })
+    public statusCode?: number
+
+    @Field(() => String, { nullable: true })
+    public message?: string
+
     @Field(() => User, { nullable: true })
     public user?: User
 
     @Field(() => String, { nullable: true })
-    public token?: string
+    public accessToken?: string
 }

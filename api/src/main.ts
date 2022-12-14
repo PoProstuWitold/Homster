@@ -3,6 +3,7 @@ import { ClassSerializerInterceptor } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import { fastifyHelmet } from '@fastify/helmet'
+import fastifyCookie from '@fastify/cookie'
 import { useContainer } from 'class-validator'
 
 import { CustomValidationPipe } from './common/pipes'
@@ -32,7 +33,15 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
 		methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE']
     })
 
-    app.register(fastifyHelmet, { 
+    await app.register(fastifyCookie, {
+        secret: configService.get('cookie.secret'),
+        parseOptions: {
+            secure: configService.get('NODE_ENV') === 'production' ? true : false,
+            httpOnly: true
+        }
+    })
+    
+    await app.register(fastifyHelmet, { 
         contentSecurityPolicy: (process.env.NODE_ENV === 'production') ? undefined : false 
     })
 

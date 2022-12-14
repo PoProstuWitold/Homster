@@ -19,7 +19,10 @@ export class UserResolver {
         @Args('value') value: string
     ): Promise<User> {
         try {
-            const user = await this.userService.findOneByField(field, value)
+            const user = await this.userService.findOneByField(field, value, {
+                throwError: true
+            })
+            
             return user
         } catch (err) {
             throw err
