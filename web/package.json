@@ -13,6 +13,7 @@
 	},
 	"dependencies": {
 		"@modular-forms/solid": "^0.9.1",
+		"@solidjs/router": "^0.5.1",
 		"@urql/core": "^3.1.1",
 		"graphql": "^16.6.0",
 		"graphql-ws": "^5.11.2",
@@ -20,7 +21,8 @@
 		"solid-js": "^1.6.5",
 		"tailwind-merge": "^1.8.0",
 		"theme-change": "^2.2.0",
-		"wonka": "^6.1.2"
+		"wonka": "^6.1.2",
+		"zod": "^3.20.2"
 	},
 	"devDependencies": {
 		"@tailwindcss/aspect-ratio": "^0.4.2",
