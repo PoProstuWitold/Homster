@@ -24,18 +24,18 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
     }
     
     const signInUser = (values: SignInValues) => {
-        // client
-        //     .mutation(
-        //         loginMutation,
-        //         {
-        //             email: values.email,
-        //             password: values.password,
-        //         }
-        //     )
-        //     .toPromise()
-        //     .then(result => {
-        //         console.log(result.data)
-        //     })
+        client
+            .mutation(
+                loginMutation,
+                {
+                    email: values.email,
+                    password: values.password,
+                }
+            )
+            .toPromise()
+            .then(result => {
+                console.log(result.data)
+            })
 
         console.log(values)
     }
@@ -73,20 +73,20 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
     }
     
     const signUpUser = (values: SignUpValues) => {
-        // client
-        //     .mutation(
-        //         registerMutation,
-        //         {
-        //             fullName: values.fullName,
-        //             displayName: values.displayName,
-        //             email: values.email,
-        //             password: values.password,
-        //         }
-        //     )
-        //     .toPromise()
-        //     .then(result => {
-        //         console.log(result.data)
-        //     })
+        client
+            .mutation(
+                registerMutation,
+                {
+                    fullName: values.fullName,
+                    displayName: values.displayName,
+                    email: values.email,
+                    password: values.password,
+                }
+            )
+            .toPromise()
+            .then(result => {
+                console.log(result.data)
+            })
 
         console.log(values)
     }
