@@ -2,6 +2,7 @@ import { Component, lazy } from 'solid-js'
 import { Routes, Route } from '@solidjs/router'
 import { NavBar } from './components/NavBar'
 import { themeChange } from 'theme-change'
+import { cacheExchange, dedupExchange, fetchExchange, createClient } from '@urql/core'
 
 const About = lazy(() => import('./pages/About'))
 const Home = lazy(() => import('./pages/Home'))
@@ -9,6 +10,21 @@ const Members = lazy(() => import('./pages/Members'))
 const Profile = lazy(() => import('./pages/Profile'))
 const SignIn = lazy(() => import('./pages/SignIn'))
 const SignUp = lazy(() => import('./pages/SignUp'))
+
+export const client = createClient({
+	url: 'http://localhost:4000/graphql',
+	requestPolicy: 'cache-first',
+	exchanges: [
+		dedupExchange,
+		cacheExchange,
+		fetchExchange,
+	],
+	fetchOptions: () => {
+		return {
+			credentials: 'include'
+		}
+	}
+})
 
 const App: Component = () => {
 	

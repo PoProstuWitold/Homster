@@ -1,10 +1,11 @@
 import { createForm, Form, Field, zodForm } from '@modular-forms/solid'
 import { Component } from 'solid-js'
 import { z } from 'zod'
+import { client } from '../App'
+import { loginMutation, registerMutation } from '../utils/graphql'
 
 import { TextInput } from './TextInput'
 
-/*@once*/
 const LoginForm: Component<any> = ({ formType = 'signin' }) => {
     const signInSchema = z.object({
         email: z
@@ -23,6 +24,19 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
     }
     
     const signInUser = (values: SignInValues) => {
+        // client
+        //     .mutation(
+        //         loginMutation,
+        //         {
+        //             email: values.email,
+        //             password: values.password,
+        //         }
+        //     )
+        //     .toPromise()
+        //     .then(result => {
+        //         console.log(result.data)
+        //     })
+
         console.log(values)
     }
 
@@ -59,6 +73,21 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
     }
     
     const signUpUser = (values: SignUpValues) => {
+        // client
+        //     .mutation(
+        //         registerMutation,
+        //         {
+        //             fullName: values.fullName,
+        //             displayName: values.displayName,
+        //             email: values.email,
+        //             password: values.password,
+        //         }
+        //     )
+        //     .toPromise()
+        //     .then(result => {
+        //         console.log(result.data)
+        //     })
+
         console.log(values)
     }
 
