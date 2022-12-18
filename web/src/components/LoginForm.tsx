@@ -1,5 +1,5 @@
 import { createForm, Form, Field, zodForm } from '@modular-forms/solid'
-import { Component } from 'solid-js'
+import { Component, createSignal } from 'solid-js'
 import { z } from 'zod'
 import { client } from '../App'
 import { loginMutation, registerMutation } from '../utils/graphql'
@@ -7,6 +7,8 @@ import { loginMutation, registerMutation } from '../utils/graphql'
 import { TextInput } from './TextInput'
 
 const LoginForm: Component<any> = ({ formType = 'signin' }) => {
+    const [apiErrors, setApiErrors] = createSignal<any>()
+
     const signInSchema = z.object({
         email: z
             .string()
@@ -23,8 +25,9 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
         password: string
     }
     
-    const signInUser = (values: SignInValues) => {
-        client
+    const signInUser = async (values: SignInValues) => {
+        try {
+            const result = await client
             .mutation(
                 loginMutation,
                 {
@@ -33,11 +36,16 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
                 }
             )
             .toPromise()
-            .then(result => {
-                console.log(result.data)
-            })
+                
+            console.log('result', result)
 
-        console.log(values)
+            if(result.data.errors) {
+                setApiErrors(result.data.errors)
+                console.log('apiErrors', apiErrors())
+            }
+        } catch (err) {
+            console.log('err', err)
+        }
     }
 
     const signIn = createForm<z.infer<typeof signInSchema>>({
@@ -72,8 +80,9 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
         displayName: string
     }
     
-    const signUpUser = (values: SignUpValues) => {
-        client
+    const signUpUser = async (values: SignUpValues) => {
+        try {
+            const result = await client
             .mutation(
                 registerMutation,
                 {
@@ -84,11 +93,16 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
                 }
             )
             .toPromise()
-            .then(result => {
-                console.log(result.data)
-            })
 
-        console.log(values)
+            console.log('result', result)
+
+            if(result.data.errors) {
+                setApiErrors(result.data.errors)
+                console.log('apiErrors', apiErrors())
+            }
+        } catch (err) {
+            console.log('err', err)
+        }
     }
 
     const signUp = createForm<z.infer<typeof signUpSchema>>({
@@ -115,7 +129,7 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
                                         type="email"
                                         label="Email"
                                         value={field.value}
-                                        error={field.error}
+                                        error={field.error || apiErrors() && apiErrors().email}
                                         required
                                     />
                                 )}
@@ -127,7 +141,7 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
                                         type="password"
                                         label="Password"
                                         value={field.value}
-                                        error={field.error}
+                                        error={field.error || apiErrors() && apiErrors().password}
                                         required
                                     />
                                 )}
@@ -149,7 +163,7 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
                                         type="email"
                                         label="Email"
                                         value={field.value}
-                                        error={field.error}
+                                        error={field.error || apiErrors() && apiErrors().email}
                                         required
                                     />
                                 )}
@@ -161,7 +175,7 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
                                         type="password"
                                         label="Password"
                                         value={field.value}
-                                        error={field.error}
+                                        error={field.error || apiErrors() && apiErrors().password}
                                         required
                                     />
                                 )}
@@ -173,7 +187,7 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
                                         type="text"
                                         label="Full name"
                                         value={field.value}
-                                        error={field.error}
+                                        error={field.error || apiErrors() && apiErrors().fullName}
                                         required
                                     />
                                 )}
@@ -185,7 +199,7 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
                                         type="text"
                                         label="Display name"
                                         value={field.value}
-                                        error={field.error}
+                                        error={field.error || apiErrors() && apiErrors().displayName}
                                         required
                                     />
                                 )}

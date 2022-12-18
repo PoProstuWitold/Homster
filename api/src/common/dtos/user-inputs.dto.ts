@@ -89,7 +89,4 @@ export class AuthResult {
 
     @Field(() => User, { nullable: true })
     public user?: User
-
-    @Field(() => String, { nullable: true })
-    public accessToken?: string
 }

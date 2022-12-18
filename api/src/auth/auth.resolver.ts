@@ -3,15 +3,10 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 import { GqlContext, GqlFastifyContext } from '../common/decorators'
 import { AuthResult, CreateUserInput, CredentialsInput } from '../common/dtos'
-import { JwtGuard } from '../common/guards'
+import { SessionGuard } from '../common/guards'
 
 import { AuthService } from './auth.service'
 
-const authCookieOptions = {
-    httpOnly: true,
-    sameSite: 'lax',
-    maxAge: 30*60
-}
 
 @Resolver('Auth')
 export class AuthResolver {
@@ -25,7 +20,7 @@ export class AuthResolver {
         @GqlContext() ctx: GqlFastifyContext
     ) {
         const result = await this.authService.register(data)
-        ctx.reply.setCookie('dsc_access', result.accessToken, (authCookieOptions as any))
+        ctx.req.session.set('user', result.user)
 
         return {
             statusCode: 200,
@@ -40,7 +35,7 @@ export class AuthResolver {
         @GqlContext() ctx: GqlFastifyContext
     ) {
         const result = await this.authService.login(data)
-        ctx.reply.setCookie('dsc_access', result.accessToken, (authCookieOptions as any))
+        ctx.req.session.set('user', result.user)
 
         return {
             statusCode: 200,
@@ -49,7 +44,7 @@ export class AuthResolver {
         }
     }
 
-    @UseGuards(JwtGuard)
+    @UseGuards(SessionGuard)
     @Query(() => AuthResult)
     public async whoAmI(
         @GqlContext() ctx: GqlFastifyContext,
@@ -57,16 +52,17 @@ export class AuthResolver {
         return {
             statusCode: 200,
             message: 'Your profile',
-            user: ctx.req.user,
+            user: ctx.req.session.get('user'),
         }
     }
 
-    @UseGuards(JwtGuard)
+    @UseGuards(SessionGuard)
     @Query(() => AuthResult)
     public async logout(
         @GqlContext() ctx: GqlFastifyContext,
     ) {
-        ctx.reply.clearCookie('dsc_access')
+        ctx.req.session.delete()
+        
         return {
             statusCode: 200,
             message: 'Logged out',

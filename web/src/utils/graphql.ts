@@ -54,6 +54,16 @@ query whoAmI{
     }
   }
 `
+
+export const logoutQuery = `
+query logout {
+  logout {
+    message
+    statusCode
+  }
+}
+`
+
 export const getAllUsersQuery = `
 query getAllUsers{
 	getUsers {

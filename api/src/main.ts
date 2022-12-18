@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import { fastifyHelmet } from '@fastify/helmet'
 import fastifyCookie from '@fastify/cookie'
+import fastifySecureSession from '@fastify/secure-session'
 import { useContainer } from 'class-validator'
 
 import { CustomValidationPipe } from './common/pipes'
@@ -21,6 +22,13 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
     const reflector = app.get(Reflector)
 
     const productionDomain = configService.get('web.production_origin')
+
+    const keys = {
+        key1: configService.get('session.key1'),
+        key2: configService.get('session.key2')
+    }
+
+    const { key1, key2 } = keys
 
     // GLOBAL MIDDLEWARES
     app.enableCors({
@@ -43,6 +51,20 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
     
     await app.register(fastifyHelmet, { 
         contentSecurityPolicy: (process.env.NODE_ENV === 'production') ? undefined : false 
+    })
+
+    await app.register(fastifySecureSession, {
+        key: [
+            Buffer.from(key1, 'hex'),
+            Buffer.from(key2, 'hex')
+        ],
+        cookieName: 'dsc_session',
+        cookie: {
+            secure: configService.get('NODE_ENV') === 'production' ? true : false,
+            httpOnly: true,
+            sameSite: 'lax',
+            path: '/'
+        }
     })
 
     app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector))
