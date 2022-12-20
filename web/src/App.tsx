@@ -2,6 +2,7 @@ import { Component, createResource, lazy, Show } from 'solid-js'
 import { Routes, Route } from '@solidjs/router'
 import { themeChange } from 'theme-change'
 import { dedupExchange, fetchExchange, createClient } from '@urql/core'
+import { cacheExchange } from '@urql/exchange-graphcache'
 
 import { NavBar } from './components/NavBar'
 import { whoAmIQuery } from './utils/graphql'
@@ -19,6 +20,15 @@ export const client = createClient({
 	requestPolicy: 'cache-first',
 	exchanges: [
 		dedupExchange,
+		cacheExchange({
+			keys: {
+				AuthResult: (data) => {
+					//@ts-ignore
+					return data.user.id as string
+				},
+				User: () => null
+			}
+		}),
 		fetchExchange,
 	],
 	fetchOptions: () => {
@@ -54,8 +64,8 @@ const App: Component = () => {
 
   	return (
 		<>
+			<NavBar />
 			<Show when={!user.loading}>
-				<NavBar />
 				<Routes>
 					<Route path="/" element={Home} />
 					<Route path="/about" element={About} />
