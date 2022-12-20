@@ -2,10 +2,11 @@ import { createResource, Show } from 'solid-js'
 
 import { client } from '../App'
 import { whoAmIQuery } from '../utils/graphql'
+import { withAuth, AuthOption } from '../utils/withAuth'
 
 const Profile = () => {
 
-	const [profile, { refetch }] = createResource(async () => {
+	const [profile] = createResource(async () => {
 		const { data } = await client.query(whoAmIQuery, {}).toPromise()
 		
 		return data.whoAmI.user
@@ -24,4 +25,4 @@ const Profile = () => {
     )
 }
 
-export default Profile
+export default withAuth(AuthOption.REQUIRED, Profile)

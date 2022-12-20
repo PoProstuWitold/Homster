@@ -1,3 +1,5 @@
+import { withAuth, AuthOption } from '../utils/withAuth'
+
 const Members = () => {
     return (
 		<>
@@ -8,4 +10,4 @@ const Members = () => {
     )
 }
 
-export default Members
+export default withAuth(AuthOption.ANY, Members)

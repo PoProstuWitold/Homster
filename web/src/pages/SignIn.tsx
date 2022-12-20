@@ -1,4 +1,5 @@
 import { LoginForm } from '../components/LoginForm'
+import { withAuth, AuthOption } from '../utils/withAuth'
 
 const SignIn = () => {
     return (
@@ -10,4 +11,4 @@ const SignIn = () => {
     )
 }
 
-export default SignIn
+export default withAuth(AuthOption.FORBIDDEN, SignIn)

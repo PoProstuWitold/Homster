@@ -2,6 +2,7 @@ import { createResource, Show } from 'solid-js'
 
 import { client } from '../App'
 import { getAllUsersQuery } from '../utils/graphql'
+import { withAuth, AuthOption } from '../utils/withAuth'
 
 const Home = () => {
 
@@ -24,4 +25,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default withAuth(AuthOption.ANY, Home)

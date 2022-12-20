@@ -1,11 +1,11 @@
-import { Component, createResource, lazy } from 'solid-js'
+import { Component, createResource, lazy, Show } from 'solid-js'
 import { Routes, Route } from '@solidjs/router'
 import { themeChange } from 'theme-change'
 import { dedupExchange, fetchExchange, createClient } from '@urql/core'
 
 import { NavBar } from './components/NavBar'
 import { whoAmIQuery } from './utils/graphql'
-import { appState, setAppState } from './utils/store'
+import { setAppState } from './utils/store'
 
 const About = lazy(() => import('./pages/About'))
 const Home = lazy(() => import('./pages/Home'))
@@ -54,15 +54,17 @@ const App: Component = () => {
 
   	return (
 		<>
-			<NavBar />
-			<Routes>
-				<Route path="/" element={Home} />
-				<Route path="/about" element={About} />
-				<Route path="/members" element={Members} />
-				<Route path="/profile" element={Profile} />
-				<Route path="/signin" element={SignIn} />
-				<Route path="/signup" element={SignUp} />
-			</Routes>
+			<Show when={!user.loading}>
+				<NavBar />
+				<Routes>
+					<Route path="/" element={Home} />
+					<Route path="/about" element={About} />
+					<Route path="/members" element={Members} />
+					<Route path="/profile" element={Profile} />
+					<Route path="/signin" element={SignIn} />
+					<Route path="/signup" element={SignUp} />
+				</Routes>
+			</Show>
 		</>
   	)
 }
