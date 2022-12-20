@@ -10,9 +10,13 @@ mutation Register($fullName: String!, $displayName: String! $email: String! $pas
 		statusCode
 		message
 		user {
-				id
-				displayName
-				role
+      id
+      displayName
+      fullName
+      email
+      role
+      createdAt
+      updatedAt
 			}
     	}
   	}
@@ -28,8 +32,12 @@ mutation Login($email: String! $password: String!) {
       message
 		user {
 			id
-			displayName
-			role
+      displayName
+      fullName
+      email
+      role
+      createdAt
+      updatedAt
 		}
     }
 }

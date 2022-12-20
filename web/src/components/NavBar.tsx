@@ -1,9 +1,11 @@
-import { A } from '@solidjs/router'
 import { Component, Match, Switch } from "solid-js"
+import { A } from '@solidjs/router'
+
 import { client } from '../App'
-import { themes } from "../utils/constans"
+import { themes } from '../utils/constans'
 import { logoutQuery } from '../utils/graphql'
-import { SelectTheme } from "./SelectTheme"
+import { appState, setAppState } from '../utils/store'
+import { SelectTheme } from './SelectTheme'
 
 const NavBar: Component = () => {
 
@@ -13,9 +15,28 @@ const NavBar: Component = () => {
             .query(logoutQuery, {})
 			.toPromise()
 
+			setAppState({ user: {
+				id: '',
+				displayName: '',
+				fullName: '',
+				email: '',
+				role: '',
+				createdAt: '',
+				updatedAt: '',
+			}})
+
 			console.log('logout result', result)
 		} catch (err) {
-			console.log(err)
+			console.error(err)
+			setAppState({ user: {
+				id: '',
+				displayName: '',
+				fullName: '',
+				email: '',
+				role: '',
+				createdAt: '',
+				updatedAt: '',
+			}})
 		}
 	}
 
@@ -51,8 +72,8 @@ const NavBar: Component = () => {
 						<li class="my-1">
 							<A href="/members" class="btn btn-ghost btn-sm normal-case">Members</A>
 						</li>
-						{/* <Switch fallback={null}>
-						<Match when={user()}>
+						<Switch fallback={null}>
+						<Match when={appState.user.id}>
 							<li class="my-1">
 								<A href="/profile" class="btn btn-ghost btn-sm normal-case">Profile</A>
 							</li>
@@ -60,7 +81,7 @@ const NavBar: Component = () => {
 								<button onClick={() => logout()} class="btn btn-ghost btn-sm normal-case">Log out</button>
 							</li>
 						</Match>
-						<Match when={!user()}>
+						<Match when={!appState.user.id}>
 							<li class="my-1">
 								<A href="/signin" class="btn btn-ghost btn-sm normal-case">Sign in</A>
 							</li>
@@ -68,7 +89,7 @@ const NavBar: Component = () => {
 								<A href="/signup" class="btn btn-ghost btn-sm normal-case">Sign up</A>
 							</li>
 						</Match>
-						</Switch> */}
+						</Switch>
 					</ul>
 				</div>
 				<A href="/" class="text-xl normal-case btn btn-ghost">
@@ -92,16 +113,16 @@ const NavBar: Component = () => {
 
 				<SelectTheme themes={themes} />
                 <div class="hidden lg:flex">
-				{/* <Switch fallback={null}>
-					<Match when={user()}>
+				<Switch fallback={null}>
+					<Match when={appState.user.id}>
 						<A href="/profile" class="btn btn-base btn-outline mx-2 normal-case">Profile</A>
                     	<button onClick={() => logout()} class="btn btn-primary mx-2 normal-case">Log out</button>
 					</Match>
-					<Match when={!user()}>
+					<Match when={!appState.user.id}>
 						<A href="/signin" class="btn btn-base btn-outline mx-2 normal-case">Sign in</A>
                     	<A href="/signup" class="btn btn-primary mx-2 normal-case">Sign up</A>
 					</Match>
-				</Switch> */}
+				</Switch>
                 </div>
 			</div>
 		</nav>

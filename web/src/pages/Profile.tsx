@@ -1,4 +1,5 @@
 import { createResource, Show } from 'solid-js'
+
 import { client } from '../App'
 import { whoAmIQuery } from '../utils/graphql'
 
@@ -6,7 +7,7 @@ const Profile = () => {
 
 	const [profile, { refetch }] = createResource(async () => {
 		const { data } = await client.query(whoAmIQuery, {}).toPromise()
-		console.log(data.whoAmI.user)
+		
 		return data.whoAmI.user
 	})
 

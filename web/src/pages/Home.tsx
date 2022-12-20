@@ -1,4 +1,5 @@
 import { createResource, Show } from 'solid-js'
+
 import { client } from '../App'
 import { getAllUsersQuery } from '../utils/graphql'
 

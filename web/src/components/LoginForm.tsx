@@ -1,9 +1,10 @@
-import { createForm, Form, Field, zodForm } from '@modular-forms/solid'
 import { Component, createSignal } from 'solid-js'
+import { createForm, Form, Field, zodForm } from '@modular-forms/solid'
 import { z } from 'zod'
+
 import { client } from '../App'
 import { loginMutation, registerMutation } from '../utils/graphql'
-
+import { appState, setAppState } from '../utils/store'
 import { TextInput } from './TextInput'
 
 const LoginForm: Component<any> = ({ formType = 'signin' }) => {
@@ -37,14 +38,17 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
             )
             .toPromise()
                 
-            console.log('result', result)
+            if(result.data && result.data.login && result.data.login.user) {
+                setAppState({ user: result.data.login.user })
+            }
 
             if(result.data.errors) {
                 setApiErrors(result.data.errors)
-                console.log('apiErrors', apiErrors())
             }
+
+			console.log('signin result', result)
         } catch (err) {
-            console.log('err', err)
+            console.error('err', err)
         }
     }
 
@@ -94,14 +98,17 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
             )
             .toPromise()
 
-            console.log('result', result)
+            if(result.data && result.data.login && result.data.login.user) {
+                setAppState({ user: result.data.login.user })
+            }
 
             if(result.data.errors) {
                 setApiErrors(result.data.errors)
-                console.log('apiErrors', apiErrors())
             }
+            
+			console.log('signup result', result)
         } catch (err) {
-            console.log('err', err)
+            console.error('err', err)
         }
     }
 
