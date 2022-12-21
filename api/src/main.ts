@@ -15,7 +15,9 @@ import { AppModule } from './app.module'
 export async function bootstrap(): Promise<NestFastifyApplication> {
 	const app = await NestFactory.create<NestFastifyApplication>(
 		AppModule,
-		new FastifyAdapter()
+		new FastifyAdapter({
+            logger: true
+        })
 	)
 	
 	const configService = app.get<ConfigService>(ConfigService)

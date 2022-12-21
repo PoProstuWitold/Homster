@@ -20,7 +20,6 @@ type AuthResult {
 
 type Query {
   whoAmI: AuthResult!
-  logout: AuthResult!
   getUser(field: String!, value: String!): User!
   getUsers: [User!]!
 }
@@ -28,6 +27,7 @@ type Query {
 type Mutation {
   register(createUserInput: CreateUserInput!): AuthResult!
   login(credentialsInput: CredentialsInput!): AuthResult!
+  logout: AuthResult!
   createUser(createUserInput: CreateUserInput!): User!
 }
 

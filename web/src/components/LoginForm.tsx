@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 import { client } from '../App'
 import { loginMutation, registerMutation } from '../utils/graphql'
-import { appState, setAppState } from '../utils/store'
+import { setAppState } from '../utils/store'
 import { TextInput } from './TextInput'
 
 const LoginForm: Component<any> = ({ formType = 'signin' }) => {
@@ -42,8 +42,8 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
                 setAppState({ user: result.data.login.user })
             }
 
-            if(result.data.errors) {
-                setApiErrors(result.data.errors)
+            if(result.data && result.data.error && result.data.error.errors) {
+                setApiErrors(result.data.error.errors)
             }
 
 			console.log('signin result', result)
@@ -102,8 +102,8 @@ const LoginForm: Component<any> = ({ formType = 'signin' }) => {
                 setAppState({ user: result.data.login.user })
             }
 
-            if(result.data.errors) {
-                setApiErrors(result.data.errors)
+            if(result.data && result.data.error && result.data.error.errors) {
+                setApiErrors(result.data.error.errors)
             }
             
 			console.log('signup result', result)

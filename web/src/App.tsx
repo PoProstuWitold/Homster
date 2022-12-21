@@ -2,14 +2,13 @@ import { Component, createResource, lazy, Show } from 'solid-js'
 import { Routes, Route } from '@solidjs/router'
 import { themeChange } from 'theme-change'
 import { dedupExchange, fetchExchange, createClient } from '@urql/core'
-import { cacheExchange } from '@urql/exchange-graphcache'
+import { offlineExchange } from '@urql/exchange-graphcache'
+import { makeDefaultStorage } from '@urql/exchange-graphcache/default-storage'
 
 import { NavBar } from './components/NavBar'
 import { whoAmIQuery } from './utils/graphql'
 import { setAppState } from './utils/store'
 import schema from './generated/schema'
-import { Query } from './generated/graphql'
-import gql from 'graphql-tag'
 
 const About = lazy(() => import('./pages/About'))
 const Home = lazy(() => import('./pages/Home'))
@@ -18,14 +17,26 @@ const Profile = lazy(() => import('./pages/Profile'))
 const SignIn = lazy(() => import('./pages/SignIn'))
 const SignUp = lazy(() => import('./pages/SignUp'))
 
+const storage = makeDefaultStorage({
+	idbName: 'dsc_cache',
+	maxAge: 1
+})
+
+const cache = offlineExchange({
+	schema,
+	storage,
+	keys: {
+		User: (data) => data.id as string,
+		AuthResult: () => null
+	}
+})
+
 export const client = createClient({
 	url: 'http://localhost:4000/graphql',
 	requestPolicy: 'cache-and-network',
 	exchanges: [
 		dedupExchange,
-		cacheExchange({
-			schema
-		}),
+		cache,
 		fetchExchange,
 	],
 	fetchOptions: () => {
@@ -59,6 +70,11 @@ const App: Component = () => {
 		return data.whoAmI.user
 	})
 
+	client.subscribeToDebugTarget(event => {
+		if (event.source === 'dedupExchange') return
+		console.log(event); // { type, message, operation, data, source, timestamp }
+	})
+	
   	return (
 		<>
 			<NavBar />

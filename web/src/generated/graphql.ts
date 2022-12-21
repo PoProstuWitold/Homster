@@ -36,6 +36,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
   login: AuthResult;
+  logout: AuthResult;
   register: AuthResult;
 };
 
@@ -58,7 +59,6 @@ export type Query = {
   __typename?: 'Query';
   getUser: User;
   getUsers: Array<User>;
-  logout: AuthResult;
   whoAmI: AuthResult;
 };
 

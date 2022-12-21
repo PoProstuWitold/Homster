@@ -45,7 +45,11 @@ import { AuthModule } from './auth/auth.module'
                 if (originalError instanceof HttpException)
                     return {
                         statusCode: originalError.getStatus(),
-                        response: { data: originalError.getResponse() as any }
+                        response: { 
+                            data: {
+                                error: originalError.getResponse() as any
+                            }
+                        }
                     }
                     
                 return { statusCode: 500, response: execution }

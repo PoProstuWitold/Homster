@@ -3,7 +3,7 @@ import { A } from '@solidjs/router'
 
 import { client } from '../App'
 import { themes } from '../utils/constans'
-import { logoutQuery } from '../utils/graphql'
+import { logoutMutation } from '../utils/graphql'
 import { appState, setAppState } from '../utils/store'
 import { SelectTheme } from './SelectTheme'
 
@@ -12,7 +12,7 @@ const NavBar: Component = () => {
 	const logout = async () => {
 		try {
 			const result = await client
-            .query(logoutQuery, {})
+            .mutation(logoutMutation, {})
 			.toPromise()
 
 			setAppState({ user: {

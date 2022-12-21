@@ -57,7 +57,7 @@ export class AuthResolver {
     }
 
     @UseGuards(SessionGuard)
-    @Query(() => AuthResult)
+    @Mutation(() => AuthResult)
     public async logout(
         @GqlContext() ctx: GqlFastifyContext,
     ) {
@@ -66,6 +66,7 @@ export class AuthResolver {
         return {
             statusCode: 200,
             message: 'Logged out',
+            user: null
         }
     }
 }

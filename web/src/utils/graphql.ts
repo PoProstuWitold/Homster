@@ -1,5 +1,3 @@
-import { Cache, QueryInput, Variables } from '@urql/exchange-graphcache'
-
 // MUTATUONS
 export const registerMutation = `
 mutation Register($fullName: String!, $displayName: String! $email: String! $password: String!) {
@@ -10,9 +8,10 @@ mutation Register($fullName: String!, $displayName: String! $email: String! $pas
         password: $password
     }) {
     __typename
-		statusCode
-		message
-		user {
+    statusCode
+    message
+    user {
+      __typename
       id
       displayName
       fullName
@@ -20,9 +19,8 @@ mutation Register($fullName: String!, $displayName: String! $email: String! $pas
       role
       createdAt
       updatedAt
-			}
-    	}
-  	}
+    }
+  }
 `
 
 export const loginMutation = `
@@ -35,6 +33,7 @@ mutation Login($email: String! $password: String!) {
       statusCode
       message
 		user {
+      __typename
 			id
       displayName
       fullName
@@ -56,6 +55,7 @@ query whoAmI{
       statusCode
       message
       user {
+        __typename
         id
         displayName
         fullName
@@ -68,22 +68,36 @@ query whoAmI{
   }
 `
 
-export const logoutQuery = `
-query logout {
+export const logoutMutation = `
+mutation logout {
   logout {
     __typename
-    message
     statusCode
+    message
+    user {
+      id
+      displayName
+      fullName
+      email
+      role
+      createdAt
+      updatedAt
+    }
   }
 }
 `
 
 export const getAllUsersQuery = `
-query getAllUsers{
-	getUsers {
+query getAllUsers {
+  getUsers {
     __typename
-		email
-		fullName
-	}
+    id
+    displayName
+    fullName
+    email
+    role
+    createdAt
+    updatedAt
+  }
 }
 `

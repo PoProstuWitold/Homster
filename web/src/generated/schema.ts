@@ -92,6 +92,18 @@ export default {
             ]
           },
           {
+            "name": "logout",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AuthResult",
+                "ofType": null
+              }
+            },
+            "args": []
+          },
+          {
             "name": "register",
             "type": {
               "kind": "NON_NULL",
@@ -168,18 +180,6 @@ export default {
                     "ofType": null
                   }
                 }
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "logout",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "AuthResult",
-                "ofType": null
               }
             },
             "args": []
