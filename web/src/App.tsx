@@ -7,6 +7,9 @@ import { cacheExchange } from '@urql/exchange-graphcache'
 import { NavBar } from './components/NavBar'
 import { whoAmIQuery } from './utils/graphql'
 import { setAppState } from './utils/store'
+import schema from './generated/schema'
+import { Query } from './generated/graphql'
+import gql from 'graphql-tag'
 
 const About = lazy(() => import('./pages/About'))
 const Home = lazy(() => import('./pages/Home'))
@@ -17,17 +20,11 @@ const SignUp = lazy(() => import('./pages/SignUp'))
 
 export const client = createClient({
 	url: 'http://localhost:4000/graphql',
-	requestPolicy: 'cache-first',
+	requestPolicy: 'cache-and-network',
 	exchanges: [
 		dedupExchange,
 		cacheExchange({
-			keys: {
-				AuthResult: (data) => {
-					//@ts-ignore
-					return data.user.id as string
-				},
-				User: () => null
-			}
+			schema
 		}),
 		fetchExchange,
 	],
