@@ -26,7 +26,6 @@ const cache = offlineExchange({
 	schema,
 	storage,
 	keys: {
-		User: (data) => data.id as string,
 		AuthResult: () => null
 	}
 })

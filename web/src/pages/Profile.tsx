@@ -2,23 +2,18 @@ import { createResource, Show } from 'solid-js'
 
 import { client } from '../App'
 import { whoAmIQuery } from '../utils/graphql'
+import { appState } from '../utils/store'
 import { withAuth, AuthOption } from '../utils/withAuth'
 
 const Profile = () => {
-
-	const [profile] = createResource(async () => {
-		const { data } = await client.query(whoAmIQuery, {}).toPromise()
-		
-		return data.whoAmI.user
-	})
-
+	
     return (
 		<>
 			<main>
-                <Show when={!profile.loading}>
+                <Show when={appState.user.id}>
 					profile
 					<br />
-					{profile().email}
+					{appState.user.email}
 				</Show>
 			</main>
 		</>
