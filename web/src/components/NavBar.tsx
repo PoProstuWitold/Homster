@@ -15,28 +15,12 @@ const NavBar: Component = () => {
             .mutation(logoutMutation, {})
 			.toPromise()
 
-			setAppState({ user: {
-				id: '',
-				displayName: '',
-				fullName: '',
-				email: '',
-				role: '',
-				createdAt: '',
-				updatedAt: '',
-			}})
+			setAppState({ user: null})
 
 			console.log('logout result', result)
 		} catch (err) {
 			console.error(err)
-			setAppState({ user: {
-				id: '',
-				displayName: '',
-				fullName: '',
-				email: '',
-				role: '',
-				createdAt: '',
-				updatedAt: '',
-			}})
+			setAppState({ user: null})
 		}
 	}
 

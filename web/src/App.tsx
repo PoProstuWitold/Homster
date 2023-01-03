@@ -1,9 +1,10 @@
-import { Component, createResource, lazy, Show } from 'solid-js'
+import { Component, createSignal, lazy, onMount, Show } from 'solid-js'
 import { Routes, Route } from '@solidjs/router'
 import { themeChange } from 'theme-change'
 import { dedupExchange, fetchExchange, createClient } from '@urql/core'
 import { offlineExchange } from '@urql/exchange-graphcache'
 import { makeDefaultStorage } from '@urql/exchange-graphcache/default-storage'
+import { Provider } from 'solid-urql'
 
 import { NavBar } from './components/NavBar'
 import { whoAmIQuery } from './utils/graphql'
@@ -48,25 +49,21 @@ export const client = createClient({
 const App: Component = () => {
 	
 	themeChange()
-	
-	const [user] = createResource(async () => {
-		const { data } = await client.query(whoAmIQuery, {}).toPromise()
 
-		if(data.whoAmI && data.whoAmI.user) {
-			setAppState({ user: data.whoAmI.user })
-		} else {
-			setAppState({ user: {
-				id: '',
-				displayName: '',
-				fullName: '',
-				email: '',
-				role: '',
-				createdAt: '',
-				updatedAt: '',
-			}})
-		}
+	const [loaded, setLoaded] = createSignal<boolean>(false)
 
-		return data.whoAmI.user
+	onMount(() => {
+		(async () => {
+			const { data, error } = await client.query(whoAmIQuery, {}).toPromise()
+
+			if(data.whoAmI && data.whoAmI.user && !error) {
+				setAppState({ user: data.whoAmI.user })
+			} else {
+				setAppState({ user: null})
+			}
+
+			setLoaded(true)
+		})()
 	})
 
 	client.subscribeToDebugTarget(event => {
@@ -76,17 +73,19 @@ const App: Component = () => {
 	
   	return (
 		<>
-			<NavBar />
-			<Show when={!user.loading}>
-				<Routes>
-					<Route path="/" element={Home} />
-					<Route path="/about" element={About} />
-					<Route path="/members" element={Members} />
-					<Route path="/profile" element={Profile} />
-					<Route path="/signin" element={SignIn} />
-					<Route path="/signup" element={SignUp} />
-				</Routes>
-			</Show>
+			<Provider value={client}>
+				<NavBar />
+				<Show when={loaded()}>
+					<Routes>
+						<Route path="/" element={Home} />
+						<Route path="/about" element={About} />
+						<Route path="/members" element={Members} />
+						<Route path="/profile" element={Profile} />
+						<Route path="/signin" element={SignIn} />
+						<Route path="/signup" element={SignUp} />
+					</Routes>
+				</Show>
+			</Provider>
 		</>
   	)
 }
