@@ -1,9 +1,9 @@
-import { Component, Match, Switch } from "solid-js"
+import { Component, createResource, Match, Switch } from "solid-js"
 import { A } from '@solidjs/router'
 
 import { client } from '../App'
 import { themes } from '../utils/constans'
-import { logoutMutation } from '../utils/graphql'
+import { logoutMutation, whoAmIQuery } from '../utils/graphql'
 import { appState, setAppState } from '../utils/store'
 import { SelectTheme } from './SelectTheme'
 
@@ -15,9 +15,10 @@ const NavBar: Component = () => {
             .mutation(logoutMutation, {})
 			.toPromise()
 
-			setAppState({ user: null})
+			setAppState({ user: null })
 
 			console.log('logout result', result)
+			console.log('user', appState.user)
 		} catch (err) {
 			console.error(err)
 			setAppState({ user: null})
@@ -57,7 +58,7 @@ const NavBar: Component = () => {
 							<A href="/members" class="btn btn-ghost btn-sm normal-case">Members</A>
 						</li>
 						<Switch fallback={null}>
-						<Match when={appState.user.id}>
+						<Match when={appState && appState.user && appState.user.id}>
 							<li class="my-1">
 								<A href="/profile" class="btn btn-ghost btn-sm normal-case">Profile</A>
 							</li>
@@ -65,7 +66,7 @@ const NavBar: Component = () => {
 								<button onClick={() => logout()} class="btn btn-ghost btn-sm normal-case">Log out</button>
 							</li>
 						</Match>
-						<Match when={!appState.user.id}>
+						<Match when={!appState || !appState.user}>
 							<li class="my-1">
 								<A href="/signin" class="btn btn-ghost btn-sm normal-case">Sign in</A>
 							</li>
@@ -98,11 +99,11 @@ const NavBar: Component = () => {
 				<SelectTheme themes={themes} />
                 <div class="hidden lg:flex">
 				<Switch fallback={null}>
-					<Match when={appState.user.id}>
+					<Match when={appState.user}>
 						<A href="/profile" class="btn btn-base btn-outline mx-2 normal-case">Profile</A>
                     	<button onClick={() => logout()} class="btn btn-primary mx-2 normal-case">Log out</button>
 					</Match>
-					<Match when={!appState.user.id}>
+					<Match when={!appState.user}>
 						<A href="/signin" class="btn btn-base btn-outline mx-2 normal-case">Sign in</A>
                     	<A href="/signup" class="btn btn-primary mx-2 normal-case">Sign up</A>
 					</Match>

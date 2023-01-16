@@ -1,14 +1,13 @@
-import { Component, createSignal, lazy, onMount, Show } from 'solid-js'
+import { Component, lazy, Show, createResource } from 'solid-js'
 import { Routes, Route } from '@solidjs/router'
 import { themeChange } from 'theme-change'
 import { dedupExchange, fetchExchange, createClient } from '@urql/core'
 import { offlineExchange } from '@urql/exchange-graphcache'
 import { makeDefaultStorage } from '@urql/exchange-graphcache/default-storage'
-import { Provider } from 'solid-urql'
 
 import { NavBar } from './components/NavBar'
 import { whoAmIQuery } from './utils/graphql'
-import { setAppState } from './utils/store'
+import { setAppState, appState } from './utils/store'
 import schema from './generated/schema'
 
 const About = lazy(() => import('./pages/About'))
@@ -25,9 +24,10 @@ const storage = makeDefaultStorage({
 
 const cache = offlineExchange({
 	schema,
-	storage,
+	// storage,
 	keys: {
-		AuthResult: () => null
+		AuthResult: () => null,
+		User: () => null,
 	}
 })
 
@@ -49,22 +49,26 @@ export const client = createClient({
 const App: Component = () => {
 	
 	themeChange()
+	const [profile] = createResource(async () => {
+		try {
+			const { data } = await client.query(whoAmIQuery, {}).toPromise()
+			setAppState({ user: data.whoAmI.user })
 
-	const [loaded, setLoaded] = createSignal<boolean>(false)
-
-	onMount(() => {
-		(async () => {
-			const { data, error } = await client.query(whoAmIQuery, {}).toPromise()
-
-			if(data.whoAmI && data.whoAmI.user && !error) {
-				setAppState({ user: data.whoAmI.user })
-			} else {
-				setAppState({ user: null})
+			if(!data.whoAmI.user) {
+				setAppState({ user: null })
+				window.localStorage.removeItem('logged')
 			}
-
-			setLoaded(true)
-		})()
+		
+			console.log('user', appState.user)
+			window.localStorage.setItem('logged', 'true')
+			return data.whoAmI.user
+		} catch (err) {
+			setAppState({ user: null })
+			window.localStorage.removeItem('logged')
+			return null
+		}
 	})
+	
 
 	client.subscribeToDebugTarget(event => {
 		if (event.source === 'dedupExchange') return
@@ -73,9 +77,8 @@ const App: Component = () => {
 	
   	return (
 		<>
-			<Provider value={client}>
-				<NavBar />
-				<Show when={loaded()}>
+			<NavBar />
+			<Show when={!profile.loading || !window.localStorage.getItem('logged')}>
 					<Routes>
 						<Route path="/" element={Home} />
 						<Route path="/about" element={About} />
@@ -84,8 +87,7 @@ const App: Component = () => {
 						<Route path="/signin" element={SignIn} />
 						<Route path="/signup" element={SignUp} />
 					</Routes>
-				</Show>
-			</Provider>
+			</Show>
 		</>
   	)
 }

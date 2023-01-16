@@ -12,16 +12,16 @@ export const withAuth = (option: AuthOption, Component) => {
         return (
             <>
             <Switch fallback={<p>Checking if user is authenticated...</p>}>
-                <Match when={(appState.user.id && option === AuthOption.REQUIRED) || (appState.user.id && option === AuthOption.ANY)}>
+                <Match when={(appState.user && option === AuthOption.REQUIRED) || (appState.user && option === AuthOption.ANY)}>
                     <Component/>
                 </Match>
-                <Match when={(!appState.user.id && option === AuthOption.FORBIDDEN) || (!appState.user.id && option === AuthOption.ANY)}>
+                <Match when={(!appState.user && option === AuthOption.FORBIDDEN) || (!appState.user && option === AuthOption.ANY)}>
                     <Component />
                 </Match>
-                <Match when={!appState.user.id && option === AuthOption.REQUIRED}>
+                <Match when={!appState.user && option === AuthOption.REQUIRED}>
                     <div>You must be logged in</div>
                 </Match>
-                <Match when={appState.user.id && option === AuthOption.FORBIDDEN}>
+                <Match when={appState.user && option === AuthOption.FORBIDDEN}>
                     <div>You can't be logged in</div>
                 </Match>
             </Switch>
