@@ -44,7 +44,7 @@ export class AuthResolver {
 
     @UseGuards(SessionGuard)
     @Query(() => AuthResult)
-    public async whoAmI(
+    public async me(
         @GqlContext() ctx: GqlFastifyContext,
     ) {
         return {

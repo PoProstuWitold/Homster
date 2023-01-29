@@ -19,7 +19,7 @@ type AuthResult {
 }
 
 type Query {
-  whoAmI: AuthResult!
+  me: AuthResult!
   getUser(field: String!, value: String!): User!
   getUsers: [User!]!
 }
