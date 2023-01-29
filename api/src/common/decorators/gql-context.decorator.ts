@@ -1,6 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { FastifyRequest, FastifyReply } from 'fastify'
+
 import { User } from '../entities'
 
 export interface UserRequest extends FastifyRequest {

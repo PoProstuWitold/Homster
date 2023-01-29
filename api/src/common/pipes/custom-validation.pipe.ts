@@ -2,10 +2,9 @@ import { ArgumentMetadata, BadRequestException, HttpException, HttpStatus, Injec
 import { plainToClass } from 'class-transformer'
 import { validate } from 'class-validator'
 
-
 @Injectable()
 export class CustomValidationPipe implements PipeTransform<any> {
-    async transform(value, metadata: ArgumentMetadata) {
+    async transform(value: unknown, metadata: ArgumentMetadata) {
 
         if (!value) {
             throw new BadRequestException('No data submitted')
@@ -32,7 +31,7 @@ export class CustomValidationPipe implements PipeTransform<any> {
         return value
     }
 
-    private buildError(errors) {
+    private buildError(errors: any[]) {
         const result = {}
 
         errors.forEach(el => {
@@ -45,7 +44,7 @@ export class CustomValidationPipe implements PipeTransform<any> {
         return result
     }
 
-    private toValidate(metatype): boolean {
+    private toValidate(metatype: unknown): boolean {
         const types = [String, Boolean, Number, Array, Object]
         
         return !types.find((type) => metatype === type)

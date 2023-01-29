@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common'
 
-
 export class UniqueViolation extends HttpException {
     constructor(field: string) {
         super({

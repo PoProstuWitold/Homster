@@ -7,7 +7,6 @@ import { CreateUserInput } from '../common/dtos'
 import { User } from '../common/entities'
 import { isUniqueError } from '../common/utils'
 
-
 interface findOneByFieldOptions {
     throwError?: boolean
 }

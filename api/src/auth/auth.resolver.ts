@@ -4,9 +4,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { GqlContext, GqlFastifyContext } from '../common/decorators'
 import { AuthResult, CreateUserInput, CredentialsInput } from '../common/dtos'
 import { SessionGuard } from '../common/guards'
-
 import { AuthService } from './auth.service'
-
 
 @Resolver('Auth')
 export class AuthResolver {

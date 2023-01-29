@@ -1,7 +1,6 @@
 import { PostgresErrorCode } from './enums'
 import { UniqueViolation } from './exceptions'
 
-
 export const isUniqueError = (err) => {
     if(err.code == PostgresErrorCode.UniqueViolation) {
         if(err.detail.includes('email')) {

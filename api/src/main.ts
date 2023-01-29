@@ -8,16 +8,12 @@ import fastifySecureSession from '@fastify/secure-session'
 import { useContainer } from 'class-validator'
 
 import { CustomValidationPipe } from './common/pipes'
-
 import { AppModule } from './app.module'
-
 
 export async function bootstrap(): Promise<NestFastifyApplication> {
 	const app = await NestFactory.create<NestFastifyApplication>(
 		AppModule,
-		new FastifyAdapter({
-            logger: true
-        })
+		new FastifyAdapter()
 	)
 	
 	const configService = app.get<ConfigService>(ConfigService)
@@ -71,9 +67,7 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
 
     app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector))
 
-    app.useGlobalPipes(
-        new CustomValidationPipe()
-    )
+    app.useGlobalPipes(new CustomValidationPipe())
 
     useContainer(app.select(AppModule), { fallbackOnErrors: true })
 
