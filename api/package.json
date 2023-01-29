@@ -1,7 +1,7 @@
 {
 	"name": "api",
 	"version": "0.0.1",
-	"description": "GraphQL API for Homster - gaming library",
+	"description": "GraphQL API for Homster - a library of games for young, old and hamsters",
 	"author": "Witold Zawada",
 	"private": true,
 	"license": "MIT",
