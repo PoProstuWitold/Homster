@@ -1,5 +1,5 @@
-import { PostgresErrorCode } from '../common/enums'
-import { UniqueViolation } from '../common/exceptions'
+import { PostgresErrorCode } from './enums'
+import { UniqueViolation } from './exceptions'
 
 
 export const isUniqueError = (err) => {
