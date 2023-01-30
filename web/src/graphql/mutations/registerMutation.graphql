@@ -1,0 +1,12 @@
+mutation Register($fullName: String!, $displayName: String!, $email: String!, $password: String!) {
+	register(
+		createUserInput: {fullName: $fullName, displayName: $displayName, email: $email, password: $password}
+	) {
+		__typename
+		statusCode
+		message
+		user {
+			...User
+		}
+	}
+}

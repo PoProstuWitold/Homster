@@ -20,8 +20,8 @@ type AuthResult {
 
 type Query {
   me: AuthResult!
-  getUser(field: String!, value: String!): User!
-  getUsers: [User!]!
+  user(field: String!, value: String!): User!
+  users: [User!]!
 }
 
 type Mutation {

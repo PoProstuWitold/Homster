@@ -1,0 +1,5 @@
+query GetAllUsers {
+	users {
+		...User
+	}
+}

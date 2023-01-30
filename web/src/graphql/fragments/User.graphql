@@ -1,0 +1,10 @@
+fragment User on User {
+    __typename
+    id
+    displayName
+    fullName
+    email
+    role
+    createdAt
+    updatedAt
+}

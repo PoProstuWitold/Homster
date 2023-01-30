@@ -1,0 +1,12 @@
+mutation Login($email: String!, $password: String!) {
+	login(
+		credentialsInput: {email: $email, password: $password}
+	) {
+		__typename
+		statusCode
+		message
+		user {
+			...User
+		}
+	}
+}

@@ -10,7 +10,7 @@ export class UserResolver {
         private readonly userService: UserService
     ) {}
 
-    @Query(() => User)
+    @Query(() => User, { name: 'user' })
     public async getUser(
         @Args('field') field: string,
         @Args('value') value: string
@@ -26,7 +26,7 @@ export class UserResolver {
         }
     }
 
-    @Query(() => [User])
+    @Query(() => [User], { name: 'users' })
     public async getUsers(): Promise<User[]> {
         try {
             return this.userService.findAll()

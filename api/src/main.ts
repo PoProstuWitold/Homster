@@ -56,7 +56,7 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
             Buffer.from(key1, 'hex'),
             Buffer.from(key2, 'hex')
         ],
-        cookieName: 'dsc_session',
+        cookieName: 'homster_session',
         cookie: {
             secure: configService.get('NODE_ENV') === 'production' ? true : false,
             httpOnly: true,

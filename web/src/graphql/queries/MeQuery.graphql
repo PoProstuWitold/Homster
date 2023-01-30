@@ -1,0 +1,10 @@
+query Me {
+    me {
+        __typename
+        statusCode
+        message
+        user {
+            ...User
+        }
+    }
+}

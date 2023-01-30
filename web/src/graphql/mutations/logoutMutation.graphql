@@ -1,0 +1,10 @@
+mutation Logout {
+	logout {
+		__typename
+		statusCode
+		message
+		user {
+			...User
+		}
+	}
+}
