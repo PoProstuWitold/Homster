@@ -1,11 +1,17 @@
+import '../styles/global.css'
+
 import type { AppProps } from 'next/app'
-import { isServer } from '@/utils'
+import { ThemeProvider } from 'next-themes'
+
+import { NavBar } from '@/components/NavBar'
 
 export default function App({ Component, pageProps }: AppProps) {
   	return (
-		isServer && 
 		<>
-			<Component {...pageProps} />
+			<ThemeProvider>
+				<NavBar />
+				<Component {...pageProps} />
+			</ThemeProvider>
 		</>
 	)
 }

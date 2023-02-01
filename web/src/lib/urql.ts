@@ -1,3 +1,4 @@
+import { isServer } from '@/utils'
 import { NextUrqlClientConfig } from 'next-urql'
 import { dedupExchange, cacheExchange, fetchExchange, Exchange } from 'urql'
 
@@ -7,8 +8,8 @@ export const urqlClient: NextUrqlClientConfig = (ssrExchange: Exchange) => ({
 	exchanges: [
 		dedupExchange,
 		cacheExchange,
-		fetchExchange,
-		ssrExchange
+		ssrExchange,
+		fetchExchange
 	],
 	fetchOptions: () => {
 		return {
