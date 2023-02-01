@@ -21,7 +21,13 @@ type AuthResult {
 type Query {
   me: AuthResult!
   user(field: String!, value: String!): User!
+  updateUser(values: UpdateUserInput!): User!
   users: [User!]!
+}
+
+input UpdateUserInput {
+  displayName: String!
+  fullName: String!
 }
 
 type Mutation {

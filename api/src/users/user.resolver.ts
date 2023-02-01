@@ -1,6 +1,9 @@
+import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { CreateUserInput } from '../common/dtos'
+import { SessionGuard } from '../common/guards'
+import { GqlContext, GqlFastifyContext } from '../common/decorators'
+import { CreateUserInput, UpdateUserInput } from '../common/dtos'
 import { User } from '../common/entities'
 import { UserService } from './user.service'
 
@@ -16,10 +19,25 @@ export class UserResolver {
         @Args('value') value: string
     ): Promise<User> {
         try {
-            const user = await this.userService.findOneByField(field, value, {
-                throwError: true
-            })
+            const user = await this.userService.findOneByField(field, value, { throwError: true })
             
+            return user
+        } catch (err) {
+            throw err
+        }
+    }
+
+    @UseGuards(SessionGuard)
+    @Query(() => User)
+    public async updateUser(
+        @Args('values') values: UpdateUserInput,
+        @GqlContext() ctx: GqlFastifyContext
+    ): Promise<User> {
+        try {
+            const session = await ctx.req.session.get('user')
+            const user = await this.userService.update(session.id, values)
+            ctx.req.session.set('user', user)
+
             return user
         } catch (err) {
             throw err

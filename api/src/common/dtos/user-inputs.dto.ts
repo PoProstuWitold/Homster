@@ -47,6 +47,33 @@ export class CreateUserInput {
 }
 
 @InputType()
+export class UpdateUserInput {
+    @IsNotEmpty({
+        message: 'Display name cannot be empty or whitespace'
+    })
+    @Length(3, 50, {
+        message: 'Display name must be between 3 and 30 characters long'
+    })
+    @Matches(/^[\w](?!.*?\.{2})[\w. ]{1,30}[\w]$/, {
+        message: "Display name can include only letters, numbers and space between words and be max 30 characters long"
+    })
+    @Field()
+    public displayName?: string
+
+    @IsNotEmpty({
+        message: 'Full name cannot be empty or whitespace'
+    })
+    @Length(3, 50, {
+        message: 'Full name must be between 3 and 30 characters long'
+    })
+    @Matches(/^[\w](?!.*?\.{2})[\w. ]{1,30}[\w]$/, {
+        message: "Full name can include only letters, numbers and space between words and be max 30 characters long"
+    })
+    @Field()
+    public fullName?: string
+}
+
+@InputType()
 export class CredentialsInput {
     @IsEmail()
     @Field()
