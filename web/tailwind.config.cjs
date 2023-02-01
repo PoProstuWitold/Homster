@@ -19,7 +19,32 @@ module.exports = {
         logs: true,
         rtl: false,
         themes: [
-            "light", "dark", "emerald"
+            {
+                light: {
+                    "primary": "#66cc8a",
+                    "secondary": "#377cfb",
+                    "accent": "#ea5234", 
+                    "neutral": "#333c4d",
+                    "base-100": "#ffffff", 
+                    "info": "#1c92f2",  
+                    "success": "#009485", 
+                    "warning": "#ff9900",   
+                    "error": "#ff5724",
+                }
+            },
+            {
+                dark: {
+                    "primary": "#66cc8a",
+                    "secondary": "#377cfb",
+                    "accent": "#ea5234", 
+                    "neutral": "#2a2e37",
+                    "base-100": "#3b424e", 
+                    "info": "#1c92f2",  
+                    "success": "#009485", 
+                    "warning": "#ff9900",   
+                    "error": "#ff5724",
+                }
+            },
         ]
     }
 }
