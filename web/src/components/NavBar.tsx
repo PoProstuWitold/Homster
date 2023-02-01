@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import { ThemeChanger } from './ThemeChanger'
 import { Popover } from '@headlessui/react'
+import Link from 'next/link'
 import { AiOutlineUser, AiOutlineClose, AiOutlineShoppingCart, AiOutlineMenu } from  'react-icons/ai'
+
+import { ThemeChanger } from './ThemeChanger'
 import { TopHeader } from './TopHeader'
 
 interface NavBarProps {
@@ -14,27 +16,27 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
     const navigation = {
         pages: [
-            { name: 'Support', href:"#link" }
+            { name: 'Support', href:"/support" }
         ],
         categories: [
             {
                 id: 'store',
                 name: 'Store',
                 sections: [
-                    { name: 'Home', href: '#' },
-                    { name: 'Wishlist', href: '#link' },
-                    { name: 'News', href: '#link' },
-                    { name: 'About', href: '#link' },
+                    { name: 'Home', href: '/store' },
+                    { name: 'Wishlist', href: '/store/wishlist' },
+                    { name: 'News', href: '/store/news' },
+                    { name: 'About', href: '/store/about' },
                 ]
             },
             {
                 id: 'community',
                 name: 'Community',
                 sections: [
-                    { name: 'Home', href: '#link' },
-                    { name: 'Discussions', href: '#link' },
-                    { name: 'Workshop', href: '#link' },
-                    { name: 'Market', href: '#link' }
+                    { name: 'Home', href: '/community' },
+                    { name: 'Discussions', href: '/community/discussions' },
+                    { name: 'Workshop', href: '/community/workshop' },
+                    { name: 'Market', href: '/community/market' }
                 ]
             }
         ]
@@ -56,12 +58,12 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                     {/* Close menu button */}
                     
                     <div className="flex justify-between">
-                        <div className="flex items-center pt-2">
+                        <Link href="/" className="flex items-center pt-2">
                             <div className="w-10 h-10 inline-flex justify-center items-center rounded-full">
                             <svg className="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 10.031v-6.423l-6.036-3.608-5.964 3.569v6.499l-6 3.224v7.216l6.136 3.492 5.864-3.393 5.864 3.393 6.136-3.492v-7.177l-6-3.3zm-1.143.036l-4.321 2.384v-4.956l4.321-2.539v5.111zm-4.895-8.71l4.272 2.596-4.268 2.509-4.176-2.554 4.172-2.551zm-10.172 12.274l4.778-2.53 4.237 2.417-4.668 2.667-4.347-2.554zm4.917 3.587l4.722-2.697v5.056l-4.722 2.757v-5.116zm6.512-3.746l4.247-2.39 4.769 2.594-4.367 2.509-4.649-2.713zm9.638 6.323l-4.421 2.539v-5.116l4.421-2.538v5.115z"/></svg>
                             </div>
                             <span className="text-base font-medium">Homster</span>
-                        </div>
+                        </Link>
                     <span className="p-5 flex">
                         <button onClick={() => setIsMenuOpen(false)}>
                         <AiOutlineClose className="w-6 h-6"/>
@@ -82,7 +84,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                         .map(category => (
                         <div key={category.id} className="grid grid-cols-2 gap-x-2 gap-y-4">
                             {category.sections.map((item, index) => (
-                            <a key={item.name} href={item.href} className={`btn btn-primary btn-ghost ${index === 0 ? "text-primary" : "hover:text-primary"}`}>{item.name}</a>
+                            <Link key={item.name} href={item.href} className={`btn btn-primary btn-ghost ${index === 0 ? "text-primary" : "hover:text-primary"}`}>{item.name}</Link>
                             ))
                             }
                         </div>
@@ -92,7 +94,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                     {/* Company infos */}
                     <div className="py-5 px-4 flex flex-col space-y-2 border-t-2 border-base-content">
                     {navigation.pages.map((page, index) => (
-                        <a key={index} href={page.href} className="py-1 px-4 rounded-md text-base font-semibold tracking-wide btn btn-primary btn-ghost">{page.name}</a>
+                        <Link key={index} href={page.href} className="py-1 px-4 rounded-md text-base font-semibold tracking-wide btn btn-primary btn-ghost">{page.name}</Link>
                     ))
                     }
                     </div>
@@ -117,7 +119,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                     {/* Container */}
                     <div className="flex items-center space-x-4">
                     {/* Site logo & Burger icon */}
-                    <div className="flex items-center">
+                    <Link href="/" className="flex items-center">
                         {/* Burger button (small device) */}
                         <button className="md:hidden mr-4" aria-label="open navigation menu" onClick={() => setIsMenuOpen(true)}>
                         <AiOutlineMenu className="w-6 h-6"/>
@@ -128,7 +130,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                         </div>
                         <span className="text-base font-medium pr-5">Homster</span>
                         
-                    </div>
+                    </Link>
                     {/* Navigation */}
                     <nav aria-label="navigation menu">
                         <Popover.Group className="hidden md:block">
@@ -148,7 +150,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                                         <ul className="mx-auto w-full max-w-5xl flex">
                                             {category.sections.map((section, index) => (
                                             <li key={section.name} className={`${index !== 0 && "border-l-2 border-primary"}`}>
-                                                <a href={section.href} className={`py-3 px-4 text-sm font-semibold whitespace-nowrap hover:text-primary`}>{section.name}</a>
+                                                <Link href={section.href} className={`py-3 px-4 text-sm font-semibold whitespace-nowrap hover:text-primary`}>{section.name}</Link>
                                             </li>
                                             ))
                                             }
@@ -163,7 +165,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                             {/* Regular pages */}
                             {navigation.pages.map(page => (
                             <li key={page.name}>
-                                <a href={page.href} className="hover:text-primary">{page.name}</a>
+                                <Link href={page.href} className="hover:text-primary">{page.name}</Link>
                             </li>
                             ))
                             }
@@ -177,16 +179,16 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                         
                     {/* Cart */}
                     <ThemeChanger />
-                    <a href="#gotoUserAccount" className="px-4 inline-flex items-center">
+                    <Link href="/store/cart" className="px-4 inline-flex items-center">
                         <AiOutlineShoppingCart className="w-6 h-6"/>
                         <span className="ml-2 text-base font-semibold">0</span>
-                    </a>
+                    </Link>
                     {/* User */}
                     <div className="px-4 border-l-2 border-primary dropdown dropdown-end">
-                            <label tabIndex={0}><AiOutlineUser className="w-6 h-6"/></label>
+                            <label tabIndex={0}><AiOutlineUser className="w-6 h-6 cursor-pointer"/></label>
                             <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-200 rounded-box w-52 mt-4">
-                            <li><a>Sign in</a></li> 
-                            <li><a>Sign up</a></li>
+                            <li><Link href={`/signin`}>Sign in</Link></li> 
+                            <li><Link href={`/signup`}>Sign up</Link></li>
                             </ul>
                     </div>
                     
