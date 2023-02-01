@@ -131,6 +131,36 @@ export default {
       },
       {
         "kind": "OBJECT",
+        "name": "PaginatedUsers",
+        "fields": [
+          {
+            "name": "hasMore",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "users",
+            "type": {
+              "kind": "LIST",
+              "ofType": {
+                "kind": "NON_NULL",
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "User",
+                  "ofType": null
+                }
+              }
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
         "name": "Query",
         "fields": [
           {
@@ -206,18 +236,23 @@ export default {
             "type": {
               "kind": "NON_NULL",
               "ofType": {
-                "kind": "LIST",
-                "ofType": {
+                "kind": "OBJECT",
+                "name": "PaginatedUsers",
+                "ofType": null
+              }
+            },
+            "args": [
+              {
+                "name": "paginationOptions",
+                "type": {
                   "kind": "NON_NULL",
                   "ofType": {
-                    "kind": "OBJECT",
-                    "name": "User",
-                    "ofType": null
+                    "kind": "SCALAR",
+                    "name": "Any"
                   }
                 }
               }
-            },
-            "args": []
+            ]
           }
         ],
         "interfaces": []

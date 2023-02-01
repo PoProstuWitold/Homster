@@ -4,9 +4,21 @@ import { hash } from 'argon2'
 import { CreateUserInput, UpdateUserInput } from '../common/dtos'
 import { PrismaService } from '../../database/prisma.service'
 import { isUniqueError } from '../common/utils'
+import { Field, InputType } from '@nestjs/graphql'
 
 interface findOneByFieldOptions {
     throwError?: boolean
+}
+@InputType()
+export class PaginationOptions {
+    @Field()
+    take: number
+    @Field()
+    cursor: string
+    @Field()
+    field: string
+    @Field()
+    type: 'asc' | 'desc'
 }
 
 @Injectable()
@@ -65,11 +77,27 @@ export class UserService {
         }
     }
 
-    public async findAll() {
+    public async findAll(paginationOptions?: PaginationOptions) {
         try {
-            const users = await this.prisma.user.findMany()
+            const { take, cursor, field, type } = paginationOptions
+            const users = await this.prisma.user.findMany({
+                take,
+                orderBy: {
+                    [field]: type
+                },
+                ...(cursor && {
+                    skip: 1, // Do not include the cursor itself in the query result.
+                    cursor: {
+                      id: cursor,
+                    }
+                })
+            })
+            
 
-            return users
+            return {
+                users,
+                hasMore: users.length === take
+            }
         } catch (err) {
             throw err
         }

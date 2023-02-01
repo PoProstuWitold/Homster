@@ -1,5 +1,8 @@
-query GetAllUsers {
-	users {
-		...User
+query GetAllUsers($take: Float!, $cursor: String!, $field: String!, $type: String!) {
+	users(paginationOptions: {take: $take, cursor: $cursor, field: $field, type: $type}) {
+		users {
+			...User
+		}
+		hasMore
 	}
 }

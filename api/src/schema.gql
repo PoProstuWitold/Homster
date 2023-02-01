@@ -18,16 +18,28 @@ type AuthResult {
   user: User
 }
 
+type PaginatedUsers {
+  users: [User!]
+  hasMore: Boolean
+}
+
 type Query {
   me: AuthResult!
   user(field: String!, value: String!): User!
   updateUser(values: UpdateUserInput!): User!
-  users: [User!]!
+  users(paginationOptions: PaginationOptions!): PaginatedUsers!
 }
 
 input UpdateUserInput {
   displayName: String!
   fullName: String!
+}
+
+input PaginationOptions {
+  take: Float!
+  cursor: String!
+  field: String!
+  type: String!
 }
 
 type Mutation {

@@ -57,12 +57,25 @@ export type MutationRegisterArgs = {
   createUserInput: CreateUserInput;
 };
 
+export type PaginatedUsers = {
+  __typename?: 'PaginatedUsers';
+  hasMore?: Maybe<Scalars['Boolean']>;
+  users?: Maybe<Array<User>>;
+};
+
+export type PaginationOptions = {
+  cursor: Scalars['String'];
+  field: Scalars['String'];
+  take: Scalars['Float'];
+  type: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   me: AuthResult;
   updateUser: User;
   user: User;
-  users: Array<User>;
+  users: PaginatedUsers;
 };
 
 
@@ -74,6 +87,11 @@ export type QueryUpdateUserArgs = {
 export type QueryUserArgs = {
   field: Scalars['String'];
   value: Scalars['String'];
+};
+
+
+export type QueryUsersArgs = {
+  paginationOptions: PaginationOptions;
 };
 
 export type UpdateUserInput = {
@@ -122,10 +140,15 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, user?: { __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string } | null } };
 
-export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllUsersQueryVariables = Exact<{
+  take: Scalars['Float'];
+  cursor: Scalars['String'];
+  field: Scalars['String'];
+  type: Scalars['String'];
+}>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', users: Array<{ __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string }> };
+export type GetAllUsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUsers', hasMore?: boolean | null, users?: Array<{ __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string }> | null } };
 
 export type GetUserQueryVariables = Exact<{
   field: Scalars['String'];
@@ -214,14 +237,19 @@ export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, '
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
 };
 export const GetAllUsersDocument = gql`
-    query GetAllUsers {
-  users {
-    ...User
+    query GetAllUsers($take: Float!, $cursor: String!, $field: String!, $type: String!) {
+  users(
+    paginationOptions: {take: $take, cursor: $cursor, field: $field, type: $type}
+  ) {
+    users {
+      ...User
+    }
+    hasMore
   }
 }
     ${UserFragmentDoc}`;
 
-export function useGetAllUsersQuery(options?: Omit<Urql.UseQueryArgs<GetAllUsersQueryVariables>, 'query'>) {
+export function useGetAllUsersQuery(options: Omit<Urql.UseQueryArgs<GetAllUsersQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllUsersQuery, GetAllUsersQueryVariables>({ query: GetAllUsersDocument, ...options });
 };
 export const GetUserDocument = gql`
