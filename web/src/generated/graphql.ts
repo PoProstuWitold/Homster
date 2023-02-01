@@ -60,14 +60,25 @@ export type MutationRegisterArgs = {
 export type Query = {
   __typename?: 'Query';
   me: AuthResult;
+  updateUser: User;
   user: User;
   users: Array<User>;
+};
+
+
+export type QueryUpdateUserArgs = {
+  values: UpdateUserInput;
 };
 
 
 export type QueryUserArgs = {
   field: Scalars['String'];
   value: Scalars['String'];
+};
+
+export type UpdateUserInput = {
+  displayName: Scalars['String'];
+  fullName: Scalars['String'];
 };
 
 export type User = {
