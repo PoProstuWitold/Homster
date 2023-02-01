@@ -17,6 +17,7 @@ specifiers:
   '@types/react': 18.0.27
   '@types/react-dom': 18.0.10
   '@urql/exchange-graphcache': ^5.0.8
+  '@urql/exchange-retry': ^1.0.0
   autoprefixer: ^10.4.13
   daisyui: ^2.50.0
   eslint: 8.33.0
@@ -45,6 +46,7 @@ dependencies:
   '@types/react': 18.0.27
   '@types/react-dom': 18.0.10
   '@urql/exchange-graphcache': 5.0.8_graphql@16.6.0
+  '@urql/exchange-retry': 1.0.0_graphql@16.6.0
   daisyui: 2.50.0_by5iqycgvtroytm54ytclj4zzi
   eslint: 8.33.0
   eslint-config-next: 13.1.6_4vsywjlpuriuw3tl5oq6zy5a64
@@ -1847,6 +1849,16 @@ packages:
 
   /@urql/exchange-graphcache/5.0.8_graphql@16.6.0:
     resolution: {integrity: sha512-uUomVgpcvcOgFEkNWoz9eEPsZ4KNZpZ5YfopZHQ+SN6eZKtT91XqjHNP0mUdcKqIE3fmbKMiPMKbBvxBwzbOow==}
+    peerDependencies:
+      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      '@urql/core': 3.1.1_graphql@16.6.0
+      graphql: 16.6.0
+      wonka: 6.1.2
+    dev: false
+
+  /@urql/exchange-retry/1.0.0_graphql@16.6.0:
+    resolution: {integrity: sha512-UGyyGAMXzop9C/fIoe7Ij63DkPSy1uMw2jipB5dnB8R3kl80za7LYzVnA1HvBEt2ZPWfMuwez/VGLOQ7XX4bTA==}
     peerDependencies:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:

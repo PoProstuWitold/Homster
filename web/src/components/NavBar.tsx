@@ -14,7 +14,7 @@ interface NavBarProps {
 export const NavBar: React.FC<NavBarProps> = ({}) => {
     const [mounted, setMounted] = useState<boolean>(false)
 
-    const [{ data, error }] = useMeQuery({
+    const [{ data }] = useMeQuery({
         pause: !mounted
     })
     const [, logout] = useLogoutMutation()
