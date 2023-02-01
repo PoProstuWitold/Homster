@@ -189,8 +189,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                     <div className="px-4 border-l-2 border-primary dropdown dropdown-end">
                             <label tabIndex={0}><AiOutlineUser className="w-6 h-6 cursor-pointer"/></label>
                             <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-200 rounded-box w-52 mt-4">
-                            <li><Link href={`/signin`}>Sign in</Link></li> 
-                            <li><Link href={`/signup`}>Sign up</Link></li>
+                            <li><Link href={`/login`}>Log in</Link></li>
                             </ul>
                     </div>
                     

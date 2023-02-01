@@ -1,9 +1,9 @@
 import { 
-	useGetAllUsersQuery, useGetUserQuery, useMeQuery,
-	useLoginMutation, useLogoutMutation, useRegisterMutation,
+	useGetAllUsersQuery
 } from '@/generated/graphql'
 import { urqlClient } from '@/lib/urql'
 import { withUrqlClient } from 'next-urql'
+import Head from 'next/head'
 
 function Home() {
 	const [{ data, fetching, error }] = useGetAllUsersQuery()
@@ -14,6 +14,9 @@ function Home() {
 
 	return (
 		<>
+			<Head>
+				<title>Hamster - library of games</title>
+			</Head>
 			<main>
 				<div>
 					{data.users.map((user, index) => {
