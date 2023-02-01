@@ -1,9 +1,10 @@
+import { withUrqlClient } from 'next-urql'
+import Head from 'next/head'
+
 import { 
 	useGetAllUsersQuery
 } from '@/generated/graphql'
-import { urqlClient } from '@/lib/urql'
-import { withUrqlClient } from 'next-urql'
-import Head from 'next/head'
+import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
 
 function Home() {
 	const [{ data, fetching, error }] = useGetAllUsersQuery()
@@ -30,4 +31,4 @@ function Home() {
 	)
 }
 
-export default withUrqlClient(urqlClient, { ssr: true })(Home)
+export default withUrqlClient(urqlClientSsr, { ssr: true })(Home)

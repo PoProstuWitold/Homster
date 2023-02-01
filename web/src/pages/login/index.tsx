@@ -4,11 +4,15 @@ import { useState } from 'react'
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai'
 import { FiArrowLeft } from 'react-icons/fi'
 import { useForm } from 'react-hook-form'
-import { useLoginMutation, useRegisterMutation } from '@/generated/graphql'
 import { withUrqlClient } from 'next-urql'
-import { urqlClient } from '@/lib/urql'
+
+import { useLoginMutation, useRegisterMutation } from '@/generated/graphql'
+import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
+import { useRouter } from 'next/router'
 
 function Login() {
+    const router = useRouter()
+
 	const [, login] = useLoginMutation()
 	const [, register] = useRegisterMutation()
 
@@ -62,10 +66,17 @@ function Login() {
 			const res = await login(data)
 			console.log('res', res)
 			//@ts-ignore
-			if(res.data && res.data.error) setApiErrors(res.data.error.errors)
-			setTimeout(() => {
-				setApiErrors([])
-			}, 5000)
+			if(res.data && res.data.error) {
+                //@ts-ignore
+                setApiErrors(res.data.error.errors)
+                setTimeout(() => {
+                    setApiErrors([])
+                }, 5000)
+            }
+            if(res.data?.login.statusCode === 200) {
+                console.log('Login success! Redirecting...')
+                router.push('/')
+            }
 		} catch (err) {
 			console.error(err)
 		}
@@ -83,10 +94,17 @@ function Login() {
 			const res = await register(data)
 			console.log('res', res)
 			//@ts-ignore
-			if(res.data && res.data.error) setApiErrors(res.data.error.errors)
-			setTimeout(() => {
-				setApiErrors([])
-			}, 5000)
+			if(res.data && res.data.error) {
+                //@ts-ignore
+                setApiErrors(res.data.error.errors)
+                setTimeout(() => {
+                    setApiErrors([])
+                }, 5000)
+            }
+            if(res.data?.register.statusCode === 200) {
+                console.log('Register success! Redirecting...')
+                router.push('/')
+            }
 		} catch (err) {
 			console.error(err)
 		}
@@ -244,4 +262,4 @@ function Login() {
     )
 }
 
-export default withUrqlClient(urqlClient, { ssr: true })(Login)
+export default withUrqlClient(urqlClientSsr, { ssr: true })(Login)

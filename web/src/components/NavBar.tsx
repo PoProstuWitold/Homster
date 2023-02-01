@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Popover } from '@headlessui/react'
 import Link from 'next/link'
 import { AiOutlineUser, AiOutlineClose, AiOutlineShoppingCart, AiOutlineMenu } from  'react-icons/ai'
 
+import { useLogoutMutation, useMeQuery } from '@/generated/graphql'
 import { ThemeChanger } from './ThemeChanger'
 import { TopHeader } from './TopHeader'
 
@@ -11,6 +12,18 @@ interface NavBarProps {
 }
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
+    const [mounted, setMounted] = useState<boolean>(false)
+
+    const [{ data, error }] = useMeQuery({
+        pause: !mounted
+    })
+    const [, logout] = useLogoutMutation()
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [activeTab, setActiveTab] = useState('store')
 
@@ -189,7 +202,22 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                     <div className="px-4 border-l-2 border-primary dropdown dropdown-end">
                             <label tabIndex={0}><AiOutlineUser className="w-6 h-6 cursor-pointer"/></label>
                             <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-200 rounded-box w-52 mt-4">
-                            <li><Link href={`/login`}>Log in</Link></li>
+                                {mounted && data && !data.me &&
+                                    <>
+                                        <li><Link href={`/login`}>Log in</Link></li>
+                                    </>
+                                }
+                                {mounted && !data &&
+                                    <>
+                                        <li><Link href={`/login`}>Log in</Link></li>
+                                    </>
+                                }
+                                {mounted && data && data.me && data.me.user &&
+                                    <>
+                                        <li><Link href={`/profile`}>{data.me.user.displayName}</Link></li>
+                                        <li><button onClick={() => logout({})}>Log out</button></li>
+                                    </>
+                                }
                             </ul>
                     </div>
                     
