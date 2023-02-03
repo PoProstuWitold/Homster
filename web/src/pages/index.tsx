@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { withUrqlClient } from 'next-urql'
 import Head from 'next/head'
 import { 
@@ -7,6 +7,18 @@ import {
 } from '@/generated/graphql'
 import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
 
+const UserItem = memo(({user, index}: any) => {
+	UserItem.displayName = 'UserItem'
+
+	return (
+	  <div key={user.id} className="p-5">
+		<p>{index}</p>
+		<p>id: {user.id}</p>
+		<p>fullName: {user.fullName}</p>
+		<p>displayName: {user.displayName}</p>
+	  </div>
+	)
+})
 
 function Home() {
 	const [users, setUsers] = useState<any>([])
@@ -59,25 +71,17 @@ function Home() {
 							)
 						})}
 						{/* Replacement for CSR */}
-						{users && users.map((user: any, index: any) => {
-							return (
-								<div key={index} className="p-5">
-									<p>{index}</p>
-									<p>id: {user.id}</p>
-									<p>fullName: {user.fullName}</p>
-									<p>displayName: {user.displayName}</p>
-								</div>
-							)
-						})}
+						{users && users.map((user: any, index: any) => (
+							<UserItem key={`${user.id}:${index}`} user={user} index={index} />
+						))}
 					</div>
 					{data.users && data.users.pageInfo.hasNext &&
 						<button onClick={() => {
 							setCursor(data.users.pageInfo.nextCursor)
 							setVariables({
+								...variables,
 								pagination: {
-									take: 10, 
-									field: 'createdAt',
-									type: 'desc',
+									...variables.pagination,
 									cursor
 								}
 							})
