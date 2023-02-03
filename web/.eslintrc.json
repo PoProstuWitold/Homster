@@ -1,4 +1,7 @@
 {
   	"extends": "next/core-web-vitals",
-	"ignorePatterns": ["./src/gql"]
+	"ignorePatterns": ["./src/gql"],
+	"rules": {
+		"@next/next/no-html-link-for-pages": "off"
+	}
 }
