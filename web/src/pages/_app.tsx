@@ -3,6 +3,7 @@ import '../styles/global.css'
 import { useRouter } from 'next/router'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
+import { Toaster } from 'react-hot-toast'
 
 import { NavBar } from '@/components/NavBar'
 import UrqlProvider from '@/lib/urql/UrqlProvider'
@@ -18,6 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
 				>
 					{router.pathname !== '/login' ? <NavBar /> : null}
 					<Component {...pageProps} />
+					<Toaster/>
 				</ThemeProvider>
 			</UrqlProvider>
 		</>

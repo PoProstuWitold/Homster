@@ -1,24 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { hash } from 'argon2'
 
-import { CreateUserInput, UpdateUserInput } from '../common/dtos'
 import { PrismaService } from '../../database/prisma.service'
+import { CreateUserInput, UpdateUserInput } from '../common/dtos'
 import { isUniqueError } from '../common/utils'
-import { Field, InputType } from '@nestjs/graphql'
+import { PaginationOptions } from '../common/types'
 
 interface findOneByFieldOptions {
     throwError?: boolean
-}
-@InputType()
-export class PaginationOptions {
-    @Field()
-    take: number
-    @Field()
-    cursor: string
-    @Field()
-    field: string
-    @Field()
-    type: 'asc' | 'desc'
 }
 
 @Injectable()
@@ -93,10 +82,19 @@ export class UserService {
                 })
             })
             
-
+            const hasNext = users.length === take
+            const hasPrevious = Boolean(cursor)
+            const nextCursor = hasNext ? users[users.length -1].id : ''
+            const previousCursor = ''
+            const pageInfo = {
+                hasNext,
+                hasPrevious,
+                nextCursor,
+                previousCursor
+            }
             return {
                 users,
-                hasMore: users.length === take
+                pageInfo
             }
         } catch (err) {
             throw err

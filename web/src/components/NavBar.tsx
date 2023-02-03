@@ -6,6 +6,7 @@ import { AiOutlineUser, AiOutlineClose, AiOutlineShoppingCart, AiOutlineMenu } f
 import { useLogoutMutation, useMeQuery } from '@/generated/graphql'
 import { ThemeChanger } from './ThemeChanger'
 import { TopHeader } from './TopHeader'
+import { toast } from 'react-hot-toast'
 
 interface NavBarProps {
 
@@ -215,7 +216,16 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                                 {mounted && data && data.me && data.me.user &&
                                     <>
                                         <li><Link href={`/profile`}>{data.me.user.displayName}</Link></li>
-                                        <li><button onClick={() => logout({})}>Log out</button></li>
+                                        <li>
+                                            <button 
+                                                onClick={() => { 
+                                                    logout({})
+                                                    toast.success('Logged out') 
+                                                }}
+                                            >
+                                            Log out
+                                            </button>
+                                        </li>
                                     </>
                                 }
                             </ul>

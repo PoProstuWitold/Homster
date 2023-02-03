@@ -18,9 +18,16 @@ type AuthResult {
   user: User
 }
 
+type PageInfo {
+  hasPrevious: Boolean!
+  hasNext: Boolean!
+  previousCursor: String!
+  nextCursor: String!
+}
+
 type PaginatedUsers {
   users: [User!]
-  hasMore: Boolean
+  pageInfo: PageInfo!
 }
 
 type Query {

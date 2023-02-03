@@ -9,6 +9,7 @@ import { withUrqlClient } from 'next-urql'
 import { useLoginMutation, useRegisterMutation } from '@/generated/graphql'
 import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
 import { useRouter } from 'next/router'
+import { toast } from 'react-hot-toast'
 
 function Login() {
     const router = useRouter()
@@ -62,9 +63,7 @@ function Login() {
 
 	const handleLogin = async (data: any) => {
 		try {
-			console.log(data)
 			const res = await login(data)
-			console.log('res', res)
 			//@ts-ignore
 			if(res.data && res.data.error) {
                 //@ts-ignore
@@ -74,7 +73,9 @@ function Login() {
                 }, 5000)
             }
             if(res.data?.login.statusCode === 200) {
-                console.log('Login success! Redirecting...')
+                toast.success('Signed in', {
+                    duration: 3000
+                })
                 router.push('/')
             }
 		} catch (err) {
@@ -90,9 +91,7 @@ function Login() {
 
 	const handleRegister = async (data: any) => {
 		try {
-			console.log(data)
 			const res = await register(data)
-			console.log('res', res)
 			//@ts-ignore
 			if(res.data && res.data.error) {
                 //@ts-ignore
@@ -102,7 +101,9 @@ function Login() {
                 }, 5000)
             }
             if(res.data?.register.statusCode === 200) {
-                console.log('Register success! Redirecting...')
+                toast.success('Signed up', {
+                    duration: 3000
+                })
                 router.push('/')
             }
 		} catch (err) {

@@ -57,9 +57,17 @@ export type MutationRegisterArgs = {
   createUserInput: CreateUserInput;
 };
 
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  hasNext: Scalars['Boolean'];
+  hasPrevious: Scalars['Boolean'];
+  nextCursor: Scalars['String'];
+  previousCursor: Scalars['String'];
+};
+
 export type PaginatedUsers = {
   __typename?: 'PaginatedUsers';
-  hasMore?: Maybe<Scalars['Boolean']>;
+  pageInfo: PageInfo;
   users?: Maybe<Array<User>>;
 };
 
@@ -141,14 +149,11 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 export type MeQuery = { __typename?: 'Query', me: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, user?: { __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string } | null } };
 
 export type GetAllUsersQueryVariables = Exact<{
-  take: Scalars['Float'];
-  cursor: Scalars['String'];
-  field: Scalars['String'];
-  type: Scalars['String'];
+  pagination: PaginationOptions;
 }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUsers', hasMore?: boolean | null, users?: Array<{ __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string }> | null } };
+export type GetAllUsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUsers', users?: Array<{ __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string }> | null, pageInfo: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
 
 export type GetUserQueryVariables = Exact<{
   field: Scalars['String'];
@@ -237,14 +242,17 @@ export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, '
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
 };
 export const GetAllUsersDocument = gql`
-    query GetAllUsers($take: Float!, $cursor: String!, $field: String!, $type: String!) {
-  users(
-    paginationOptions: {take: $take, cursor: $cursor, field: $field, type: $type}
-  ) {
+    query GetAllUsers($pagination: PaginationOptions!) {
+  users(paginationOptions: $pagination) {
     users {
       ...User
     }
-    hasMore
+    pageInfo {
+      hasNext
+      hasPrevious
+      previousCursor
+      nextCursor
+    }
   }
 }
     ${UserFragmentDoc}`;

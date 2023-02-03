@@ -1,20 +1,12 @@
 import { UseGuards } from '@nestjs/common'
-import { Args, Field, Mutation, ObjectType, Query, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 import { SessionGuard } from '../common/guards'
 import { GqlContext, GqlFastifyContext } from '../common/decorators'
 import { CreateUserInput, UpdateUserInput } from '../common/dtos'
 import { User } from '../common/entities'
-import { PaginationOptions, UserService } from './user.service'
-
-@ObjectType()
-class PaginatedUsers {
-    @Field(() => [User], { nullable: true })
-    users?: User[]
-
-    @Field({ nullable: true })
-    hasMore?: boolean
-}
+import { PaginatedUsers, PaginationOptions } from '../common/types'
+import { UserService } from './user.service'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -56,11 +48,11 @@ export class UserResolver {
     @Query(() => PaginatedUsers, { name: 'users' })
     public async getUsers(@Args('paginationOptions') paginationOptions: PaginationOptions): Promise<PaginatedUsers> {
         try {
-            const { users, hasMore } = await this.userService.findAll(paginationOptions)
+            const { users, pageInfo } = await this.userService.findAll(paginationOptions)
 
             return {
                 users,
-                hasMore
+                pageInfo
             }
         } catch (err) {
             throw err
