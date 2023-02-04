@@ -58,7 +58,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     
     return (
         <>
-           <div className="relative w-full bg-white">
+           <div className="sticky top-0 w-full bg-white">
       
             {/* STORE NAVIGATION (SMALL DEVICE) */}
             <div className="md:hidden">

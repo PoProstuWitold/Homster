@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { withUrqlClient } from 'next-urql'
 import Head from 'next/head'
 import { 
@@ -21,8 +21,10 @@ const UserItem = memo(({user, index}: any) => {
 })
 
 function Home() {
+	const scrollRef = useRef<HTMLDivElement>(null)
 	const [users, setUsers] = useState<any>([])
 	const [cursor, setCursor] = useState<string>('')
+	const [scrollTo, setScrollTo] = useState<boolean>(false)
 	const [variables, setVariables] = useState({
 		pagination: {
 			take: 10,
@@ -36,6 +38,18 @@ function Home() {
 		variables
 	})
 
+
+	const onScroll = () => {
+		console.log('scrolling')
+	}
+
+	useEffect(() => {
+		scrollRef.current?.addEventListener('scroll', onScroll, {
+			passive: true
+		})
+		return () => scrollRef.current?.removeEventListener('scroll', onScroll)
+	}, [])
+
 	useEffect(() => {
 		if(data && data.users.users) {
 			console.log('triggered')
@@ -43,10 +57,21 @@ function Home() {
 			if(cursor) {
 				console.log('data', data.users)
 				setUsers([...users, ...data.users.users])
+				if(scrollTo) {
+					scrollRef.current?.scrollIntoView({
+						block: 'end'
+					})
+				}
 			}
+			
 		}
 	}, [data])
 	
+	const userItems = useMemo(() => {
+		return users.map((user: any, index: any) => (
+			<UserItem key={`${user.id}:${index}`} user={user} index={index} />
+		))
+	}, [users])
 	
 	if(fetching) return <div>Fetching</div>
 	if(error) return <div>Error</div>
@@ -58,7 +83,9 @@ function Home() {
 				<title>Hamster - library of games</title>
 			</Head>
 			<main>
-					<div>
+					<div 
+						ref={scrollRef}
+					>
 						{/* SSR, replace with CSR when paginating */}
 						{!users.length && data && data.users.users && data.users.users.map((user: any, index: any) => {
 							return (
@@ -71,11 +98,8 @@ function Home() {
 							)
 						})}
 						{/* Replacement for CSR */}
-						{users && users.map((user: any, index: any) => (
-							<UserItem key={`${user.id}:${index}`} user={user} index={index} />
-						))}
-					</div>
-					{data.users && data.users.pageInfo.hasNext &&
+						{userItems}
+						{data.users && data.users.pageInfo.hasNext &&
 						<button onClick={() => {
 							setCursor(data.users.pageInfo.nextCursor)
 							setVariables({
@@ -85,8 +109,10 @@ function Home() {
 									cursor
 								}
 							})
+							setScrollTo(true)
 						}} className="btn btn-primary">next</button>
 					}
+					</div>		
 			</main>
 		</>
 	)
