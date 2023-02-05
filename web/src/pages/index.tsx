@@ -72,10 +72,6 @@ function Home() {
 			<UserItem key={`${user.id}:${index}`} user={user} index={index} />
 		))
 	}, [users])
-	
-	if(fetching) return <div>Fetching</div>
-	if(error) return <div>Error</div>
-	if(!data) return <div>No data</div>
 
 	return (
 		<>
@@ -99,7 +95,7 @@ function Home() {
 						})}
 						{/* Replacement for CSR */}
 						{userItems}
-						{data.users && data.users.pageInfo.hasNext &&
+						{data && data.users && data.users.pageInfo.hasNext &&
 						<button onClick={() => {
 							setCursor(data.users.pageInfo.nextCursor)
 							setVariables({
