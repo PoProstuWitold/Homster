@@ -1,1 +1,1 @@
-export * from './user-inputs.dto'
+export * from './inputs.dto'

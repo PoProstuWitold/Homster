@@ -12,17 +12,103 @@ datasource db {
 
 enum Role {
 	USER
+	DEVELOPER
 	MOD
 	ADMIN
 }
 
 model User {
-	id          String      @id @default(uuid())
-	createdAt   DateTime  	@default(now())
-	updatedAt   DateTime  	@updatedAt
-	role		Role		@default(USER)
-	email    	String		@unique
-	displayName String		@unique
-	password	String
-	fullName	String
+	id          	String      @id @default(uuid())
+	createdAt   	DateTime  	@default(now())
+	updatedAt   	DateTime  	@updatedAt
+	role			Role		@default(USER)
+	email    		String		@unique
+	displayName 	String		@unique
+	password		String
+	fullName		String
+	games			Game[]
+	employments 	StudioEmployee[]
+}
+
+enum GameStatus {
+	NotReleased
+	Alpha
+	Beta
+	EarlyAccess
+	Released
+}
+
+enum GameType {
+	Game
+	DLC
+}
+
+model Tag {
+	id    			Int    		@id 		@default(autoincrement())
+	name  			String 		@unique
+	games 			Game[]
+}
+
+model Game {
+	id          	String      @id @default(uuid())
+	createdAt   	DateTime  	@default(now())
+	updatedAt   	DateTime  	@updatedAt
+	name			String		
+	description 	String
+	basicPrice		Float		@default(0)
+	price 			Float		@default(0)
+	status			GameStatus	@default(Released)
+	type			GameType	@default(Game)
+	studios			GameStudio[]
+	releasedAt		DateTime
+	recentReviews 	Int			@default(0)
+	allReviews		Int			@default(0)
+	recentRating	Float		@default(0)
+	allRating		Float		@default(0)
+	tags  			Tag[]
+	users			User[]
+}
+
+enum StudioType {
+	Developer
+	Publisher
+	DeveloperAndPublisher
+}
+
+enum EmploymentType {
+	Owner
+	Manager
+	Worker
+}
+
+model Studio {
+	id          	String      @id @default(uuid())
+	createdAt   	DateTime  	@default(now())
+	updatedAt   	DateTime  	@updatedAt
+	name			String		@unique
+	type			StudioType	@default(DeveloperAndPublisher)
+	games			GameStudio[]
+	employees       StudioEmployee[]
+}
+
+model StudioEmployee {
+	studio      	Studio      	@relation(fields: [studioId], references: [id])
+	studioId    	String       
+	employee      	User        	@relation(fields: [employeeId], references: [id])
+	employeeId    	String
+	employmentType	EmploymentType 	@default(Worker)       
+	assignedAt 		DateTime 		@default(now())
+	assignedBy 		String    
+
+	@@id([studioId, employeeId])
+}
+
+model GameStudio {
+	game 			Game 		@relation(fields: [gameId], references: [id])
+	gameId 			String
+	studio 			Studio 		@relation(fields: [studioId], references: [id])
+	studioId 		String
+	contribution	StudioType	@default(DeveloperAndPublisher)
+	
+	@@id([gameId, studioId])
 }

@@ -1,2 +1,5 @@
 export * from './base.entity'
 export * from './user.entity'
+export * from './game.entity'
+export * from './studio.entity'
+export * from './tag.entity'

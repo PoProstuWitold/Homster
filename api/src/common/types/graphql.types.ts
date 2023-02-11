@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
-import { User } from '../entities'
+import { Game, Studio, User } from '../entities'
 
 @ObjectType()
 export class PageInfo {
@@ -20,6 +20,24 @@ export class PageInfo {
 export class PaginatedUsers {
     @Field(() => [User], { nullable: true })
     users?: User[]
+
+    @Field(() => PageInfo)
+    pageInfo: PageInfo
+}
+
+@ObjectType()
+export class PaginatedStudios {
+    @Field(() => [Studio], { nullable: true })
+    edges?: Studio[]
+
+    @Field(() => PageInfo)
+    pageInfo: PageInfo
+}
+
+@ObjectType()
+export class PaginatedGames {
+    @Field(() => [Game], { nullable: true })
+    edges?: Game[]
 
     @Field(() => PageInfo)
     pageInfo: PageInfo

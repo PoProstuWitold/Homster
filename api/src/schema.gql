@@ -2,6 +2,60 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Studio {
+  id: String!
+  createdAt: String!
+  updatedAt: String!
+  name: String!
+  type: String!
+  games: [GameStudio!]
+  employees: [StudioEmployee!]
+}
+
+type StudioEmployee {
+  assignedAt: String!
+  assignedBy: String!
+  employeeId: String!
+  employee: User
+  employmentType: String!
+  studioId: String!
+  studio: Studio
+}
+
+type GameStudio {
+  gameId: String!
+  game: Game
+  studioId: String!
+  studio: Studio
+  contribution: String!
+}
+
+type Tag {
+  id: Int!
+  name: String!
+  games: [Game!]
+}
+
+type Game {
+  id: String!
+  createdAt: String!
+  updatedAt: String!
+  name: String!
+  description: String!
+  basicPrice: Float!
+  price: Float!
+  status: String!
+  type: String!
+  studios: [GameStudio!]
+  releasedAt: String!
+  recentReviews: Int!
+  allReviews: Int!
+  recentRating: Float!
+  allRating: Float!
+  tags: [Tag!]
+  users: [User!]
+}
+
 type User {
   id: String!
   createdAt: String!
@@ -10,6 +64,8 @@ type User {
   fullName: String!
   role: String!
   email: String!
+  games: [Game!]
+  employments: [StudioEmployee!]
 }
 
 type AuthResult {
@@ -30,16 +86,28 @@ type PaginatedUsers {
   pageInfo: PageInfo!
 }
 
+type PaginatedStudios {
+  edges: [Studio!]
+  pageInfo: PageInfo!
+}
+
+type PaginatedGames {
+  edges: [Game!]
+  pageInfo: PageInfo!
+}
+
 type Query {
   me: AuthResult!
   user(field: String!, value: String!): User!
   updateUser(values: UpdateUserInput!): User!
   users(paginationOptions: PaginationOptions!): PaginatedUsers!
+  studios(paginationOptions: PaginationOptions!): PaginatedStudios!
+  games(paginationOptions: PaginationOptions!): PaginatedGames!
 }
 
 input UpdateUserInput {
-  displayName: String!
-  fullName: String!
+  displayName: String
+  fullName: String
 }
 
 input PaginationOptions {
@@ -54,6 +122,8 @@ type Mutation {
   login(credentialsInput: CredentialsInput!): AuthResult!
   logout: AuthResult!
   createUser(createUserInput: CreateUserInput!): User!
+  createStudio(createStudioInput: CreateStudioInput!): Studio!
+  createGame(createGameInput: CreateGameInput!): Game!
 }
 
 input CreateUserInput {
@@ -66,4 +136,19 @@ input CreateUserInput {
 input CredentialsInput {
   email: String!
   password: String!
+}
+
+input CreateStudioInput {
+  name: String!
+  type: String
+}
+
+input CreateGameInput {
+  name: String!
+  description: String!
+  status: String!
+  releasedAt: String!
+  type: String!
+  developers: [String!]!
+  publishers: [String!]!
 }

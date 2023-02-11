@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { hash } from 'argon2'
+import { User } from '@prisma/client'
 
 import { PrismaService } from '../../database/prisma.service'
 import { CreateUserInput, UpdateUserInput } from '../common/dtos'
@@ -8,6 +9,7 @@ import { PaginationOptions } from '../common/types'
 
 interface findOneByFieldOptions {
     throwError?: boolean
+    includeRelations?: boolean
 }
 
 @Injectable()
@@ -48,11 +50,29 @@ export class UserService {
 
     public async findOneByField(field: string, value: string | number, options?: findOneByFieldOptions) {
         try {
-            const user = await this.prisma.user.findFirst({
-                where: {
-                    [field]: value
-                }
-            })
+            let user: User
+            
+            if(!options || !options.includeRelations) {
+                user = await this.prisma.user.findFirst({
+                    where: {
+                        [field]: value
+                    }
+                })
+            } else {
+                user = await this.prisma.user.findFirst({
+                    where: {
+                        [field]: value
+                    },
+                    include: {
+                        games: true,
+                        employments: {
+                            include: {
+                                studio: true
+                            }
+                        }
+                    }
+                })
+            }
 
             if(options && options.throwError) {
                 if(!user) {

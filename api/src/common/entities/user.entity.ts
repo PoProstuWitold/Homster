@@ -1,18 +1,27 @@
 import { Field, ObjectType } from '@nestjs/graphql'
 import { User as UserDB, Role } from '@prisma/client'
+
 import { BaseEntity } from './base.entity'
+import { Game } from './game.entity'
+import { StudioEmployee } from './studio.entity'
 
 @ObjectType()
 export class User extends BaseEntity {
     @Field(() => String)
-    public displayName: UserDB['displayName']
+    displayName: UserDB['displayName']
 
     @Field(() => String)
-    public fullName: UserDB['fullName']
+    fullName: UserDB['fullName']
 
     @Field()
-    public role: Role
+    role: Role
 
     @Field(() => String)
-    public email: UserDB['email']
+    email: UserDB['email']
+
+    @Field(() => [Game], { nullable: true })
+    games?: Game[]
+
+    @Field(() => [StudioEmployee], { nullable: true })
+    employments?: StudioEmployee[]
 }

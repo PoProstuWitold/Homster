@@ -6,6 +6,8 @@ import { join } from 'path'
 
 import { UserModule } from './users/user.module'
 import { AuthModule } from './auth/auth.module'
+import { StudioModule } from './studio/studio.module'
+import { GamesModule } from './games/games.module'
 
 @Module({
 	imports: [
@@ -24,6 +26,7 @@ import { AuthModule } from './auth/auth.module'
                     return {
                         statusCode: originalError.getStatus(),
                         response: { 
+                            // Refactor to errors
                             data: {
                                 error: originalError.getResponse() as any
                             }
@@ -34,7 +37,9 @@ import { AuthModule } from './auth/auth.module'
             }
 		}),
         AuthModule,
-		UserModule
+		UserModule,
+        StudioModule,
+        GamesModule
 	]
 })
 export class AppModule {}
