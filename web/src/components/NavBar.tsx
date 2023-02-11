@@ -213,9 +213,9 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                                         <li><Link href={`/login`}>Log in</Link></li>
                                     </>
                                 }
-                                {mounted && data && data.me && data.me.user &&
+                                {mounted && data && data.me && data.me.profile &&
                                     <>
-                                        <li><Link href={`/profile`}>{data.me.user.displayName}</Link></li>
+                                        <li><Link href={`/profile`}>{data.me.profile.displayName}</Link></li>
                                         <li>
                                             <button 
                                                 onClick={() => { 

@@ -3,8 +3,8 @@ query Me {
         __typename
         statusCode
         message
-        user {
-            ...User
+        profile {
+            ...Profile
         }
     }
 }

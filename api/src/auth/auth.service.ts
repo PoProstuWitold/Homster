@@ -14,10 +14,10 @@ export class AuthService {
     
     public async register(data: CreateUserInput) {
         try {
-            const user = await this.userService.create(data)
+            const profile = await this.userService.create(data)
             
             const result: AuthResult = {
-                user
+                profile
             }
 
             return result
@@ -31,18 +31,18 @@ export class AuthService {
         try {
             const { email, password } = credentials
 
-            const user = await this.userService.findOneByField('email', email)
-            if(!user) {
+            const profile = await this.userService.findOneByField('email', email)
+            if(!profile) {
                 throw new InvalidCredentials()
             }
 
-            const match = await verify(user.password, password)
+            const match = await verify(profile.password, password)
             if(!match) {
                 throw new InvalidCredentials()
             }
 
             const result: AuthResult = {
-                user
+                profile
             }
 
             return result

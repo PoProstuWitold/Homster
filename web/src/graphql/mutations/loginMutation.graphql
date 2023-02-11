@@ -5,8 +5,8 @@ mutation Login($email: String!, $password: String!) {
 		__typename
 		statusCode
 		message
-		user {
-			...User
+		profile {
+			...Profile
 		}
 	}
 }

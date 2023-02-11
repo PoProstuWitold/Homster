@@ -5,8 +5,8 @@ mutation Register($fullName: String!, $displayName: String!, $email: String!, $p
 		__typename
 		statusCode
 		message
-		user {
-			...User
+		profile {
+			...Profile
 		}
 	}
 }

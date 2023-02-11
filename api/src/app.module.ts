@@ -22,16 +22,16 @@ import { GamesModule } from './games/games.module'
             errorFormatter: execution => {
                 const [error] = execution.errors // take first error
                 const originalError = error?.originalError
-                if (originalError instanceof HttpException)
+                if (originalError instanceof HttpException) {
                     return {
                         statusCode: originalError.getStatus(),
-                        response: { 
-                            // Refactor to errors
+                        response: {
                             data: {
                                 error: originalError.getResponse() as any
                             }
                         }
                     }
+                }         
                     
                 return { statusCode: 500, response: execution }
             }

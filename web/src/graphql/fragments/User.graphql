@@ -8,3 +8,14 @@ fragment User on User {
     createdAt
     updatedAt
 }
+
+fragment Profile on Profile {
+    __typename
+    id
+    displayName
+    fullName
+    email
+    role
+    createdAt
+    updatedAt
+}

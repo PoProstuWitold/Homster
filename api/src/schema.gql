@@ -68,10 +68,22 @@ type User {
   employments: [StudioEmployee!]
 }
 
+type Profile {
+  id: String!
+  createdAt: String!
+  updatedAt: String!
+  displayName: String!
+  fullName: String!
+  role: String!
+  email: String!
+  games: [Game!]
+  employments: [StudioEmployee!]
+}
+
 type AuthResult {
   statusCode: Int
   message: String
-  user: User
+  profile: Profile
 }
 
 type PageInfo {

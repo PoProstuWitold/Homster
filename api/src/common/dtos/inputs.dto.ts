@@ -7,7 +7,7 @@ import {
     Game as GameDB, GameStatus, GameType 
 } from '@prisma/client'
 
-import { User } from '../entities'
+import { Profile, User } from '../entities'
 
 @InputType()
 export class CreateUserInput {
@@ -108,8 +108,8 @@ export class AuthResult {
     @Field(() => String, { nullable: true })
     message?: string
 
-    @Field(() => User, { nullable: true })
-    user?: User
+    @Field(() => Profile, { nullable: true })
+    profile?: Profile
 }
 
 @InputType()

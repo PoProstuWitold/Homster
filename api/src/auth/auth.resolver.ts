@@ -18,7 +18,7 @@ export class AuthResolver {
         @GqlContext() ctx: GqlFastifyContext
     ) {
         const result = await this.authService.register(data)
-        ctx.req.session.set('user', result.user)
+        ctx.req.session.set('user', result.profile)
 
         return {
             statusCode: 200,
@@ -33,7 +33,7 @@ export class AuthResolver {
         @GqlContext() ctx: GqlFastifyContext
     ) {
         const result = await this.authService.login(data)
-        ctx.req.session.set('user', result.user)
+        ctx.req.session.set('user', result.profile)
 
         return {
             statusCode: 200,
@@ -50,7 +50,7 @@ export class AuthResolver {
         return {
             statusCode: 200,
             message: 'Your profile',
-            user: ctx.req.session.get('user'),
+            profile: ctx.req.session.get('user'),
         }
     }
 

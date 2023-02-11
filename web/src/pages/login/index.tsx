@@ -72,7 +72,7 @@ function Login() {
                     setApiErrors([])
                 }, 5000)
             }
-            if(res.data?.login.statusCode === 200) {
+            if(res && res.data && res.data.login && res.data.login.statusCode === 200) {
                 toast.success('Signed in', {
                     duration: 3000
                 })
@@ -100,7 +100,7 @@ function Login() {
                     setApiErrors([])
                 }, 5000)
             }
-            if(res.data?.register.statusCode === 200) {
+            if(res && res.data && res.data.register && res.data.register.statusCode === 200) {
                 toast.success('Signed up', {
                     duration: 3000
                 })

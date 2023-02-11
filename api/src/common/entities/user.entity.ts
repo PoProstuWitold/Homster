@@ -25,3 +25,6 @@ export class User extends BaseEntity {
     @Field(() => [StudioEmployee], { nullable: true })
     employments?: StudioEmployee[]
 }
+
+@ObjectType()
+export class Profile extends User {}

@@ -18,8 +18,23 @@ export type Scalars = {
 export type AuthResult = {
   __typename?: 'AuthResult';
   message?: Maybe<Scalars['String']>;
+  profile?: Maybe<Profile>;
   statusCode?: Maybe<Scalars['Int']>;
-  user?: Maybe<User>;
+};
+
+export type CreateGameInput = {
+  description: Scalars['String'];
+  developers: Array<Scalars['String']>;
+  name: Scalars['String'];
+  publishers: Array<Scalars['String']>;
+  releasedAt: Scalars['String'];
+  status: Scalars['String'];
+  type: Scalars['String'];
+};
+
+export type CreateStudioInput = {
+  name: Scalars['String'];
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type CreateUserInput = {
@@ -34,12 +49,54 @@ export type CredentialsInput = {
   password: Scalars['String'];
 };
 
+export type Game = {
+  __typename?: 'Game';
+  allRating: Scalars['Float'];
+  allReviews: Scalars['Int'];
+  basicPrice: Scalars['Float'];
+  createdAt: Scalars['String'];
+  description: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  recentRating: Scalars['Float'];
+  recentReviews: Scalars['Int'];
+  releasedAt: Scalars['String'];
+  status: Scalars['String'];
+  studios?: Maybe<Array<GameStudio>>;
+  tags?: Maybe<Array<Tag>>;
+  type: Scalars['String'];
+  updatedAt: Scalars['String'];
+  users?: Maybe<Array<User>>;
+};
+
+export type GameStudio = {
+  __typename?: 'GameStudio';
+  contribution: Scalars['String'];
+  game?: Maybe<Game>;
+  gameId: Scalars['String'];
+  studio?: Maybe<Studio>;
+  studioId: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createGame: Game;
+  createStudio: Studio;
   createUser: User;
   login: AuthResult;
   logout: AuthResult;
   register: AuthResult;
+};
+
+
+export type MutationCreateGameArgs = {
+  createGameInput: CreateGameInput;
+};
+
+
+export type MutationCreateStudioArgs = {
+  createStudioInput: CreateStudioInput;
 };
 
 
@@ -65,6 +122,18 @@ export type PageInfo = {
   previousCursor: Scalars['String'];
 };
 
+export type PaginatedGames = {
+  __typename?: 'PaginatedGames';
+  edges?: Maybe<Array<Game>>;
+  pageInfo: PageInfo;
+};
+
+export type PaginatedStudios = {
+  __typename?: 'PaginatedStudios';
+  edges?: Maybe<Array<Studio>>;
+  pageInfo: PageInfo;
+};
+
 export type PaginatedUsers = {
   __typename?: 'PaginatedUsers';
   pageInfo: PageInfo;
@@ -78,12 +147,37 @@ export type PaginationOptions = {
   type: Scalars['String'];
 };
 
+export type Profile = {
+  __typename?: 'Profile';
+  createdAt: Scalars['String'];
+  displayName: Scalars['String'];
+  email: Scalars['String'];
+  employments?: Maybe<Array<StudioEmployee>>;
+  fullName: Scalars['String'];
+  games?: Maybe<Array<Game>>;
+  id: Scalars['String'];
+  role: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  games: PaginatedGames;
   me: AuthResult;
+  studios: PaginatedStudios;
   updateUser: User;
   user: User;
   users: PaginatedUsers;
+};
+
+
+export type QueryGamesArgs = {
+  paginationOptions: PaginationOptions;
+};
+
+
+export type QueryStudiosArgs = {
+  paginationOptions: PaginationOptions;
 };
 
 
@@ -102,9 +196,38 @@ export type QueryUsersArgs = {
   paginationOptions: PaginationOptions;
 };
 
+export type Studio = {
+  __typename?: 'Studio';
+  createdAt: Scalars['String'];
+  employees?: Maybe<Array<StudioEmployee>>;
+  games?: Maybe<Array<GameStudio>>;
+  id: Scalars['String'];
+  name: Scalars['String'];
+  type: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type StudioEmployee = {
+  __typename?: 'StudioEmployee';
+  assignedAt: Scalars['String'];
+  assignedBy: Scalars['String'];
+  employee?: Maybe<User>;
+  employeeId: Scalars['String'];
+  employmentType: Scalars['String'];
+  studio?: Maybe<Studio>;
+  studioId: Scalars['String'];
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  games?: Maybe<Array<Game>>;
+  id: Scalars['Int'];
+  name: Scalars['String'];
+};
+
 export type UpdateUserInput = {
-  displayName: Scalars['String'];
-  fullName: Scalars['String'];
+  displayName?: InputMaybe<Scalars['String']>;
+  fullName?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
@@ -112,7 +235,9 @@ export type User = {
   createdAt: Scalars['String'];
   displayName: Scalars['String'];
   email: Scalars['String'];
+  employments?: Maybe<Array<StudioEmployee>>;
   fullName: Scalars['String'];
+  games?: Maybe<Array<Game>>;
   id: Scalars['String'];
   role: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -120,18 +245,20 @@ export type User = {
 
 export type UserFragment = { __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string };
 
+export type ProfileFragment = { __typename: 'Profile', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string };
+
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, user?: { __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, profile?: { __typename: 'Profile', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string } | null } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutMutation = { __typename?: 'Mutation', logout: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, user?: { __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string } | null } };
+export type LogoutMutation = { __typename?: 'Mutation', logout: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, profile?: { __typename: 'Profile', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string } | null } };
 
 export type RegisterMutationVariables = Exact<{
   fullName: Scalars['String'];
@@ -141,12 +268,12 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, user?: { __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string } | null } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, profile?: { __typename: 'Profile', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string } | null } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, user?: { __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string } | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, profile?: { __typename: 'Profile', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string } | null } };
 
 export type GetAllUsersQueryVariables = Exact<{
   pagination: PaginationOptions;
@@ -175,18 +302,30 @@ export const UserFragmentDoc = gql`
   updatedAt
 }
     `;
+export const ProfileFragmentDoc = gql`
+    fragment Profile on Profile {
+  __typename
+  id
+  displayName
+  fullName
+  email
+  role
+  createdAt
+  updatedAt
+}
+    `;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(credentialsInput: {email: $email, password: $password}) {
     __typename
     statusCode
     message
-    user {
-      ...User
+    profile {
+      ...Profile
     }
   }
 }
-    ${UserFragmentDoc}`;
+    ${ProfileFragmentDoc}`;
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
@@ -197,12 +336,12 @@ export const LogoutDocument = gql`
     __typename
     statusCode
     message
-    user {
-      ...User
+    profile {
+      ...Profile
     }
   }
 }
-    ${UserFragmentDoc}`;
+    ${ProfileFragmentDoc}`;
 
 export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
@@ -215,12 +354,12 @@ export const RegisterDocument = gql`
     __typename
     statusCode
     message
-    user {
-      ...User
+    profile {
+      ...Profile
     }
   }
 }
-    ${UserFragmentDoc}`;
+    ${ProfileFragmentDoc}`;
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
@@ -231,12 +370,12 @@ export const MeDocument = gql`
     __typename
     statusCode
     message
-    user {
-      ...User
+    profile {
+      ...Profile
     }
   }
 }
-    ${UserFragmentDoc}`;
+    ${ProfileFragmentDoc}`;
 
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
