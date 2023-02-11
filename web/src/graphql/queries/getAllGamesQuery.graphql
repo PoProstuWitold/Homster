@@ -1,0 +1,25 @@
+query GetAllGames($pagination: PaginationOptions!) {
+    games(paginationOptions: $pagination) {
+        edges {
+            id
+            createdAt
+            updatedAt
+            name
+            description
+            type
+            studios {
+                contribution
+                studio {
+                    id
+                    name
+                }
+            }
+        }
+        pageInfo {
+            hasNext
+            hasPrevious
+            previousCursor
+            nextCursor
+        }
+    }
+}

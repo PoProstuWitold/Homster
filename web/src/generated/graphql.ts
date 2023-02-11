@@ -275,6 +275,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, profile?: { __typename: 'Profile', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: string, updatedAt: string } | null } };
 
+export type GetAllGamesQueryVariables = Exact<{
+  pagination: PaginationOptions;
+}>;
+
+
+export type GetAllGamesQuery = { __typename?: 'Query', games: { __typename?: 'PaginatedGames', edges?: Array<{ __typename?: 'Game', id: string, createdAt: string, updatedAt: string, name: string, description: string, type: string, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename?: 'Studio', id: string, name: string } | null }> | null }> | null, pageInfo: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
+
 export type GetAllUsersQueryVariables = Exact<{
   pagination: PaginationOptions;
 }>;
@@ -379,6 +386,37 @@ export const MeDocument = gql`
 
 export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
+};
+export const GetAllGamesDocument = gql`
+    query GetAllGames($pagination: PaginationOptions!) {
+  games(paginationOptions: $pagination) {
+    edges {
+      id
+      createdAt
+      updatedAt
+      name
+      description
+      type
+      studios {
+        contribution
+        studio {
+          id
+          name
+        }
+      }
+    }
+    pageInfo {
+      hasNext
+      hasPrevious
+      previousCursor
+      nextCursor
+    }
+  }
+}
+    `;
+
+export function useGetAllGamesQuery(options: Omit<Urql.UseQueryArgs<GetAllGamesQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllGamesQuery, GetAllGamesQueryVariables>({ query: GetAllGamesDocument, ...options });
 };
 export const GetAllUsersDocument = gql`
     query GetAllUsers($pagination: PaginationOptions!) {

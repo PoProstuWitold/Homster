@@ -3,26 +3,29 @@ import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { withUrqlClient } from 'next-urql'
 import Head from 'next/head'
 import { 
-	useGetAllUsersQuery
+	useGetAllGamesQuery
 } from '@/generated/graphql'
 import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
+import { getStudios } from '@/utils/getStudios'
 
-const UserItem = memo(({user, index}: any) => {
-	UserItem.displayName = 'UserItem'
-
+const GameItem = memo(({game, index}: any) => {
+	GameItem.displayName = 'GameItem'
+    const [developers, publishers] = getStudios(game.studios)
 	return (
-	  <div key={user.id} className="p-5">
+	  <div key={game.id} className="p-5">
 		<p>{index}</p>
-		<p>id: {user.id}</p>
-		<p>fullName: {user.fullName}</p>
-		<p>displayName: {user.displayName}</p>
+		<p>id: {game.id}</p>
+		<p>name: {game.name}</p>
+        <p>description: {game.description}</p>
+        <p>developers: {developers.join(', ')}</p>
+        <p>publishers: {publishers.join(', ')}</p>
 	  </div>
 	)
 })
 
 function Home() {
 	const scrollRef = useRef<HTMLDivElement>(null)
-	const [users, setUsers] = useState<any>([])
+	const [games, setGames] = useState<any>([])
 	const [cursor, setCursor] = useState<string>('')
 	const [scrollTo, setScrollTo] = useState<boolean>(false)
 	const [variables, setVariables] = useState({
@@ -34,18 +37,18 @@ function Home() {
 		}
 	})
 
-	const [{ data, fetching, error }] = useGetAllUsersQuery({
+	const [{ data, fetching, error }] = useGetAllGamesQuery({
 		variables
 	})
 
 
 	useEffect(() => {
-		if(data && data.users.users) {
+		if(data && data.games.edges) {
 			console.log('triggered')
-			setCursor(data.users.pageInfo.nextCursor)
+			setCursor(data.games.pageInfo.nextCursor)
 			if(cursor) {
-				console.log('data', data.users)
-				setUsers([...users, ...data.users.users])
+				console.log('data', data.games)
+				setGames([...games, ...data.games.edges])
 				if(scrollTo) {
 					scrollRef.current?.scrollIntoView({
 						block: 'end'
@@ -57,36 +60,31 @@ function Home() {
 	}, [data])
 	
 	const userItems = useMemo(() => {
-		return users.map((user: any, index: any) => (
-			<UserItem key={`${user.id}:${index}`} user={user} index={index} />
+		return games.map((game: any, index: any) => (
+			<GameItem key={`${game.id}:${index}`} game={game} index={index} />
 		))
-	}, [users])
+	}, [games])
 
 	return (
 		<>
 			<Head>
-				<title>Hamster - library of games</title>
+				<title>Store</title>
 			</Head>
 			<main>
 					<div 
 						ref={scrollRef}
 					>
 						{/* SSR, replace with CSR when paginating */}
-						{!users.length && data && data.users.users && data.users.users.map((user: any, index: any) => {
+						{!games.length && data && data.games.edges && data.games.edges.map((game: any, index: any) => {
 							return (
-								<div key={index} className="p-5">
-									<p>{index}</p>
-									<p>id: {user.id}</p>
-									<p>fullName: {user.fullName}</p>
-									<p>displayName: {user.displayName}</p>
-								</div>
+								<GameItem key={`${game.id}:${index}`} game={game} index={index} />
 							)
 						})}
 						{/* Replacement for CSR */}
 						{userItems}
-						{data && data.users && data.users.pageInfo.hasNext &&
+						{data && data.games && data.games.pageInfo.hasNext &&
 						<button onClick={() => {
-							setCursor(data.users.pageInfo.nextCursor)
+							setCursor(data.games.pageInfo.nextCursor)
 							setVariables({
 								...variables,
 								pagination: {
