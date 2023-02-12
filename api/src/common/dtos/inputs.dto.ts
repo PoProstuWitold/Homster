@@ -1,6 +1,6 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql'
 import { 
-    IsNotEmpty, NotContains, Length, Matches, IsEmail, IsDateString, IsEnum, IsArray, IsOptional 
+    IsNotEmpty, NotContains, Length, Matches, IsEmail, IsDateString, IsEnum, IsArray, IsOptional, IsBoolean 
 } from 'class-validator'
 import { 
     Studio as StudioDB, StudioType,
@@ -131,6 +131,11 @@ export class CreateStudioInput {
     })
     @Field(() => String, { nullable: true })
     type?: StudioType
+
+    @IsOptional()
+    @IsBoolean()
+    @Field(() => Boolean, { nullable: true })
+    makeOwner?: boolean
 }
 
 @InputType()

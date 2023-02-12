@@ -193,6 +193,7 @@ input CredentialsInput {
 input CreateStudioInput {
   name: String!
   type: String
+  makeOwner: Boolean
 }
 
 input CreateGameInput {

@@ -14,30 +14,34 @@ export class StudioService {
     
     public async create(data: CreateStudioInput, user: User) {
         try {
+            const { name, type } = data
 
             const studio = await this.prisma.studio.create({ 
                 data: {
-                    ...data
+                    name,
+                    type
                 }
             })
 
-            await this.prisma.studioEmployee.create({
-                data: {
-                    studio: {
-                        connect: {
-                            id: studio.id
-                        }
-                    },
-                    employee: {
-                        connect: {
-                            id: user.id
-                        }
-                    },
-                    employmentType: 'Owner',
-                    assignedBy: user.id,
-                    assignedAt: new Date()
-                }
-            })
+            if(data.makeOwner) {
+                await this.prisma.studioEmployee.create({
+                    data: {
+                        studio: {
+                            connect: {
+                                id: studio.id
+                            }
+                        },
+                        employee: {
+                            connect: {
+                                id: user.id
+                            }
+                        },
+                        employmentType: 'Owner',
+                        assignedBy: user.id,
+                        assignedAt: new Date()
+                    }
+                })
+            }
 
             const result = await this.prisma.studio.findUnique({
                 where: {
