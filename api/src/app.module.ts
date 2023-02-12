@@ -8,6 +8,8 @@ import { UserModule } from './users/user.module'
 import { AuthModule } from './auth/auth.module'
 import { StudioModule } from './studio/studio.module'
 import { GamesModule } from './games/games.module'
+import { TagModule } from './tags/tags.module'
+import { GenreModule } from './genres/genres.module'
 
 @Module({
 	imports: [
@@ -39,7 +41,9 @@ import { GamesModule } from './games/games.module'
         AuthModule,
 		UserModule,
         StudioModule,
-        GamesModule
+        GamesModule,
+        TagModule,
+        GenreModule
 	]
 })
 export class AppModule {}

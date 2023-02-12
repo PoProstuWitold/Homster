@@ -2,6 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Genre {
+  id: Int!
+  createdAt: String!
+  updatedAt: String!
+  name: String!
+  games: [Game!]
+}
+
 type Studio {
   id: String!
   createdAt: String!
@@ -32,6 +40,8 @@ type GameStudio {
 
 type Tag {
   id: Int!
+  createdAt: String!
+  updatedAt: String!
   name: String!
   games: [Game!]
 }
@@ -52,7 +62,9 @@ type Game {
   allReviews: Int!
   recentRating: Float!
   allRating: Float!
+  adultOnly: Boolean!
   tags: [Tag!]
+  genres: [Genre!]
   users: [User!]
 }
 
@@ -103,6 +115,22 @@ type PaginatedStudios {
   pageInfo: PageInfo!
 }
 
+type OffsetPageInfo {
+  currentPage: Int!
+  totalPages: Int!
+  totalCount: Int!
+}
+
+type PaginatedGenres {
+  edges: [Genre!]
+  pageInfo: OffsetPageInfo
+}
+
+type PaginatedTags {
+  edges: [Tag!]
+  pageInfo: OffsetPageInfo
+}
+
 type PaginatedGames {
   edges: [Game!]
   pageInfo: PageInfo!
@@ -115,6 +143,8 @@ type Query {
   users(paginationOptions: PaginationOptions!): PaginatedUsers!
   studios(paginationOptions: PaginationOptions!): PaginatedStudios!
   games(paginationOptions: PaginationOptions!): PaginatedGames!
+  tags(paginationOptions: OffsetPaginationOptions!): PaginatedTags!
+  genres(paginationOptions: OffsetPaginationOptions!): PaginatedGenres!
 }
 
 input UpdateUserInput {
@@ -129,6 +159,13 @@ input PaginationOptions {
   type: String!
 }
 
+input OffsetPaginationOptions {
+  take: Float!
+  skip: Float!
+  field: String!
+  type: String!
+}
+
 type Mutation {
   register(createUserInput: CreateUserInput!): AuthResult!
   login(credentialsInput: CredentialsInput!): AuthResult!
@@ -136,6 +173,9 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   createStudio(createStudioInput: CreateStudioInput!): Studio!
   createGame(createGameInput: CreateGameInput!): Game!
+  assign(assignToGameInput: AssignOrRevokeToGameInput!): Game!
+  createTag(createTagInput: CreateTagInput!): Tag!
+  createGenre(createGenreInput: CreateGenreInput!): Genre!
 }
 
 input CreateUserInput {
@@ -163,4 +203,19 @@ input CreateGameInput {
   type: String!
   developers: [String!]!
   publishers: [String!]!
+}
+
+input AssignOrRevokeToGameInput {
+  assignment: [String!]!
+  game: String!
+  type: String!
+  activity: String!
+}
+
+input CreateTagInput {
+  name: String!
+}
+
+input CreateGenreInput {
+  name: String!
 }

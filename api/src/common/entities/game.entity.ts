@@ -2,6 +2,7 @@ import { Field, Float, Int, ObjectType } from '@nestjs/graphql'
 import { Game as GameDB, GameStatus, GameType } from '@prisma/client'
 
 import { BaseEntity } from './base.entity'
+import { Genre } from './genre.entity'
 import { GameStudio } from './studio.entity'
 import { Tag } from './tag.entity'
 import { User } from './user.entity'
@@ -44,8 +45,14 @@ export class Game extends BaseEntity {
     @Field(() => Float)
     allRating: GameDB['allRating']
 
+    @Field(() => Boolean)
+    adultOnly: GameDB['adultOnly']
+
     @Field(() => [Tag], { nullable: true })
     tags?: Tag[]
+
+    @Field(() => [Genre], { nullable: true })
+    genres?: Genre[]
 
     @Field(() => [User], { nullable: true })
     users?: User[]

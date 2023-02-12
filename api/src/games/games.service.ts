@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { GameStudio, StudioType } from '@prisma/client'
+import { Game, GameStudio, StudioType } from '@prisma/client'
 
 import { PrismaService } from '../../database/prisma.service'
-import { CreateGameInput } from '../common/dtos'
+import { AssignOrRevokeToGameInput, CreateGameInput } from '../common/dtos'
 import { PaginationOptions } from '../common/types'
 import { isUniqueError } from '../common/utils'
 
@@ -115,6 +115,7 @@ export class GameService {
                         }
                     },
                     tags: true,
+                    genres: true,
                     users: true
                 }
             })
@@ -134,6 +135,55 @@ export class GameService {
                 pageInfo
             }
         } catch (err) {
+            throw err
+        }
+    }
+
+    public async assignOrRevoke(data: AssignOrRevokeToGameInput) {
+        try {
+            const assignments = data.assignment.map(name => ({ name }))
+            
+            const game = await this.prisma.game.update({
+                where: {
+                    id: data.game
+                },
+                data: {
+                    ...(data.type === 'tag' && data.activity === 'assign' && {
+                        tags: {
+                            connect: assignments
+                        }
+                    }),
+                    ...(data.type === 'genre' && data.activity === 'assign' && {
+                        genres: {
+                            connect: assignments
+                        }
+                    }),
+                    ...(data.type === 'tag' && data.activity === 'revoke' && {
+                        tags: {
+                            disconnect: assignments
+                        }
+                    }),
+                    ...(data.type === 'genre' && data.activity === 'revoke' && {
+                        genres: {
+                            disconnect: assignments
+                        }
+                    }),
+                },
+                include: {
+                    tags: true,
+                    genres: true,
+                    studios: {
+                        include: {
+                            studio: true
+                        }
+                    }
+                }
+            })
+
+            console.log(game)
+            return game
+        } catch (err) {
+            isUniqueError(err)
             throw err
         }
     }

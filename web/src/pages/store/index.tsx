@@ -19,6 +19,8 @@ const GameItem = memo(({game, index}: any) => {
         <p>description: {game.description}</p>
         <p>developers: {developers.join(', ')}</p>
         <p>publishers: {publishers.join(', ')}</p>
+		<p>tags: {game.tags && game.tags.map((tag: any) => tag.name).join(', ')}</p>
+		<p>genres: {game.genres && game.genres.map((genre: any) => genre.name).join(', ')}</p>
 	  </div>
 	)
 })

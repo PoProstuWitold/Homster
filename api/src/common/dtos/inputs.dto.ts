@@ -4,7 +4,9 @@ import {
 } from 'class-validator'
 import { 
     Studio as StudioDB, StudioType,
-    Game as GameDB, GameStatus, GameType 
+    Game as GameDB, GameStatus, GameType ,
+    Tag as TagDB,
+    Genre as GenreDB
 } from '@prisma/client'
 
 import { Profile, User } from '../entities'
@@ -186,4 +188,64 @@ export class CreateGameInput {
     })
     @Field(() => [String])
     publishers: string
+}
+
+@InputType()
+export class AssignOrRevokeToGameInput {
+    @IsArray({
+        message: 'Assignment must be array of assignment names'
+    })
+    @Field(() => [String])
+    assignment: string[]
+
+    @IsNotEmpty({
+        message: 'Game cannot be empty or whitespace'
+    })
+    @Length(2, 100, {
+        message: 'Game must be between 2 and 100 characters long'
+    })
+    @Field(() => String)
+    game: string
+
+    @IsNotEmpty({
+        message: 'Game assigment type cannot be empty or whitespace'
+    })
+    @Length(2, 15, {
+        message: 'Game assigment type must be either "tag" or "genre"'
+    })
+    @Field(() => String)
+    type: "tag" | "genre"
+
+    @IsNotEmpty({
+        message: 'Game assigment activity cannot be empty or whitespace'
+    })
+    @Length(2, 15, {
+        message: 'Game assigment activity must be either "assign" or "revoke"'
+    })
+    @Field(() => String)
+    activity: "assign" | "revoke"
+}
+
+@InputType()
+export class CreateTagInput {
+    @IsNotEmpty({
+        message: 'Tag name cannot be empty or whitespace'
+    })
+    @Length(2, 20, {
+        message: 'Tag name must be between 2 and 20 characters long'
+    })
+    @Field(() => String)
+    name: TagDB['name']
+}
+
+@InputType()
+export class CreateGenreInput {
+    @IsNotEmpty({
+        message: 'Genre name cannot be empty or whitespace'
+    })
+    @Length(2, 20, {
+        message: 'Genre name must be between 2 and 20 characters long'
+    })
+    @Field(() => String)
+    name: GenreDB['name']
 }

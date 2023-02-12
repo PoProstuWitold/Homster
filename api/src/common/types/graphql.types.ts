@@ -1,5 +1,5 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql'
-import { Game, Studio, User } from '../entities'
+import { Field, InputType, Int, ObjectType } from '@nestjs/graphql'
+import { Game, Genre, Studio, Tag, User } from '../entities'
 
 @ObjectType()
 export class PageInfo {
@@ -35,6 +35,36 @@ export class PaginatedStudios {
 }
 
 @ObjectType()
+export class OffsetPageInfo {
+    @Field(() => Int)
+    currentPage: number
+
+    @Field(() => Int)
+    totalPages: number
+
+    @Field(() => Int)
+    totalCount: number
+}
+
+@ObjectType()
+export class PaginatedGenres {
+    @Field(() => [Genre], { nullable: true })
+    edges?: Genre[]
+
+    @Field(() => OffsetPageInfo, { nullable: true })
+    pageInfo?: OffsetPageInfo
+}
+
+@ObjectType()
+export class PaginatedTags {
+    @Field(() => [Tag], { nullable: true })
+    edges?: Tag[]
+
+    @Field(() => OffsetPageInfo, { nullable: true })
+    pageInfo?: OffsetPageInfo
+}
+
+@ObjectType()
 export class PaginatedGames {
     @Field(() => [Game], { nullable: true })
     edges?: Game[]
@@ -49,6 +79,18 @@ export class PaginationOptions {
     take: number
     @Field()
     cursor: string
+    @Field()
+    field: string
+    @Field()
+    type: 'asc' | 'desc'
+}
+
+@InputType()
+export class OffsetPaginationOptions {
+    @Field()
+    take: number
+    @Field()
+    skip: number
     @Field()
     field: string
     @Field()

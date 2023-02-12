@@ -1,12 +1,12 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql'
-import { Tag as TagDB } from '@prisma/client'
+import { Genre as GenreDB } from '@prisma/client'
 
 import { Game } from './game.entity'
 
 @ObjectType()
-export class Tag {
+export class Genre {
     @Field(() => Int)
-    id: TagDB['id']
+    id: GenreDB['id']
 
     @Field(() => String)
     createdAt: Date
@@ -15,7 +15,7 @@ export class Tag {
     updatedAt: Date
 
     @Field(() => String)
-    name: TagDB['name']
+    name: GenreDB['name']
 
     @Field(() => [Game], { nullable: true })
     games?: Game[]

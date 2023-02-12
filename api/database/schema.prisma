@@ -46,6 +46,16 @@ enum GameType {
 model Tag {
 	id    			Int    		@id 		@default(autoincrement())
 	name  			String 		@unique
+	createdAt   	DateTime  	@default(now())
+	updatedAt   	DateTime  	@updatedAt
+	games 			Game[]
+}
+
+model Genre {
+	id    			Int    		@id 		@default(autoincrement())
+	name  			String 		@unique
+	createdAt   	DateTime  	@default(now())
+	updatedAt   	DateTime  	@updatedAt
 	games 			Game[]
 }
 
@@ -66,7 +76,9 @@ model Game {
 	recentRating	Float		@default(0)
 	allRating		Float		@default(0)
 	tags  			Tag[]
+	genres			Genre[]
 	users			User[]
+	adultOnly		Boolean		@default(false)
 }
 
 enum StudioType {

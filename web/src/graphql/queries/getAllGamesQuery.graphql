@@ -2,6 +2,14 @@ query GetAllGames($pagination: PaginationOptions!) {
     games(paginationOptions: $pagination) {
         edges {
             id
+            adultOnly
+            tags {
+                name
+            }
+            genres {
+                name
+            }
+            basicPrice
             createdAt
             updatedAt
             name

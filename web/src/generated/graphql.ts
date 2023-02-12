@@ -15,6 +15,13 @@ export type Scalars = {
   Float: number;
 };
 
+export type AssignOrRevokeToGameInput = {
+  activity: Scalars['String'];
+  assignment: Array<Scalars['String']>;
+  game: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export type AuthResult = {
   __typename?: 'AuthResult';
   message?: Maybe<Scalars['String']>;
@@ -32,9 +39,17 @@ export type CreateGameInput = {
   type: Scalars['String'];
 };
 
+export type CreateGenreInput = {
+  name: Scalars['String'];
+};
+
 export type CreateStudioInput = {
   name: Scalars['String'];
   type?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateTagInput = {
+  name: Scalars['String'];
 };
 
 export type CreateUserInput = {
@@ -51,11 +66,13 @@ export type CredentialsInput = {
 
 export type Game = {
   __typename?: 'Game';
+  adultOnly: Scalars['Boolean'];
   allRating: Scalars['Float'];
   allReviews: Scalars['Int'];
   basicPrice: Scalars['Float'];
   createdAt: Scalars['String'];
   description: Scalars['String'];
+  genres?: Maybe<Array<Genre>>;
   id: Scalars['String'];
   name: Scalars['String'];
   price: Scalars['Float'];
@@ -79,14 +96,31 @@ export type GameStudio = {
   studioId: Scalars['String'];
 };
 
+export type Genre = {
+  __typename?: 'Genre';
+  createdAt: Scalars['String'];
+  games?: Maybe<Array<Game>>;
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  assign: Game;
   createGame: Game;
+  createGenre: Genre;
   createStudio: Studio;
+  createTag: Tag;
   createUser: User;
   login: AuthResult;
   logout: AuthResult;
   register: AuthResult;
+};
+
+
+export type MutationAssignArgs = {
+  assignToGameInput: AssignOrRevokeToGameInput;
 };
 
 
@@ -95,8 +129,18 @@ export type MutationCreateGameArgs = {
 };
 
 
+export type MutationCreateGenreArgs = {
+  createGenreInput: CreateGenreInput;
+};
+
+
 export type MutationCreateStudioArgs = {
   createStudioInput: CreateStudioInput;
+};
+
+
+export type MutationCreateTagArgs = {
+  createTagInput: CreateTagInput;
 };
 
 
@@ -114,6 +158,20 @@ export type MutationRegisterArgs = {
   createUserInput: CreateUserInput;
 };
 
+export type OffsetPageInfo = {
+  __typename?: 'OffsetPageInfo';
+  currentPage: Scalars['Int'];
+  totalCount: Scalars['Int'];
+  totalPages: Scalars['Int'];
+};
+
+export type OffsetPaginationOptions = {
+  field: Scalars['String'];
+  skip: Scalars['Float'];
+  take: Scalars['Float'];
+  type: Scalars['String'];
+};
+
 export type PageInfo = {
   __typename?: 'PageInfo';
   hasNext: Scalars['Boolean'];
@@ -128,10 +186,22 @@ export type PaginatedGames = {
   pageInfo: PageInfo;
 };
 
+export type PaginatedGenres = {
+  __typename?: 'PaginatedGenres';
+  edges?: Maybe<Array<Genre>>;
+  pageInfo?: Maybe<OffsetPageInfo>;
+};
+
 export type PaginatedStudios = {
   __typename?: 'PaginatedStudios';
   edges?: Maybe<Array<Studio>>;
   pageInfo: PageInfo;
+};
+
+export type PaginatedTags = {
+  __typename?: 'PaginatedTags';
+  edges?: Maybe<Array<Tag>>;
+  pageInfo?: Maybe<OffsetPageInfo>;
 };
 
 export type PaginatedUsers = {
@@ -163,8 +233,10 @@ export type Profile = {
 export type Query = {
   __typename?: 'Query';
   games: PaginatedGames;
+  genres: PaginatedGenres;
   me: AuthResult;
   studios: PaginatedStudios;
+  tags: PaginatedTags;
   updateUser: User;
   user: User;
   users: PaginatedUsers;
@@ -176,8 +248,18 @@ export type QueryGamesArgs = {
 };
 
 
+export type QueryGenresArgs = {
+  paginationOptions: OffsetPaginationOptions;
+};
+
+
 export type QueryStudiosArgs = {
   paginationOptions: PaginationOptions;
+};
+
+
+export type QueryTagsArgs = {
+  paginationOptions: OffsetPaginationOptions;
 };
 
 
@@ -220,9 +302,11 @@ export type StudioEmployee = {
 
 export type Tag = {
   __typename?: 'Tag';
+  createdAt: Scalars['String'];
   games?: Maybe<Array<Game>>;
   id: Scalars['Int'];
   name: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type UpdateUserInput = {
@@ -280,7 +364,7 @@ export type GetAllGamesQueryVariables = Exact<{
 }>;
 
 
-export type GetAllGamesQuery = { __typename?: 'Query', games: { __typename?: 'PaginatedGames', edges?: Array<{ __typename?: 'Game', id: string, createdAt: string, updatedAt: string, name: string, description: string, type: string, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename?: 'Studio', id: string, name: string } | null }> | null }> | null, pageInfo: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
+export type GetAllGamesQuery = { __typename?: 'Query', games: { __typename?: 'PaginatedGames', edges?: Array<{ __typename?: 'Game', id: string, adultOnly: boolean, basicPrice: number, createdAt: string, updatedAt: string, name: string, description: string, type: string, tags?: Array<{ __typename?: 'Tag', name: string }> | null, genres?: Array<{ __typename?: 'Genre', name: string }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename?: 'Studio', id: string, name: string } | null }> | null }> | null, pageInfo: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
 
 export type GetAllUsersQueryVariables = Exact<{
   pagination: PaginationOptions;
@@ -392,6 +476,14 @@ export const GetAllGamesDocument = gql`
   games(paginationOptions: $pagination) {
     edges {
       id
+      adultOnly
+      tags {
+        name
+      }
+      genres {
+        name
+      }
+      basicPrice
       createdAt
       updatedAt
       name
