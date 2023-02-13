@@ -20,11 +20,7 @@ export class AuthResolver {
         const result = await this.authService.register(data)
         ctx.req.session.set('user', result.profile)
 
-        return {
-            statusCode: 200,
-            message: 'Signed up',
-            ...result
-        }
+        return result
     }
 
     @Mutation(() => AuthResult)
@@ -35,11 +31,7 @@ export class AuthResolver {
         const result = await this.authService.login(data)
         ctx.req.session.set('user', result.profile)
 
-        return {
-            statusCode: 200,
-            message: 'Signed in',
-            ...result
-        }
+        return result
     }
 
     @UseGuards(SessionGuard)
@@ -47,10 +39,12 @@ export class AuthResolver {
     public async me(
         @GqlContext() ctx: GqlFastifyContext,
     ) {
+        const profile = await this.authService.serializeSession(ctx.req.session.get('user'))
+
         return {
             statusCode: 200,
             message: 'Your profile',
-            profile: ctx.req.session.get('user'),
+            profile,
         }
     }
 
@@ -64,7 +58,7 @@ export class AuthResolver {
         return {
             statusCode: 200,
             message: 'Logged out',
-            user: null
+            profile: null
         }
     }
 }

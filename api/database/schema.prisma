@@ -104,9 +104,9 @@ model Studio {
 }
 
 model StudioEmployee {
-	studio      	Studio      	@relation(fields: [studioId], references: [id])
+	studio      	Studio      	@relation(fields: [studioId], references: [id], onDelete: Cascade)
 	studioId    	String       
-	employee      	User        	@relation(fields: [employeeId], references: [id])
+	employee      	User        	@relation(fields: [employeeId], references: [id], onDelete: Cascade)
 	employeeId    	String
 	employmentType	EmploymentType 	@default(Worker)       
 	assignedAt 		DateTime 		@default(now())
@@ -116,9 +116,9 @@ model StudioEmployee {
 }
 
 model GameStudio {
-	game 			Game 		@relation(fields: [gameId], references: [id])
+	game 			Game 		@relation(fields: [gameId], references: [id], onDelete: Cascade)
 	gameId 			String
-	studio 			Studio 		@relation(fields: [studioId], references: [id])
+	studio 			Studio 		@relation(fields: [studioId], references: [id], onDelete: Cascade)
 	studioId 		String
 	contribution	StudioType	@default(DeveloperAndPublisher)
 	

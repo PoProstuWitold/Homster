@@ -98,7 +98,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                         .map(category => (
                         <div key={category.id} className="grid grid-cols-2 gap-x-2 gap-y-4">
                             {category.sections.map((item, index) => (
-                            <Link key={item.name} href={item.href} className={`btn btn-primary btn-ghost ${index === 0 ? "text-primary" : "hover:text-primary"}`}>{item.name}</Link>
+                                <a key={item.name} href={item.href} className={`btn btn-primary btn-ghost ${index === 0 ? "text-primary" : "hover:text-primary"}`}>{item.name}</a>
                             ))
                             }
                         </div>
@@ -166,7 +166,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                                         <ul className="mx-auto w-full max-w-5xl flex">
                                             {category.sections.map((section, index) => (
                                             <li key={section.name} className={`${index !== 0 && "border-l-2 border-primary"}`}>
-                                                <Link href={section.href} className={`py-3 px-4 text-sm font-semibold whitespace-nowrap hover:text-primary`}>{section.name}</Link>
+                                                <a href={section.href} className={`py-3 px-4 text-sm font-semibold whitespace-nowrap hover:text-primary`}>{section.name}</a>
                                             </li>
                                             ))
                                             }

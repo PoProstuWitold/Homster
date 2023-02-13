@@ -21,8 +21,11 @@ import { GenreModule } from './genres/genres.module'
 			graphiql: true,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
             subscription: true,
+            buildSchemaOptions: {
+                dateScalarMode: 'isoDate'
+            },
             errorFormatter: execution => {
-                const [error] = execution.errors // take first error
+                const [error] = execution.errors
                 const originalError = error?.originalError
                 if (originalError instanceof HttpException) {
                     return {

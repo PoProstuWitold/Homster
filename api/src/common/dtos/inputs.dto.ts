@@ -1,6 +1,10 @@
-import { Field, InputType, Int, ObjectType } from '@nestjs/graphql'
 import { 
-    IsNotEmpty, NotContains, Length, Matches, IsEmail, IsDateString, IsEnum, IsArray, IsOptional, IsBoolean 
+    Field, GraphQLISODateTime, InputType, Int, ObjectType 
+} from '@nestjs/graphql'
+import { 
+    IsNotEmpty, NotContains, Length, Matches, 
+    IsEmail, IsEnum, IsArray, IsOptional, 
+    IsBoolean, IsNumber, IsDate 
 } from 'class-validator'
 import { 
     Studio as StudioDB, StudioType,
@@ -9,7 +13,7 @@ import {
     Genre as GenreDB
 } from '@prisma/client'
 
-import { Profile, User } from '../entities'
+import { Profile } from '../entities'
 
 @InputType()
 export class CreateUserInput {
@@ -170,11 +174,11 @@ export class CreateGameInput {
     @IsNotEmpty({
         message: 'Game release date cannot be empty or whitespace'
     })
-    @IsDateString({}, {
-        message: 'Release date must be valid ISO string'
+    @IsDate({
+        message: 'Release date must be valid date'
     })
-    @Field(() => String)
-    releasedAt: GameDB['releasedAt']
+    @Field(() => GraphQLISODateTime)
+    releasedAt: Date
 
     @IsEnum(GameType, {
         message: `Game type must be one of these: Game, DLC`
@@ -193,6 +197,17 @@ export class CreateGameInput {
     })
     @Field(() => [String])
     publishers: string
+
+    @IsOptional()
+    @IsNumber({
+        allowInfinity: false,
+        allowNaN: false,
+        maxDecimalPlaces: 2
+    }, {
+        message: 'Basic game price must be possitive number'
+    })
+    @Field(() => Number, { nullable: true })
+    basicPrice?: number
 }
 
 @InputType()

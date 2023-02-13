@@ -1,15 +1,15 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql'
 
 @ObjectType({
     isAbstract: true
 })
 export abstract class BaseEntity {
-    @Field(() => String)
-    public id: string
+    @Field(() => ID)
+    id: string
 
-    @Field(() => String)
-    public createdAt: Date
+    @Field()
+    createdAt: Date
 
-    @Field(() => String)
-    public updatedAt: Date
+    @Field(() => GraphQLISODateTime)
+    updatedAt: Date
 }

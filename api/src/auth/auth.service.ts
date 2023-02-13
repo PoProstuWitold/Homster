@@ -5,6 +5,7 @@ import { UserService } from '../users/user.service'
 import { isUniqueError } from '../common/utils'
 import { AuthResult, CreateUserInput, CredentialsInput } from '../common/dtos'
 import { InvalidCredentials } from '../common/exceptions'
+import { User } from '../common/entities'
 
 @Injectable()
 export class AuthService {
@@ -16,8 +17,12 @@ export class AuthService {
         try {
             const profile = await this.userService.create(data)
             
+            delete profile.password
+
             const result: AuthResult = {
-                profile
+                profile,
+                statusCode: 200,
+                message: 'Signed up',
             }
 
             return result
@@ -41,11 +46,38 @@ export class AuthService {
                 throw new InvalidCredentials()
             }
 
+            delete profile.password
+
             const result: AuthResult = {
-                profile
+                profile,
+                statusCode: 200,
+                message: 'Signed up',
             }
 
             return result
+        } catch (err) {
+            throw err
+        }
+    }
+
+    public async serializeSession(user: User) {
+        try {
+            let {
+                createdAt,
+                updatedAt,
+                ...rest
+            } = user
+
+            createdAt = new Date(createdAt)
+            updatedAt = new Date(updatedAt)
+
+            const profile = {
+                createdAt,
+                updatedAt,
+                ...rest
+            }
+
+            return profile
         } catch (err) {
             throw err
         }

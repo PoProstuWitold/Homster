@@ -5,14 +5,14 @@ export const getStudios = (studios: any[]) => {
     studios.map(studio => {
         switch (studio.contribution) {
             case 'Developer':
-                developers.push(studio.studio.name)
+                developers.push(studio.studio)
                 break
             case 'Publisher':
-                publishers.push(studio.studio.name)
+                publishers.push(studio.studio)
                 break
             case 'DeveloperAndPublisher':
-                developers.push(studio.studio.name)
-                publishers.push(studio.studio.name)
+                developers.push(studio.studio)
+                publishers.push(studio.studio)
                 break
             default:
                 break

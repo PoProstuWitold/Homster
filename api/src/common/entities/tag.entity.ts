@@ -1,17 +1,17 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql'
 import { Tag as TagDB } from '@prisma/client'
 
 import { Game } from './game.entity'
 
 @ObjectType()
 export class Tag {
-    @Field(() => Int)
+    @Field(() => ID)
     id: TagDB['id']
 
-    @Field(() => String)
+    @Field(() => GraphQLISODateTime)
     createdAt: Date
 
-    @Field(() => String)
+    @Field(() => GraphQLISODateTime)
     updatedAt: Date
 
     @Field(() => String)

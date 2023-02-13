@@ -14,10 +14,12 @@ export class GameService {
     
     public async create(data: CreateGameInput) {
         try {
-            const {
-                name, description, status, type, releasedAt,
+            let {
+                name, description, status, type, releasedAt, basicPrice,
                 developers, publishers
             } = data
+
+            releasedAt = releasedAt
 
             const studios = [...developers, ...publishers]
             const devs = []
@@ -67,7 +69,10 @@ export class GameService {
             const game = await this.prisma.game.create({
                 data: {
                     name, description, status, type, releasedAt,
-                    // basicPrice,
+                    ...(basicPrice && {
+                        basicPrice,
+                        price: basicPrice
+                    })
                 }
             })
 

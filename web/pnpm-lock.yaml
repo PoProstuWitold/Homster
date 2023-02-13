@@ -20,6 +20,7 @@ specifiers:
   '@urql/exchange-retry': ^1.0.0
   autoprefixer: ^10.4.13
   daisyui: ^2.50.0
+  dayjs: ^1.11.7
   eslint: 8.34.0
   eslint-config-next: 13.1.6
   graphql: ^16.6.0
@@ -49,6 +50,7 @@ dependencies:
   '@urql/exchange-graphcache': 5.0.8_graphql@16.6.0
   '@urql/exchange-retry': 1.0.0_graphql@16.6.0
   daisyui: 2.50.0_by5iqycgvtroytm54ytclj4zzi
+  dayjs: 1.11.7
   eslint: 8.34.0
   eslint-config-next: 13.1.6_7kw3g6rralp5ps6mg3uyzz6azm
   graphql: 16.6.0
@@ -2604,6 +2606,10 @@ packages:
   /dataloader/2.1.0:
     resolution: {integrity: sha512-qTcEYLen3r7ojZNgVUaRggOI+KM7jrKxXeSHhogh/TWxYMeONEMqY+hmkobiYQozsGIyg9OYVzO4ZIfoB4I0pQ==}
     dev: true
+
+  /dayjs/1.11.7:
+    resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
+    dev: false
 
   /debounce/1.2.1:
     resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}

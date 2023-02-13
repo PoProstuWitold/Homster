@@ -1,4 +1,4 @@
-import { Field, Float, Int, ObjectType } from '@nestjs/graphql'
+import { Field, Float, GraphQLISODateTime, Int, ObjectType } from '@nestjs/graphql'
 import { Game as GameDB, GameStatus, GameType } from '@prisma/client'
 
 import { BaseEntity } from './base.entity'
@@ -30,8 +30,8 @@ export class Game extends BaseEntity {
     @Field(() => [GameStudio], { nullable: true })
     studios?: GameStudio[]
 
-    @Field(() => String)
-    releasedAt: GameDB['releasedAt']
+    @Field(() => GraphQLISODateTime)
+    releasedAt: Date
 
     @Field(() => Int)
     recentReviews: GameDB['recentReviews']

@@ -1,17 +1,17 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { Field, GraphQLISODateTime, ID, ObjectType } from '@nestjs/graphql'
 import { Genre as GenreDB } from '@prisma/client'
 
 import { Game } from './game.entity'
 
 @ObjectType()
 export class Genre {
-    @Field(() => Int)
+    @Field(() => ID)
     id: GenreDB['id']
 
-    @Field(() => String)
+    @Field(() => GraphQLISODateTime)
     createdAt: Date
 
-    @Field(() => String)
+    @Field(() => GraphQLISODateTime)
     updatedAt: Date
 
     @Field(() => String)

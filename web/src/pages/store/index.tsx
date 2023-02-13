@@ -1,29 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { withUrqlClient } from 'next-urql'
 import Head from 'next/head'
 import { 
 	useGetAllGamesQuery
 } from '@/generated/graphql'
 import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
-import { getStudios } from '@/utils/getStudios'
-
-const GameItem = memo(({game, index}: any) => {
-	GameItem.displayName = 'GameItem'
-    const [developers, publishers] = getStudios(game.studios)
-	return (
-	  <div key={game.id} className="p-5">
-		<p>{index}</p>
-		<p>id: {game.id}</p>
-		<p>name: {game.name}</p>
-        <p>description: {game.description}</p>
-        <p>developers: {developers.join(', ')}</p>
-        <p>publishers: {publishers.join(', ')}</p>
-		<p>tags: {game.tags && game.tags.map((tag: any) => tag.name).join(', ')}</p>
-		<p>genres: {game.genres && game.genres.map((genre: any) => genre.name).join(', ')}</p>
-	  </div>
-	)
-})
+import { GameCard } from '@/components/GameCard'
 
 function Home() {
 	const scrollRef = useRef<HTMLDivElement>(null)
@@ -32,7 +15,7 @@ function Home() {
 	const [scrollTo, setScrollTo] = useState<boolean>(false)
 	const [variables, setVariables] = useState({
 		pagination: {
-			take: 10,
+			take: 5,
 			cursor: '',
 			field: 'createdAt',
 			type: 'desc'
@@ -61,9 +44,9 @@ function Home() {
 		}
 	}, [data])
 	
-	const userItems = useMemo(() => {
+	const gameCards = useMemo(() => {
 		return games.map((game: any, index: any) => (
-			<GameItem key={`${game.id}:${index}`} game={game} index={index} />
+			<GameCard key={`${game.id}:${Math.random()}`} game={game} index={index} />
 		))
 	}, [games])
 
@@ -79,24 +62,24 @@ function Home() {
 						{/* SSR, replace with CSR when paginating */}
 						{!games.length && data && data.games.edges && data.games.edges.map((game: any, index: any) => {
 							return (
-								<GameItem key={`${game.id}:${index}`} game={game} index={index} />
+								<GameCard key={`${game.id}:${Math.random()}`} game={game} index={index} />
 							)
 						})}
 						{/* Replacement for CSR */}
-						{userItems}
+						{gameCards}
 						{data && data.games && data.games.pageInfo.hasNext &&
-						<button onClick={() => {
-							setCursor(data.games.pageInfo.nextCursor)
-							setVariables({
-								...variables,
-								pagination: {
-									...variables.pagination,
-									cursor
-								}
-							})
-							setScrollTo(true)
-						}} className="btn btn-primary">next</button>
-					}
+							<button onClick={() => {
+								setCursor(data.games.pageInfo.nextCursor)
+								setVariables({
+									...variables,
+									pagination: {
+										...variables.pagination,
+										cursor
+									}
+								})
+								setScrollTo(true)
+							}} className="btn btn-primary">next</button>
+						}
 					</div>		
 			</main>
 		</>

@@ -3,17 +3,22 @@
 # ------------------------------------------------------
 
 type Genre {
-  id: Int!
-  createdAt: String!
-  updatedAt: String!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   games: [Game!]
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Studio {
-  id: String!
-  createdAt: String!
-  updatedAt: String!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   type: String!
   games: [GameStudio!]
@@ -39,17 +44,17 @@ type GameStudio {
 }
 
 type Tag {
-  id: Int!
-  createdAt: String!
-  updatedAt: String!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   games: [Game!]
 }
 
 type Game {
-  id: String!
-  createdAt: String!
-  updatedAt: String!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   name: String!
   description: String!
   basicPrice: Float!
@@ -57,7 +62,7 @@ type Game {
   status: String!
   type: String!
   studios: [GameStudio!]
-  releasedAt: String!
+  releasedAt: DateTime!
   recentReviews: Int!
   allReviews: Int!
   recentRating: Float!
@@ -69,9 +74,9 @@ type Game {
 }
 
 type User {
-  id: String!
-  createdAt: String!
-  updatedAt: String!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   displayName: String!
   fullName: String!
   role: String!
@@ -81,9 +86,9 @@ type User {
 }
 
 type Profile {
-  id: String!
-  createdAt: String!
-  updatedAt: String!
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   displayName: String!
   fullName: String!
   role: String!
@@ -200,10 +205,11 @@ input CreateGameInput {
   name: String!
   description: String!
   status: String!
-  releasedAt: String!
+  releasedAt: DateTime!
   type: String!
   developers: [String!]!
   publishers: [String!]!
+  basicPrice: Float
 }
 
 input AssignOrRevokeToGameInput {
