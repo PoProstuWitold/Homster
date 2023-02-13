@@ -13,7 +13,7 @@ export const GameCard = memo(({game, index}: any) => {
 		<div className="flex flex-row items-center justify-between border-b-2 pb-2 border-base-100">
 			<h3 className="text-2xl">{game.name}</h3>
 			{game.adultOnly &&
-				<span className="relative mx-2 p-2 text-sm bg-error text-base-300 rounded-full">
+				<span className="mx-2 p-2 text-sm bg-error font-extrabold rounded-[100%]">
 					+18
 				</span>
 			}
