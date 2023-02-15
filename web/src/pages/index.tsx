@@ -33,28 +33,46 @@ function Home() {
 			type: 'desc'
 		}
 	})
+	const [hasNextPage, setHasNextPage] = useState<boolean>(false)
 
-	const [{ data, fetching, error }] = useGetAllUsersQuery({
+	const [{ data, fetching }] = useGetAllUsersQuery({
 		variables
 	})
 
-
 	useEffect(() => {
-		if(data && data.users.edges) {
-			console.log('triggered')
+		if (data && data.users.edges) {
 			setCursor(data.users.pageInfo.nextCursor)
+			setHasNextPage(data.users.pageInfo.hasNext)
 			if(cursor) {
 				console.log('data', data.users)
 				setUsers([...users, ...data.users.edges])
-				if(scrollTo) {
-					scrollRef.current?.scrollIntoView({
-						block: 'end'
-					})
-				}
 			}
-			
 		}
 	}, [data])
+
+	useEffect(() => {
+		if (hasNextPage && scrollRef.current) {
+			const element = scrollRef.current
+			const observer = new IntersectionObserver((entries) => {
+				if (data && entries[0].isIntersecting) {
+					setCursor(data.users.pageInfo.nextCursor)
+					setHasNextPage(data.users.pageInfo.hasNext)
+					setVariables({
+						...variables,
+						pagination: {
+							...variables.pagination,
+							cursor
+						}
+					})
+				}
+			})
+			observer.observe(element)
+
+			return () => {
+				observer.unobserve(element)
+			}
+		}
+	}, [hasNextPage, cursor, scrollRef.current])
 	
 	const userItems = useMemo(() => {
 		return users.map((user: any, index: any) => (
@@ -68,36 +86,26 @@ function Home() {
 				<title>Hamster - library of games</title>
 			</Head>
 			<main>
-					<div 
-						ref={scrollRef}
-					>
+					<div>
 						{/* SSR, replace with CSR when paginating */}
 						{!users.length && data && data.users.edges && data.users.edges.map((user: any, index: any) => {
 							return (
-								<div key={index} className="p-5">
-									<p>{index}</p>
-									<p>id: {user.id}</p>
-									<p>fullName: {user.fullName}</p>
-									<p>displayName: {user.displayName}</p>
-								</div>
+								<UserItem key={`${user.id}:${index}`} user={user} index={index} />
 							)
 						})}
 						{/* Replacement for CSR */}
 						{userItems}
-						{data && data.users && data.users.pageInfo.hasNext &&
-						<button onClick={() => {
-							setCursor(data.users.pageInfo.nextCursor)
-							setVariables({
-								...variables,
-								pagination: {
-									...variables.pagination,
-									cursor
-								}
-							})
-							setScrollTo(true)
-						}} className="btn btn-primary">next</button>
-					}
-					</div>		
+					</div>	
+					{hasNextPage && (
+						<div ref={scrollRef} className="w-full h-1">
+							{/* A small div used to observe when the user scrolls to the bottom of the page */}
+						</div>
+					)}
+					{!hasNextPage && !fetching && (
+						<div className="w-full mx-auto p-4 flex justify-center italic">
+							No more data to load
+						</div>
+					)}	
 			</main>
 		</>
 	)

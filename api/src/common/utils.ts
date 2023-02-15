@@ -11,5 +11,8 @@ export const isPrismaError = (err: any) => {
         if (err.code === 'P2025') {
             throw new BadRequestException(err.meta.cause || 'Record to update not found')
         }
+        if (err.code === 'P2016') {
+            throw new BadRequestException('Entity with given criteria not found')
+        }
     }
 }
