@@ -24,5 +24,7 @@ async function main() {
 main()
     .catch((e) => console.error(e))
     .finally(async () => {
+        console.log('Seed succed. Disconnecting database...')
         await prisma.$disconnect()
+        console.log('Database disconnected')
     })

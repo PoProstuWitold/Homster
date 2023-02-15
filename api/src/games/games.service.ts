@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-import { Game, GameStudio, StudioType } from '@prisma/client'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { GameStudio, StudioType } from '@prisma/client'
+import { isUUID } from 'class-validator'
 
 import { PrismaService } from '../../database/prisma.service'
 import { AssignOrRevokeToGameInput, CreateGameInput } from '../common/dtos'
 import { PaginationOptions } from '../common/types'
-import { isUniqueError } from '../common/utils'
+import { isPrismaError } from '../common/utils'
 
 @Injectable()
 export class GameService {
@@ -16,55 +17,12 @@ export class GameService {
         try {
             let {
                 name, description, status, type, releasedAt, basicPrice,
-                developers, publishers
+                developers, publishers,
+                tags, genres
             } = data
 
-            releasedAt = releasedAt
-
-            const studios = [...developers, ...publishers]
-            const devs = []
-            const publ = []
-            const devsAndPubl = []
-
-            for(const studio of studios) {
-                const result = await this.prisma.studio.findUnique({
-                    where: {
-                        name: studio
-                    },
-                })
-
-                if(!result) {
-                    throw new NotFoundException(`Studio with name ${studio} not found`)
-                }
- 
-                if(result) {
-                    if(developers.includes(result.name) && !publishers.includes(result.name)) {
-                        console.log(`Studio ${result.name} is developer of this game`)
-                        devs.push({
-                            contribution: StudioType['Developer'],
-                            studioId: result.id
-                        })
-                    }
-
-                    if(!developers.includes(result.name) && publishers.includes(result.name)) {
-                        console.log(`Studio ${result.name} is publisher of this game`)
-                        publ.push({
-                            contribution: StudioType['Publisher'],
-                            studioId: result.id
-                        })
-                    }
-
-                    if(developers.includes(result.name) && publishers.includes(result.name)) {
-                        console.log(`Studio ${result.name} is developer & publisher of this game`)
-                        devsAndPubl.push({
-                            contribution: StudioType['DeveloperAndPublisher'],
-                            studioId: result.id
-                        })
-                    }
-                }
-            }
-
-            const allStudios = [...devs, ...publ, ...devsAndPubl]
+            const [dbTags, dbGenres] = await this.checkIfAssigmentsExist(tags, genres)
+            const allStudios = await this.checkIfStudiosExist(developers, publishers)
 
             const game = await this.prisma.game.create({
                 data: {
@@ -72,7 +30,17 @@ export class GameService {
                     ...(basicPrice && {
                         basicPrice,
                         price: basicPrice
-                    })
+                    }),
+                    ...(tags && {
+                        tags: {
+                            connect: dbTags
+                        }
+                    }),
+                    ...(genres && {
+                        genres: {
+                            connect: dbGenres
+                        }
+                    }),
                 }
             })
 
@@ -89,12 +57,21 @@ export class GameService {
             const result = await this.prisma.game.findUnique({
                 where: {
                     id: game.id
+                },
+                include: {
+                    studios: {
+                        include: {
+                            studio: true
+                        }
+                    },
+                    tags: true,
+                    genres: true
                 }
             })
 
             return result
         } catch (err) {
-            isUniqueError(err)
+            isPrismaError(err)
             throw err
         }
     }
@@ -146,31 +123,45 @@ export class GameService {
 
     public async assignOrRevoke(data: AssignOrRevokeToGameInput) {
         try {
-            const assignments = data.assignment.map(name => ({ name }))
-            
-            const game = await this.prisma.game.update({
+            let {
+                activity, game, genres, tags
+            } = data
+
+            if((!genres || !genres.length) && (!tags || !tags.length)) {
+                throw new BadRequestException('No tags & genres provided!')
+            }
+
+            const isUuid = isUUID(game)
+            const [dbTags, dbGenres] = await this.checkIfAssigmentsExist(tags, genres)
+
+            const gameDb = await this.prisma.game.update({
                 where: {
-                    id: data.game
+                    ...(isUuid && {
+                        id: game
+                    }),
+                    ...(!isUuid && {
+                        name: game
+                    }),
                 },
                 data: {
-                    ...(data.type === 'tag' && data.activity === 'assign' && {
+                    ...(dbTags && activity === 'assign' && {
                         tags: {
-                            connect: assignments
+                            connect: dbTags
                         }
                     }),
-                    ...(data.type === 'genre' && data.activity === 'assign' && {
+                    ...(dbGenres && activity === 'assign' && {
                         genres: {
-                            connect: assignments
+                            connect: dbGenres
                         }
                     }),
-                    ...(data.type === 'tag' && data.activity === 'revoke' && {
+                    ...(dbTags && activity === 'revoke' && {
                         tags: {
-                            disconnect: assignments
+                            disconnect: dbTags
                         }
                     }),
-                    ...(data.type === 'genre' && data.activity === 'revoke' && {
+                    ...(dbGenres && activity === 'revoke' && {
                         genres: {
-                            disconnect: assignments
+                            disconnect: dbGenres
                         }
                     }),
                 },
@@ -185,10 +176,109 @@ export class GameService {
                 }
             })
 
-            console.log(game)
-            return game
+            return gameDb
         } catch (err) {
-            isUniqueError(err)
+            isPrismaError(err)
+            throw err
+        }
+    }
+
+    private async checkIfStudiosExist(developers, publishers) {
+        try {
+            const studios = [...developers, ...publishers]
+            const devs = []
+            const publ = []
+            const devsAndPubl = []
+            console.log(studios)
+            for(const studio of studios) {
+                console.log(studio)
+                const result = await this.prisma.studio.findUnique({
+                    where: {
+                        name: studio
+                    },
+                })
+
+                if(!result) {
+                    throw new NotFoundException(`Studio with name '${studio}' not found`)
+                }
+ 
+                if(result) {
+                    if(developers.includes(result.name) && !publishers.includes(result.name)) {
+                        console.log(`Studio ${result.name} is developer of this game`)
+                        devs.push({
+                            contribution: StudioType['Developer'],
+                            studioId: result.id
+                        })
+                    }
+
+                    if(!developers.includes(result.name) && publishers.includes(result.name)) {
+                        console.log(`Studio ${result.name} is publisher of this game`)
+                        publ.push({
+                            contribution: StudioType['Publisher'],
+                            studioId: result.id
+                        })
+                    }
+
+                    if(developers.includes(result.name) && publishers.includes(result.name)) {
+                        console.log(`Studio ${result.name} is developer & publisher of this game`)
+                        devsAndPubl.push({
+                            contribution: StudioType['DeveloperAndPublisher'],
+                            studioId: result.id
+                        })
+                    }
+                }
+            }
+
+            const allStudios = [...devs, ...publ, ...devsAndPubl]
+
+            return allStudios
+        } catch (err) {
+            throw err
+        }
+    }
+
+    private async checkIfAssigmentsExist(tags: string[], genres: string[]) {
+        try {
+            const dbTags = []
+            const dbGenres = []
+
+            if(tags) {
+                for(const tag of tags) {
+                    const result = await this.prisma.tag.findUnique({
+                        where: {
+                            name: tag
+                        }
+                    })
+
+                    if(!result) {
+                        throw new NotFoundException(`Tag with name '${tag}' not found`)
+                    }
+
+                    dbTags.push({ name: result.name })
+                }
+            }
+
+            if(genres) {
+                for(const genre of genres) {
+                    const result = await this.prisma.genre.findUnique({
+                        where: {
+                            name: genre
+                        }
+                    })
+
+                    if(!result) {
+                        throw new NotFoundException(`Genre with name '${genre}' not found`)
+                    }
+
+                    dbGenres.push({ name: result.name })
+                }
+            }
+
+            return [
+                dbTags,
+                dbGenres
+            ]
+        } catch (err) {
             throw err
         }
     }

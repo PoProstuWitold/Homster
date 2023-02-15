@@ -17,6 +17,9 @@ export class Tag {
     @Field(() => String)
     name: TagDB['name']
 
+    @Field(() => String, { nullable: true })
+    description?: TagDB['description']
+
     @Field(() => [Game], { nullable: true })
     games?: Game[]
 }

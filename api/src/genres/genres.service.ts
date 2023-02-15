@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
-import { isUniqueError } from '../common/utils'
+import { isPrismaError } from '../common/utils'
 import { OffsetPaginationOptions } from '../common/types'
 import { CreateGenreInput } from '../common/dtos'
 import { PrismaService } from '../../database/prisma.service'
@@ -16,7 +16,7 @@ export class GenreService {
             const genre = await this.prisma.genre.create({ data })
             return genre
         } catch (err) {
-            isUniqueError(err)
+            isPrismaError(err)
             throw err
         }
     }

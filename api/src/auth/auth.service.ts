@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { verify } from 'argon2'
 
 import { UserService } from '../users/user.service'
-import { isUniqueError } from '../common/utils'
+import { isPrismaError } from '../common/utils'
 import { AuthResult, CreateUserInput, CredentialsInput } from '../common/dtos'
 import { InvalidCredentials } from '../common/exceptions'
 import { User } from '../common/entities'
@@ -27,7 +27,7 @@ export class AuthService {
 
             return result
         } catch (err) {
-            isUniqueError(err)
+            isPrismaError(err)
             throw err
         }
     }

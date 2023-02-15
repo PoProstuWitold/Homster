@@ -208,15 +208,37 @@ export class CreateGameInput {
     })
     @Field(() => Number, { nullable: true })
     basicPrice?: number
+
+    @IsOptional()
+    @IsArray({
+        message: 'Tags must be array of tags name'
+    })
+    @Field(() => [String])
+    tags: string[]
+
+    @IsOptional()
+    @IsArray({
+        message: 'Genres must be array of tags name'
+    })
+    @Field(() => [String])
+    genres: string[]
 }
 
 @InputType()
 export class AssignOrRevokeToGameInput {
+    @IsOptional()
     @IsArray({
-        message: 'Assignment must be array of assignment names'
+        message: 'Tags must be array of tags names'
     })
-    @Field(() => [String])
-    assignment: string[]
+    @Field(() => [String], { nullable: true })
+    tags?: string[]
+
+    @IsOptional()
+    @IsArray({
+        message: 'Genres must be array of genres names'
+    })
+    @Field(() => [String], { nullable: true })
+    genres?: string[]
 
     @IsNotEmpty({
         message: 'Game cannot be empty or whitespace'
@@ -226,15 +248,6 @@ export class AssignOrRevokeToGameInput {
     })
     @Field(() => String)
     game: string
-
-    @IsNotEmpty({
-        message: 'Game assigment type cannot be empty or whitespace'
-    })
-    @Length(2, 15, {
-        message: 'Game assigment type must be either "tag" or "genre"'
-    })
-    @Field(() => String)
-    type: "tag" | "genre"
 
     @IsNotEmpty({
         message: 'Game assigment activity cannot be empty or whitespace'
@@ -256,6 +269,16 @@ export class CreateTagInput {
     })
     @Field(() => String)
     name: TagDB['name']
+
+    @IsOptional()
+    @IsNotEmpty({
+        message: 'Tag description cannot be empty or whitespace'
+    })
+    @Length(2, 50, {
+        message: 'Tag description must be between 2 and 20 characters long'
+    })
+    @Field(() => String, { nullable: true })
+    description?: TagDB['description']
 }
 
 @InputType()
@@ -268,4 +291,14 @@ export class CreateGenreInput {
     })
     @Field(() => String)
     name: GenreDB['name']
+
+    @IsOptional()
+    @IsNotEmpty({
+        message: 'Genre description cannot be empty or whitespace'
+    })
+    @Length(2, 50, {
+        message: 'Genre description must be between 2 and 20 characters long'
+    })
+    @Field(() => String, { nullable: true })
+    description?: GenreDB['description']
 }

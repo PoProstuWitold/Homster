@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 
 import { PaginationOptions } from '../common/types'
 import { CreateStudioInput } from '../common/dtos'
-import { isUniqueError } from '../common/utils'
+import { isPrismaError } from '../common/utils'
 import { User } from '../common/entities'
 import { PrismaService } from '../../database/prisma.service'
 
@@ -74,7 +74,7 @@ export class StudioService {
             
             return result
         } catch (err) {
-            isUniqueError(err)
+            isPrismaError(err)
             throw err
         }
     }

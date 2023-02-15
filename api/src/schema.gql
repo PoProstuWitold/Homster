@@ -7,6 +7,7 @@ type Genre {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
+  description: String
   games: [Game!]
 }
 
@@ -48,6 +49,7 @@ type Tag {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
+  description: String
   games: [Game!]
 }
 
@@ -210,19 +212,23 @@ input CreateGameInput {
   developers: [String!]!
   publishers: [String!]!
   basicPrice: Float
+  tags: [String!]!
+  genres: [String!]!
 }
 
 input AssignOrRevokeToGameInput {
-  assignment: [String!]!
+  tags: [String!]
+  genres: [String!]
   game: String!
-  type: String!
   activity: String!
 }
 
 input CreateTagInput {
   name: String!
+  description: String
 }
 
 input CreateGenreInput {
   name: String!
+  description: String
 }

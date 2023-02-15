@@ -4,7 +4,7 @@ import { User } from '@prisma/client'
 
 import { PrismaService } from '../../database/prisma.service'
 import { CreateUserInput, UpdateUserInput } from '../common/dtos'
-import { isUniqueError } from '../common/utils'
+import { isPrismaError } from '../common/utils'
 import { PaginationOptions } from '../common/types'
 
 interface findOneByFieldOptions {
@@ -27,7 +27,7 @@ export class UserService {
 
             return user
         } catch (err) {
-            isUniqueError(err)
+            isPrismaError(err)
             throw err
         }
     }
@@ -43,7 +43,7 @@ export class UserService {
 
             return user
         } catch (err) {
-            isUniqueError(err)
+            isPrismaError(err)
             throw err
         }
     }

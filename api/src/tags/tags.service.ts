@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 
 import { OffsetPaginationOptions } from '../common/types'
 import { CreateTagInput } from '../common/dtos'
-import { isUniqueError } from '../common/utils'
+import { isPrismaError } from '../common/utils'
 import { PrismaService } from '../../database/prisma.service'
 
 @Injectable()
@@ -16,7 +16,7 @@ export class TagService {
             const tag = await this.prisma.tag.create({ data })
             return tag
         } catch (err) {
-            isUniqueError(err)
+            isPrismaError(err)
             throw err
         }
     }

@@ -17,6 +17,9 @@ export class Genre {
     @Field(() => String)
     name: GenreDB['name']
 
+    @Field(() => String, { nullable: true })
+    description?: GenreDB['description']
+
     @Field(() => [Game], { nullable: true })
     games?: Game[]
 }
