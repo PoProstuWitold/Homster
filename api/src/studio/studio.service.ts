@@ -125,8 +125,6 @@ export class StudioService {
                     }
                 }
             })
-
-            console.log('edges', edges[0].employees)
             
             const hasNext = edges.length === take
             const hasPrevious = Boolean(cursor)

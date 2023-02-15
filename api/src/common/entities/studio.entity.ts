@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql'
 import { 
     Studio as StudioDB, 
     StudioType,
@@ -27,8 +27,8 @@ export class Studio extends BaseEntity {
 
 @ObjectType()
 export class StudioEmployee {
-	@Field(() => String)
-    assignedAt: StudioEmployeeDB['assignedAt']
+	@Field(() => GraphQLISODateTime)
+    assignedAt: Date
 
     @Field(() => String)
     assignedBy: StudioEmployeeDB['assignedBy']

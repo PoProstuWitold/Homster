@@ -189,9 +189,8 @@ export class GameService {
             const devs = []
             const publ = []
             const devsAndPubl = []
-            console.log(studios)
+            
             for(const studio of studios) {
-                console.log(studio)
                 const result = await this.prisma.studio.findUnique({
                     where: {
                         name: studio
@@ -203,24 +202,24 @@ export class GameService {
                 }
  
                 if(result) {
+                    // DEVELOPER
                     if(developers.includes(result.name) && !publishers.includes(result.name)) {
-                        console.log(`Studio ${result.name} is developer of this game`)
                         devs.push({
                             contribution: StudioType['Developer'],
                             studioId: result.id
                         })
                     }
 
+                    // PUBLISHER
                     if(!developers.includes(result.name) && publishers.includes(result.name)) {
-                        console.log(`Studio ${result.name} is publisher of this game`)
                         publ.push({
                             contribution: StudioType['Publisher'],
                             studioId: result.id
                         })
                     }
 
+                    // DEVELOPER AND PUBLISHER
                     if(developers.includes(result.name) && publishers.includes(result.name)) {
-                        console.log(`Studio ${result.name} is developer & publisher of this game`)
                         devsAndPubl.push({
                             contribution: StudioType['DeveloperAndPublisher'],
                             studioId: result.id

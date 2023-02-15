@@ -1,6 +1,6 @@
 query GetAllUsers($pagination: PaginationOptions!) {
 	users(paginationOptions: $pagination) {
-		users {
+		edges {
 			...User
 		}
 		pageInfo {

@@ -40,12 +40,12 @@ function Home() {
 
 
 	useEffect(() => {
-		if(data && data.users.users) {
+		if(data && data.users.edges) {
 			console.log('triggered')
 			setCursor(data.users.pageInfo.nextCursor)
 			if(cursor) {
 				console.log('data', data.users)
-				setUsers([...users, ...data.users.users])
+				setUsers([...users, ...data.users.edges])
 				if(scrollTo) {
 					scrollRef.current?.scrollIntoView({
 						block: 'end'
@@ -72,7 +72,7 @@ function Home() {
 						ref={scrollRef}
 					>
 						{/* SSR, replace with CSR when paginating */}
-						{!users.length && data && data.users.users && data.users.users.map((user: any, index: any) => {
+						{!users.length && data && data.users.edges && data.users.edges.map((user: any, index: any) => {
 							return (
 								<div key={index} className="p-5">
 									<p>{index}</p>

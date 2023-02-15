@@ -9,7 +9,6 @@ export const isPrismaError = (err: any) => {
             throw new UniqueViolation(err.meta.target[0])
         }
         if (err.code === 'P2025') {
-            console.log(err)
             throw new BadRequestException(err.meta.cause || 'Record to update not found')
         }
     }

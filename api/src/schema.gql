@@ -27,7 +27,7 @@ type Studio {
 }
 
 type StudioEmployee {
-  assignedAt: String!
+  assignedAt: DateTime!
   assignedBy: String!
   employeeId: String!
   employee: User
@@ -113,7 +113,7 @@ type PageInfo {
 }
 
 type PaginatedUsers {
-  users: [User!]
+  edges: [User!]
   pageInfo: PageInfo!
 }
 

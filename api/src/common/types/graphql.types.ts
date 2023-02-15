@@ -19,7 +19,7 @@ export class PageInfo {
 @ObjectType()
 export class PaginatedUsers {
     @Field(() => [User], { nullable: true })
-    users?: User[]
+    edges?: User[]
 
     @Field(() => PageInfo)
     pageInfo: PageInfo

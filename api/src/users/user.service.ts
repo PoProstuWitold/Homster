@@ -89,7 +89,7 @@ export class UserService {
     public async findAll(paginationOptions?: PaginationOptions) {
         try {
             const { take, cursor, field, type } = paginationOptions
-            const users = await this.prisma.user.findMany({
+            const edges = await this.prisma.user.findMany({
                 take,
                 orderBy: {
                     [field]: type
@@ -102,9 +102,9 @@ export class UserService {
                 })
             })
             
-            const hasNext = users.length === take
+            const hasNext = edges.length === take
             const hasPrevious = Boolean(cursor)
-            const nextCursor = hasNext ? users[users.length -1].id : ''
+            const nextCursor = hasNext ? edges[edges.length -1].id : ''
             const previousCursor = ''
             const pageInfo = {
                 hasNext,
@@ -113,7 +113,7 @@ export class UserService {
                 previousCursor
             }
             return {
-                users,
+                edges,
                 pageInfo
             }
         } catch (err) {

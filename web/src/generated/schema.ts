@@ -347,6 +347,14 @@ export default {
             "args": []
           },
           {
+            "name": "description",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
             "name": "games",
             "type": {
               "kind": "LIST",
@@ -826,19 +834,7 @@ export default {
         "name": "PaginatedUsers",
         "fields": [
           {
-            "name": "pageInfo",
-            "type": {
-              "kind": "NON_NULL",
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "PageInfo",
-                "ofType": null
-              }
-            },
-            "args": []
-          },
-          {
-            "name": "users",
+            "name": "edges",
             "type": {
               "kind": "LIST",
               "ofType": {
@@ -848,6 +844,18 @@ export default {
                   "name": "User",
                   "ofType": null
                 }
+              }
+            },
+            "args": []
+          },
+          {
+            "name": "pageInfo",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
               }
             },
             "args": []
@@ -1343,6 +1351,14 @@ export default {
                 "kind": "SCALAR",
                 "name": "Any"
               }
+            },
+            "args": []
+          },
+          {
+            "name": "description",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
             },
             "args": []
           },

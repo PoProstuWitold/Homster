@@ -48,10 +48,10 @@ export class UserResolver {
     @Query(() => PaginatedUsers, { name: 'users' })
     public async getUsers(@Args('paginationOptions') paginationOptions: PaginationOptions): Promise<PaginatedUsers> {
         try {
-            const { users, pageInfo } = await this.userService.findAll(paginationOptions)
+            const { edges, pageInfo } = await this.userService.findAll(paginationOptions)
 
             return {
-                users,
+                edges,
                 pageInfo
             }
         } catch (err) {
