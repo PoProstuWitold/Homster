@@ -9,16 +9,16 @@ export const GameCard = memo(({game, index}: any) => {
 	GameCard.displayName = 'GameItem'
     const [developers, publishers] = getStudios(game.studios)
 	return (
-	  <div key={`${game.id}:${Math.random()}`} className="flex flex-col p-5 w-[25rem] bg-base-300 m-5 h-86 gap-3 rounded-xl">
+	  <div key={`${game.id}:${Math.random()}`} className="flex flex-col p-5 w-[24rem] bg-base-300 m-5 h-86 gap-3 rounded-xl">
 		<div className="flex flex-row items-center justify-between border-b-2 pb-2 border-base-100">
-			<h3 className="text-2xl">{game.name}</h3>
+			<h3 className="text-2xl h-10">{game.name}</h3>
 			{game.adultOnly &&
-				<span className="mx-2 p-2 text-sm bg-error font-extrabold rounded-[100%]">
+				<span className="mx-1 p-2 text-sm bg-error font-extrabold rounded-[100%]">
 					+18
 				</span>
 			}
 		</div>
-        <p className="text-base min-h-16">{game.description}</p>
+        <p className="text-base h-16">{game.description}</p>
 		<div className="flex flex-row text-sm">
 			<div className="w-1/2">
 				<p className="font-semibold">developers:</p>
@@ -53,7 +53,7 @@ export const GameCard = memo(({game, index}: any) => {
 				</div>
 			</div>
 		</div>
-		<div className="flex flex-col text-sm gap-2">
+		<div className="flex flex-col text-sm gap-2 my-2">
 			<div className="flex flex-col flex-wrap">
 				<p className="font-semibold my-1">genres:</p>
 				{!game.genres.length && <p className="italic">No genres assigned</p>}
@@ -61,7 +61,7 @@ export const GameCard = memo(({game, index}: any) => {
 					{game.genres && game.genres.map((genre: any) => <Link href={`/genres/${genre.name.replace(/ /g, "_")}`} className="font-semibold badge badge-outline min-w-fit rounded-sm hover:badge-primary hover:badge-outline" key={`${genre.id}:${Math.random()}`}>{genre.name}</Link>)}
 				</div>
 			</div>
-			<div className="flex flex-col flex-wrap">
+			<div className="flex flex-col flex-wrap my-2">
 				<p className="font-semibold my-1">tags:</p>
 				{!game.tags.length && <p className="italic">No tags assigned</p>}
 				<div className="flex flex-row flex-wrap gap-2">
@@ -69,7 +69,7 @@ export const GameCard = memo(({game, index}: any) => {
 				</div>
 			</div>
 		</div>
-		<div className="mt-5 flex justify-between">
+		<div className="flex justify-between mt-auto">
 			<div>
 				<Link href={`/app/${game.id}/${game.name.replace(/ /g, "_")}`} className="btn btn-outline btn-secondary rounded-sm">Visit Store page</Link>
 			</div>

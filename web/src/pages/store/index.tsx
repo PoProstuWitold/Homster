@@ -22,7 +22,7 @@ function Home() {
 		}
 	})
 
-	const [{ data, fetching, error }] = useGetAllGamesQuery({
+	const [{ data }] = useGetAllGamesQuery({
 		variables
 	})
 
@@ -58,6 +58,7 @@ function Home() {
 			<main>
 					<div 
 						ref={scrollRef}
+						className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 justify-items-center"
 					>
 						{/* SSR, replace with CSR when paginating */}
 						{!games.length && data && data.games.edges && data.games.edges.map((game: any, index: any) => {
@@ -67,8 +68,11 @@ function Home() {
 						})}
 						{/* Replacement for CSR */}
 						{gameCards}
-						{data && data.games && data.games.pageInfo.hasNext &&
-							<button onClick={() => {
+						
+					</div>	
+					{data && data.games && data.games.pageInfo.hasNext &&
+						<button 
+							onClick={() => {
 								setCursor(data.games.pageInfo.nextCursor)
 								setVariables({
 									...variables,
@@ -78,9 +82,12 @@ function Home() {
 									}
 								})
 								setScrollTo(true)
-							}} className="btn btn-primary">next</button>
-						}
-					</div>		
+							}} 
+							className="flex btn btn-primary mx-auto my-5"
+						>
+						next
+						</button>
+					}	
 			</main>
 		</>
 	)
