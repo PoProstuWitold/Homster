@@ -12,7 +12,7 @@ const UserItem = memo(({user, index}: any) => {
 
 	return (
 	  <div key={user.id} className="p-5">
-		<p>{index}</p>
+		<p>{index + 1}</p>
 		<p>id: {user.id}</p>
 		<p>fullName: {user.fullName}</p>
 		<p>displayName: {user.displayName}</p>
@@ -24,12 +24,11 @@ function Home() {
 	const scrollRef = useRef<HTMLDivElement>(null)
 	const [users, setUsers] = useState<any>([])
 	const [cursor, setCursor] = useState<string>('')
-	const [scrollTo, setScrollTo] = useState<boolean>(false)
 	const [variables, setVariables] = useState({
 		pagination: {
 			take: 10,
 			cursor: '',
-			field: 'createdAt',
+			field: 'fullName',
 			type: 'desc'
 		}
 	})
@@ -44,8 +43,8 @@ function Home() {
 			setCursor(data.users.pageInfo.nextCursor)
 			setHasNextPage(data.users.pageInfo.hasNext)
 			if(cursor) {
-				console.log('data', data.users)
-				setUsers([...users, ...data.users.edges])
+				//@ts-ignore
+				setUsers((prevUsers) => [...prevUsers, ...data.users.edges])
 			}
 		}
 	}, [data])

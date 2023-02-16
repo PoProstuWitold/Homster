@@ -9,9 +9,9 @@ export const GameCard = memo(({game}: any) => {
 	GameCard.displayName = 'GameItem'
     const [developers, publishers] = getStudios(game.studios)
 	return (
-	  <div key={`${game.id}:${Math.random()}`} className="flex flex-col p-5 w-[24rem] bg-base-300 m-5 h-86 gap-3 rounded-xl">
+	  <div key={`${game.id}:${Math.random()}`} className="flex flex-col p-5 w-[24rem] bg-base-300 m-5 h-86 gap-3 rounded-xl cursor-default">
 		<div className="flex flex-row items-center justify-between border-b-2 pb-2 border-base-100">
-			<h3 className="text-2xl h-10">{game.name}</h3>
+			<h3 className="text-2xl h-[2.4rem] line-clamp-1">{game.name}</h3>
 			{game.adultOnly &&
 				<span className="mx-1 p-2 text-sm bg-error font-extrabold rounded-[100%]">
 					+18

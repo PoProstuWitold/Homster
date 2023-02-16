@@ -14,9 +14,9 @@ function Home() {
 	const [cursor, setCursor] = useState<string>('')
 	const [variables, setVariables] = useState({
 		pagination: {
-			take: 5,
+			take: 6,
 			cursor: '',
-			field: 'createdAt',
+			field: 'name',
 			type: 'desc'
 		}
 	})
@@ -32,8 +32,8 @@ function Home() {
 			setCursor(data.games.pageInfo.nextCursor)
 			setHasNextPage(data.games.pageInfo.hasNext)
 			if(cursor) {
-				console.log('data', data.games)
-				setGames([...games, ...data.games.edges])
+				//@ts-ignore
+				setGames((prevGames) => [...prevGames, ...data.games.edges])
 			}
 		}
 	}, [data])
