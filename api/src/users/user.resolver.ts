@@ -29,7 +29,7 @@ export class UserResolver {
     }
 
     @UseGuards(SessionGuard)
-    @Query(() => User)
+    @Mutation(() => User)
     public async updateUser(
         @Args('values') values: UpdateUserInput,
         @GqlContext() ctx: GqlFastifyContext

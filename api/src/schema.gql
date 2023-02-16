@@ -146,17 +146,11 @@ type PaginatedGames {
 type Query {
   me: AuthResult!
   user(field: String!, value: String!): User!
-  updateUser(values: UpdateUserInput!): User!
   users(paginationOptions: PaginationOptions!): PaginatedUsers!
   studios(paginationOptions: PaginationOptions!): PaginatedStudios!
   games(paginationOptions: PaginationOptions!): PaginatedGames!
   tags(paginationOptions: OffsetPaginationOptions!): PaginatedTags!
   genres(paginationOptions: OffsetPaginationOptions!): PaginatedGenres!
-}
-
-input UpdateUserInput {
-  displayName: String
-  fullName: String
 }
 
 input PaginationOptions {
@@ -177,6 +171,7 @@ type Mutation {
   register(createUserInput: CreateUserInput!): AuthResult!
   login(credentialsInput: CredentialsInput!): AuthResult!
   logout: AuthResult!
+  updateUser(values: UpdateUserInput!): User!
   createUser(createUserInput: CreateUserInput!): User!
   createStudio(createStudioInput: CreateStudioInput!): Studio!
   createGame(createGameInput: CreateGameInput!): Game!
@@ -195,6 +190,11 @@ input CreateUserInput {
 input CredentialsInput {
   email: String!
   password: String!
+}
+
+input UpdateUserInput {
+  displayName: String
+  fullName: String
 }
 
 input CreateStudioInput {

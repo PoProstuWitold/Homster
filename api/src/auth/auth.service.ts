@@ -51,7 +51,7 @@ export class AuthService {
             const result: AuthResult = {
                 profile,
                 statusCode: 200,
-                message: 'Signed up',
+                message: 'Signed in',
             }
 
             return result
