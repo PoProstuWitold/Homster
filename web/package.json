@@ -15,6 +15,7 @@
 	"dependencies": {
 		"@headlessui/react": "^1.7.11",
 		"@next/font": "13.1.6",
+		"@tailwindcss/line-clamp": "^0.4.2",
 		"@tailwindcss/typography": "^0.5.9",
 		"@types/node": "18.13.0",
 		"@types/react": "18.0.28",

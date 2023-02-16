@@ -5,7 +5,7 @@ import { formatString } from '@/utils/formatString'
 import dayjs from 'dayjs'
 dayjs().format()
 
-export const GameCard = memo(({game, index}: any) => {
+export const GameCard = memo(({game}: any) => {
 	GameCard.displayName = 'GameItem'
     const [developers, publishers] = getStudios(game.studios)
 	return (
@@ -18,10 +18,10 @@ export const GameCard = memo(({game, index}: any) => {
 				</span>
 			}
 		</div>
-        <p className="text-base h-16">{game.description}</p>
+        <p className="text-base h-[4.5rem] line-clamp-3">{game.description}</p>
 		<div className="flex flex-row text-sm">
 			<div className="w-1/2">
-				<p className="font-semibold">developers:</p>
+				<p className="font-semibold line-clamp-2">developers:</p>
 				<div className="flex flex-row flex-wrap">
 					{developers.map((developer: any, index: number) => <div key={`${developer.id}:${Math.random()}`}>
 						<Link href={`/studio/${developer.name.replace(/ /g, "_")}`} className="link link-hover link-primary font-semibold" key={`${developer.id}:${Math.random()}`}>{developer.name}</Link>
@@ -30,7 +30,7 @@ export const GameCard = memo(({game, index}: any) => {
 				</div>
 			</div>
 			<div className="w-1/2">
-				<p className="font-semibold">publishers:</p>
+				<p className="font-semibold line-clamp-2">publishers:</p>
 				<div className="flex flex-row flex-wrap">
 					{publishers.map((publisher: any, index: number) => <div key={`${publisher.id}:${Math.random()}`}>
 						<Link href={`/studio/${publisher.name.replace(/ /g, "_")}`} className="link link-hover link-primary font-semibold" key={`${publisher.id}:${Math.random()}`}>{publisher.name}</Link>

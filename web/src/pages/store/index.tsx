@@ -78,9 +78,9 @@ function Home() {
 					className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 justify-items-center"
 				>
 					{/* SSR, replace with CSR when paginating */}
-					{!games.length && data && data.games.edges && data.games.edges.map((game: any, index: any) => {
+					{!games.length && data && data.games.edges && data.games.edges.map((game: any) => {
 						return (
-							<GameCard key={`${game.id}:${Math.random()}`} game={game} index={index} />
+							<GameCard key={`${game.id}:${Math.random()}`} game={game} />
 						)
 					})}
 					{/* Replacement for CSR */}
