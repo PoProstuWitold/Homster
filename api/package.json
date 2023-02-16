@@ -18,13 +18,11 @@
 		"test:watch": "jest --watch",
 		"test:cov": "jest --coverage",
 		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-		"test:e2e": "jest --config ./test/jest-e2e.json",
-		"prisma:generate": "npx prisma generate",
-		"prisma:push": "npx prisma db push",
-		"prisma:seed": "ts-node ./database/seed.ts"
+		"test:e2e": "jest --config ./test/jest-e2e.json"
 	},
 	"prisma": {
-		"schema": "./database/schema.prisma"
+		"schema": "./database/schema.prisma",
+		"seed": "ts-node --transpile-only ./database/seed.ts"
 	},
 	"dependencies": {
 		"@fastify/cookie": "^8.3.0",
