@@ -6,9 +6,11 @@ import { fastifyHelmet } from '@fastify/helmet'
 import fastifyCookie from '@fastify/cookie'
 import fastifySecureSession from '@fastify/secure-session'
 import { useContainer } from 'class-validator'
+import mercuriusUpload from 'mercurius-upload'
 
 import { CustomValidationPipe } from './common/pipes'
 import { AppModule } from './app.module'
+import { join } from 'path'
 
 export async function bootstrap(): Promise<NestFastifyApplication> {
 	const app = await NestFactory.create<NestFastifyApplication>(
@@ -64,6 +66,8 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
             path: '/'
         }
     })
+
+    await app.register(mercuriusUpload)
 
     app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector))
 

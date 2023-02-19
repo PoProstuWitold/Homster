@@ -41,6 +41,7 @@
 		"fastify": "^4.13.0",
 		"graphql": "^16.6.0",
 		"mercurius": "^12.0.1",
+		"mercurius-upload": "^6.0.0",
 		"pg": "^8.9.0",
 		"prisma": "^4.10.1",
 		"reflect-metadata": "^0.1.13",

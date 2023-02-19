@@ -178,6 +178,7 @@ type Mutation {
   assign(assignToGameInput: AssignOrRevokeToGameInput!): Game!
   createTag(createTagInput: CreateTagInput!): Tag!
   createGenre(createGenreInput: CreateGenreInput!): Genre!
+  uploadFile(file: Upload!): String!
 }
 
 input CreateUserInput {
@@ -232,3 +233,6 @@ input CreateGenreInput {
   name: String!
   description: String
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload

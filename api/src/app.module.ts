@@ -10,6 +10,7 @@ import { StudioModule } from './studio/studio.module'
 import { GamesModule } from './games/games.module'
 import { TagModule } from './tags/tags.module'
 import { GenreModule } from './genres/genres.module'
+import { UploaderModule } from './uploader/uploader.module'
 
 @Module({
 	imports: [
@@ -46,7 +47,8 @@ import { GenreModule } from './genres/genres.module'
         StudioModule,
         GamesModule,
         TagModule,
-        GenreModule
+        GenreModule,
+        UploaderModule
 	]
 })
 export class AppModule {}
