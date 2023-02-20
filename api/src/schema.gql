@@ -143,6 +143,12 @@ type PaginatedGames {
   pageInfo: PageInfo!
 }
 
+type UploadResult {
+  name: String!
+  description: String!
+  image: String!
+}
+
 type Query {
   me: AuthResult!
   user(field: String!, value: String!): User!
@@ -178,7 +184,7 @@ type Mutation {
   assign(assignToGameInput: AssignOrRevokeToGameInput!): Game!
   createTag(createTagInput: CreateTagInput!): Tag!
   createGenre(createGenreInput: CreateGenreInput!): Genre!
-  uploadFile(file: Upload!): String!
+  uploadFile(values: CreateUploadInput!, file: Upload): UploadResult!
 }
 
 input CreateUserInput {
@@ -232,6 +238,11 @@ input CreateTagInput {
 input CreateGenreInput {
   name: String!
   description: String
+}
+
+input CreateUploadInput {
+  name: String!
+  description: String!
 }
 
 """The `Upload` scalar type represents a file upload."""

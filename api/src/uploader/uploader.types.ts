@@ -1,5 +1,33 @@
+import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { Exclude } from 'class-transformer'
+import { IsMimeType, IsNotEmpty, IsString } from 'class-validator'
 import { GraphQLError, GraphQLScalarType } from 'graphql'
 import { Readable } from 'stream'
+
+@InputType()
+export class CreateUploadInput {
+    @IsString()
+    @IsNotEmpty()
+    @Field(() => String)
+    name: string;
+
+    @IsString()
+    @IsNotEmpty()
+    @Field(() => String)
+    description: string;
+}
+
+@ObjectType()
+export class UploadResult {
+    @Field(() => String)
+    name: string;
+
+    @Field(() => String)
+    description: string;
+
+    @Field(() => String)
+    image: string;
+}
 
 export interface FileUpload {
     filename: string
@@ -8,7 +36,23 @@ export interface FileUpload {
     createReadStream: () => Readable
 }
 
-export interface FileUploadRaw {
+@InputType()
+export class FileUploadDto implements FileUpload {
+    @IsString()
+    filename: string;
+
+    @IsString()
+    @IsMimeType()
+    mimetype: string;
+
+    @IsString()
+    encoding: string;
+
+    @Exclude()
+    createReadStream: () => Readable;
+}
+
+export class FileUploadRaw {
     file: {
         filename: string
         mimetype: string

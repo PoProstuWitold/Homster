@@ -1,16 +1,14 @@
 import { NestFactory, Reflector } from '@nestjs/core'
-import { ClassSerializerInterceptor } from '@nestjs/common'
+import { ClassSerializerInterceptor, HttpException, HttpStatus, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import { fastifyHelmet } from '@fastify/helmet'
 import fastifyCookie from '@fastify/cookie'
 import fastifySecureSession from '@fastify/secure-session'
-import { useContainer } from 'class-validator'
+import { ValidationError } from 'class-validator'
 import mercuriusUpload from 'mercurius-upload'
 
-import { CustomValidationPipe } from './common/pipes'
 import { AppModule } from './app.module'
-import { join } from 'path'
 
 export async function bootstrap(): Promise<NestFastifyApplication> {
 	const app = await NestFactory.create<NestFastifyApplication>(
@@ -71,9 +69,22 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
 
     app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector))
 
-    app.useGlobalPipes(new CustomValidationPipe())
+    app.useGlobalPipes(new ValidationPipe({
+        exceptionFactory: (errors: ValidationError[]) => {
+            const result = {}
 
-    useContainer(app.select(AppModule), { fallbackOnErrors: true })
+            errors.forEach(error => {
+              const constraints = Object.values(error.constraints);
+              result[error.property] = constraints[0];
+            })
+            
+            throw new HttpException({
+                statusCode: 400,
+                message: 'Input data validation failed',
+                errors: result, 
+            }, HttpStatus.BAD_REQUEST);
+        }
+    }))
 
     const port = Number(configService.get('api.port')) || 4000
 
