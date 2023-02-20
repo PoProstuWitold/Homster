@@ -1,3 +1,4 @@
+import { join } from 'path'
 import { NestFactory, Reflector } from '@nestjs/core'
 import { ClassSerializerInterceptor, HttpException, HttpStatus, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
@@ -37,6 +38,12 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
 		],
         optionsSuccessStatus: 200,
 		methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE']
+    })
+
+    const path = join(process.cwd(), 'public')
+    app.useStaticAssets({
+        root: path,
+        prefix: '/public/'
     })
 
     await app.register(fastifyCookie, {
