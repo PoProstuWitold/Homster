@@ -1,7 +1,7 @@
 {
 	"name": "web",
 	"version": "0.0.1",
-	"description": "GraphQL Web Client for Homster - a library of games for young, old and hamsters",
+	"description": "GraphQL web client for Homster. Written with Next.js",
 	"author": "Witold Zawada",
 	"private": true,
 	"license": "MIT",

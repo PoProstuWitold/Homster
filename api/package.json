@@ -1,7 +1,7 @@
 {
 	"name": "api",
 	"version": "0.0.1",
-	"description": "GraphQL API for Homster - a library of games for young, old and hamsters",
+	"description": "GraphQL API server for Homster. Written in Nest.js",
 	"author": "Witold Zawada",
 	"private": true,
 	"license": "MIT",
