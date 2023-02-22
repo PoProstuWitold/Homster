@@ -1,7 +1,7 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 
 import { CreateUploadInput, FileUpload, GraphQLUpload, UploadResult } from './uploader.types'
-import { UploaderService } from './uploader.service'
+import { Mimetype, UploaderService } from './uploader.service'
 
 @Resolver()
 export class UploaderResolver {
@@ -15,7 +15,7 @@ export class UploaderResolver {
         @Args({name: 'file', type: () => GraphQLUpload, nullable: true}) file?: FileUpload,
     ): Promise<UploadResult> {
         try {
-            const upload = await this.uploaderService.uploadFile(values, file)
+            const upload = await this.uploaderService.uploadFile(values, file, [Mimetype.PNG, Mimetype.JPG])
             return upload
         } catch (err) {
             throw err
