@@ -1,0 +1,8 @@
+fragment Genre on Genre {
+    __typename
+    id
+    createdAt
+    updatedAt
+    name
+    description
+}

@@ -1,0 +1,8 @@
+fragment Tag on Tag {
+    __typename
+    id
+    createdAt
+    updatedAt
+    name
+    description
+}

@@ -1,13 +1,10 @@
-query GetAllUsers($pagination: PaginationOptions!) {
+query GetAllUsers($pagination: CursorPaginationOptions!) {
 	users(paginationOptions: $pagination) {
 		edges {
 			...User
 		}
 		pageInfo {
-			hasNext
-			hasPrevious
-			previousCursor
-			nextCursor
+			...CursorPage
 		}
 	}
 }

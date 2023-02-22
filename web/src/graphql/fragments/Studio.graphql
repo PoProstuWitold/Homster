@@ -1,0 +1,8 @@
+fragment Studio on Studio {
+    __typename
+    id
+    createdAt
+    updatedAt
+    name
+    type
+}

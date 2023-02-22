@@ -1,37 +1,10 @@
-query GetAllGames($pagination: PaginationOptions!) {
+query GetAllGames($pagination: CursorPaginationOptions!) {
     games(paginationOptions: $pagination) {
         edges {
-            id
-            adultOnly
-            tags {
-                name
-            }
-            genres {
-                name
-            }
-            basicPrice
-            price
-            status
-            type
-            releasedAt
-            createdAt
-            updatedAt
-            name
-            description
-            type
-            studios {
-                contribution
-                studio {
-                    id
-                    name
-                }
-            }
+            ...Game
         }
         pageInfo {
-            hasNext
-            hasPrevious
-            previousCursor
-            nextCursor
+            ...CursorPage
         }
     }
 }

@@ -1,0 +1,6 @@
+fragment CursorPage on CursorPageInfo {
+    hasNext
+    hasPrevious
+    previousCursor
+    nextCursor
+}

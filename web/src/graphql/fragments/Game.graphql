@@ -1,0 +1,27 @@
+fragment Game on Game {
+    __typename
+    id
+    createdAt
+    updatedAt
+    adultOnly
+    basicPrice
+    price
+    status
+    type
+    releasedAt
+    name
+    description
+    type
+    tags {
+        ...Tag
+    }
+    genres {
+        ...Genre
+    }
+    studios {
+        contribution
+        studio {
+            ...Studio
+        }
+    }
+}

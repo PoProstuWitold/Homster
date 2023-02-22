@@ -14,6 +14,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
+  Upload: any;
 };
 
 export type AssignOrRevokeToGameInput = {
@@ -59,6 +60,11 @@ export type CreateTagInput = {
   name: Scalars['String'];
 };
 
+export type CreateUploadInput = {
+  description: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type CreateUserInput = {
   displayName: Scalars['String'];
   email: Scalars['String'];
@@ -69,6 +75,39 @@ export type CreateUserInput = {
 export type CredentialsInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type CursorPageInfo = {
+  __typename?: 'CursorPageInfo';
+  hasNext: Scalars['Boolean'];
+  hasPrevious: Scalars['Boolean'];
+  nextCursor: Scalars['String'];
+  previousCursor: Scalars['String'];
+};
+
+export type CursorPaginatedGames = {
+  __typename?: 'CursorPaginatedGames';
+  edges?: Maybe<Array<Game>>;
+  pageInfo: CursorPageInfo;
+};
+
+export type CursorPaginatedStudios = {
+  __typename?: 'CursorPaginatedStudios';
+  edges?: Maybe<Array<Studio>>;
+  pageInfo: CursorPageInfo;
+};
+
+export type CursorPaginatedUsers = {
+  __typename?: 'CursorPaginatedUsers';
+  edges?: Maybe<Array<User>>;
+  pageInfo: CursorPageInfo;
+};
+
+export type CursorPaginationOptions = {
+  cursor: Scalars['String'];
+  field: Scalars['String'];
+  take: Scalars['Float'];
+  type: Scalars['String'];
 };
 
 export type Game = {
@@ -124,6 +163,8 @@ export type Mutation = {
   login: AuthResult;
   logout: AuthResult;
   register: AuthResult;
+  updateUser: User;
+  uploadFile: UploadResult;
 };
 
 
@@ -166,6 +207,17 @@ export type MutationRegisterArgs = {
   createUserInput: CreateUserInput;
 };
 
+
+export type MutationUpdateUserArgs = {
+  values: UpdateUserInput;
+};
+
+
+export type MutationUploadFileArgs = {
+  file?: InputMaybe<Scalars['Upload']>;
+  values: CreateUploadInput;
+};
+
 export type OffsetPageInfo = {
   __typename?: 'OffsetPageInfo';
   currentPage: Scalars['Int'];
@@ -173,54 +225,21 @@ export type OffsetPageInfo = {
   totalPages: Scalars['Int'];
 };
 
-export type OffsetPaginationOptions = {
-  field: Scalars['String'];
-  skip: Scalars['Float'];
-  take: Scalars['Float'];
-  type: Scalars['String'];
-};
-
-export type PageInfo = {
-  __typename?: 'PageInfo';
-  hasNext: Scalars['Boolean'];
-  hasPrevious: Scalars['Boolean'];
-  nextCursor: Scalars['String'];
-  previousCursor: Scalars['String'];
-};
-
-export type PaginatedGames = {
-  __typename?: 'PaginatedGames';
-  edges?: Maybe<Array<Game>>;
-  pageInfo: PageInfo;
-};
-
-export type PaginatedGenres = {
-  __typename?: 'PaginatedGenres';
+export type OffsetPaginatedGenres = {
+  __typename?: 'OffsetPaginatedGenres';
   edges?: Maybe<Array<Genre>>;
   pageInfo?: Maybe<OffsetPageInfo>;
 };
 
-export type PaginatedStudios = {
-  __typename?: 'PaginatedStudios';
-  edges?: Maybe<Array<Studio>>;
-  pageInfo: PageInfo;
-};
-
-export type PaginatedTags = {
-  __typename?: 'PaginatedTags';
+export type OffsetPaginatedTags = {
+  __typename?: 'OffsetPaginatedTags';
   edges?: Maybe<Array<Tag>>;
   pageInfo?: Maybe<OffsetPageInfo>;
 };
 
-export type PaginatedUsers = {
-  __typename?: 'PaginatedUsers';
-  edges?: Maybe<Array<User>>;
-  pageInfo: PageInfo;
-};
-
-export type PaginationOptions = {
-  cursor: Scalars['String'];
+export type OffsetPaginationOptions = {
   field: Scalars['String'];
+  skip: Scalars['Float'];
   take: Scalars['Float'];
   type: Scalars['String'];
 };
@@ -240,19 +259,18 @@ export type Profile = {
 
 export type Query = {
   __typename?: 'Query';
-  games: PaginatedGames;
-  genres: PaginatedGenres;
+  games: CursorPaginatedGames;
+  genres: OffsetPaginatedGenres;
   me: AuthResult;
-  studios: PaginatedStudios;
-  tags: PaginatedTags;
-  updateUser: User;
+  studios: CursorPaginatedStudios;
+  tags: OffsetPaginatedTags;
   user: User;
-  users: PaginatedUsers;
+  users: CursorPaginatedUsers;
 };
 
 
 export type QueryGamesArgs = {
-  paginationOptions: PaginationOptions;
+  paginationOptions: CursorPaginationOptions;
 };
 
 
@@ -262,17 +280,12 @@ export type QueryGenresArgs = {
 
 
 export type QueryStudiosArgs = {
-  paginationOptions: PaginationOptions;
+  paginationOptions: CursorPaginationOptions;
 };
 
 
 export type QueryTagsArgs = {
   paginationOptions: OffsetPaginationOptions;
-};
-
-
-export type QueryUpdateUserArgs = {
-  values: UpdateUserInput;
 };
 
 
@@ -283,7 +296,7 @@ export type QueryUserArgs = {
 
 
 export type QueryUsersArgs = {
-  paginationOptions: PaginationOptions;
+  paginationOptions: CursorPaginationOptions;
 };
 
 export type Studio = {
@@ -323,6 +336,13 @@ export type UpdateUserInput = {
   fullName?: InputMaybe<Scalars['String']>;
 };
 
+export type UploadResult = {
+  __typename?: 'UploadResult';
+  description: Scalars['String'];
+  image: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
@@ -335,6 +355,16 @@ export type User = {
   role: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
+
+export type CursorPageFragment = { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string };
+
+export type GameFragment = { __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, price: number, status: string, type: string, releasedAt: any, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, type: string } | null }> | null };
+
+export type GenreFragment = { __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null };
+
+export type StudioFragment = { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, type: string };
+
+export type TagFragment = { __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null };
 
 export type UserFragment = { __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: any, updatedAt: any };
 
@@ -369,18 +399,18 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 export type MeQuery = { __typename?: 'Query', me: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, profile?: { __typename: 'Profile', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: any, updatedAt: any } | null } };
 
 export type GetAllGamesQueryVariables = Exact<{
-  pagination: PaginationOptions;
+  pagination: CursorPaginationOptions;
 }>;
 
 
-export type GetAllGamesQuery = { __typename?: 'Query', games: { __typename?: 'PaginatedGames', edges?: Array<{ __typename?: 'Game', id: string, adultOnly: boolean, basicPrice: number, price: number, status: string, type: string, releasedAt: any, createdAt: any, updatedAt: any, name: string, description: string, tags?: Array<{ __typename?: 'Tag', name: string }> | null, genres?: Array<{ __typename?: 'Genre', name: string }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename?: 'Studio', id: string, name: string } | null }> | null }> | null, pageInfo: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
+export type GetAllGamesQuery = { __typename?: 'Query', games: { __typename?: 'CursorPaginatedGames', edges?: Array<{ __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, price: number, status: string, type: string, releasedAt: any, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, type: string } | null }> | null }> | null, pageInfo: { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
 
 export type GetAllUsersQueryVariables = Exact<{
-  pagination: PaginationOptions;
+  pagination: CursorPaginationOptions;
 }>;
 
 
-export type GetAllUsersQuery = { __typename?: 'Query', users: { __typename?: 'PaginatedUsers', edges?: Array<{ __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: any, updatedAt: any }> | null, pageInfo: { __typename?: 'PageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
+export type GetAllUsersQuery = { __typename?: 'Query', users: { __typename?: 'CursorPaginatedUsers', edges?: Array<{ __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: any, updatedAt: any }> | null, pageInfo: { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
 
 export type GetUserQueryVariables = Exact<{
   field: Scalars['String'];
@@ -390,6 +420,75 @@ export type GetUserQueryVariables = Exact<{
 
 export type GetUserQuery = { __typename?: 'Query', user: { __typename: 'User', id: string, displayName: string, fullName: string, email: string, role: string, createdAt: any, updatedAt: any } };
 
+export const CursorPageFragmentDoc = gql`
+    fragment CursorPage on CursorPageInfo {
+  hasNext
+  hasPrevious
+  previousCursor
+  nextCursor
+}
+    `;
+export const TagFragmentDoc = gql`
+    fragment Tag on Tag {
+  __typename
+  id
+  createdAt
+  updatedAt
+  name
+  description
+}
+    `;
+export const GenreFragmentDoc = gql`
+    fragment Genre on Genre {
+  __typename
+  id
+  createdAt
+  updatedAt
+  name
+  description
+}
+    `;
+export const StudioFragmentDoc = gql`
+    fragment Studio on Studio {
+  __typename
+  id
+  createdAt
+  updatedAt
+  name
+  type
+}
+    `;
+export const GameFragmentDoc = gql`
+    fragment Game on Game {
+  __typename
+  id
+  createdAt
+  updatedAt
+  adultOnly
+  basicPrice
+  price
+  status
+  type
+  releasedAt
+  name
+  description
+  type
+  tags {
+    ...Tag
+  }
+  genres {
+    ...Genre
+  }
+  studios {
+    contribution
+    studio {
+      ...Studio
+    }
+  }
+}
+    ${TagFragmentDoc}
+${GenreFragmentDoc}
+${StudioFragmentDoc}`;
 export const UserFragmentDoc = gql`
     fragment User on User {
   __typename
@@ -481,63 +580,35 @@ export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, '
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
 };
 export const GetAllGamesDocument = gql`
-    query GetAllGames($pagination: PaginationOptions!) {
+    query GetAllGames($pagination: CursorPaginationOptions!) {
   games(paginationOptions: $pagination) {
     edges {
-      id
-      adultOnly
-      tags {
-        name
-      }
-      genres {
-        name
-      }
-      basicPrice
-      price
-      status
-      type
-      releasedAt
-      createdAt
-      updatedAt
-      name
-      description
-      type
-      studios {
-        contribution
-        studio {
-          id
-          name
-        }
-      }
+      ...Game
     }
     pageInfo {
-      hasNext
-      hasPrevious
-      previousCursor
-      nextCursor
+      ...CursorPage
     }
   }
 }
-    `;
+    ${GameFragmentDoc}
+${CursorPageFragmentDoc}`;
 
 export function useGetAllGamesQuery(options: Omit<Urql.UseQueryArgs<GetAllGamesQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllGamesQuery, GetAllGamesQueryVariables>({ query: GetAllGamesDocument, ...options });
 };
 export const GetAllUsersDocument = gql`
-    query GetAllUsers($pagination: PaginationOptions!) {
+    query GetAllUsers($pagination: CursorPaginationOptions!) {
   users(paginationOptions: $pagination) {
     edges {
       ...User
     }
     pageInfo {
-      hasNext
-      hasPrevious
-      previousCursor
-      nextCursor
+      ...CursorPage
     }
   }
 }
-    ${UserFragmentDoc}`;
+    ${UserFragmentDoc}
+${CursorPageFragmentDoc}`;
 
 export function useGetAllUsersQuery(options: Omit<Urql.UseQueryArgs<GetAllUsersQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllUsersQuery, GetAllUsersQueryVariables>({ query: GetAllUsersDocument, ...options });
