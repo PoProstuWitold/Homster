@@ -105,21 +105,11 @@ type AuthResult {
   profile: Profile
 }
 
-type PageInfo {
+type CursorPageInfo {
   hasPrevious: Boolean!
   hasNext: Boolean!
   previousCursor: String!
   nextCursor: String!
-}
-
-type PaginatedUsers {
-  edges: [User!]
-  pageInfo: PageInfo!
-}
-
-type PaginatedStudios {
-  edges: [Studio!]
-  pageInfo: PageInfo!
 }
 
 type OffsetPageInfo {
@@ -128,19 +118,29 @@ type OffsetPageInfo {
   totalCount: Int!
 }
 
-type PaginatedGenres {
+type CursorPaginatedUsers {
+  edges: [User!]
+  pageInfo: CursorPageInfo!
+}
+
+type CursorPaginatedStudios {
+  edges: [Studio!]
+  pageInfo: CursorPageInfo!
+}
+
+type OffsetPaginatedGenres {
   edges: [Genre!]
   pageInfo: OffsetPageInfo
 }
 
-type PaginatedTags {
+type OffsetPaginatedTags {
   edges: [Tag!]
   pageInfo: OffsetPageInfo
 }
 
-type PaginatedGames {
+type CursorPaginatedGames {
   edges: [Game!]
-  pageInfo: PageInfo!
+  pageInfo: CursorPageInfo!
 }
 
 type UploadResult {
@@ -152,14 +152,14 @@ type UploadResult {
 type Query {
   me: AuthResult!
   user(field: String!, value: String!): User!
-  users(paginationOptions: PaginationOptions!): PaginatedUsers!
-  studios(paginationOptions: PaginationOptions!): PaginatedStudios!
-  games(paginationOptions: PaginationOptions!): PaginatedGames!
-  tags(paginationOptions: OffsetPaginationOptions!): PaginatedTags!
-  genres(paginationOptions: OffsetPaginationOptions!): PaginatedGenres!
+  users(paginationOptions: CursorPaginationOptions!): CursorPaginatedUsers!
+  studios(paginationOptions: CursorPaginationOptions!): CursorPaginatedStudios!
+  games(paginationOptions: CursorPaginationOptions!): CursorPaginatedGames!
+  tags(paginationOptions: OffsetPaginationOptions!): OffsetPaginatedTags!
+  genres(paginationOptions: OffsetPaginationOptions!): OffsetPaginatedGenres!
 }
 
-input PaginationOptions {
+input CursorPaginationOptions {
   take: Float!
   cursor: String!
   field: String!

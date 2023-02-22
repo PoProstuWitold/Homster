@@ -5,7 +5,11 @@ import { Role } from '@prisma/client'
 import { SessionGuard, Roles, RolesGuard } from '../common/guards'
 import { Studio } from '../common/entities'
 import { CreateStudioInput } from '../common/dtos'
-import { GqlFastifyContext, PaginatedStudios, PaginationOptions } from '../common/types'
+import { 
+    GqlFastifyContext, 
+    CursorPaginatedStudios, 
+    CursorPaginationOptions 
+} from '../common/types'
 import { StudioService } from './studio.service'
 
 @Resolver(() => Studio)
@@ -30,8 +34,8 @@ export class StudioResolver {
         }
     }
 
-    @Query(() => PaginatedStudios, { name: 'studios' })
-    public async getStudios(@Args('paginationOptions') paginationOptions: PaginationOptions): Promise<any> {
+    @Query(() => CursorPaginatedStudios, { name: 'studios' })
+    public async getStudios(@Args('paginationOptions') paginationOptions: CursorPaginationOptions): Promise<CursorPaginatedStudios> {
         try {
             const { edges, pageInfo } = await this.studioService.findAll(paginationOptions)
             

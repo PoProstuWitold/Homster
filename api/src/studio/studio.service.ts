@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
-import { PaginationOptions } from '../common/types'
+import { CursorPaginationOptions } from '../common/types'
 import { CreateStudioInput } from '../common/dtos'
 import { isPrismaError } from '../common/utils'
 import { User } from '../common/entities'
@@ -79,7 +79,7 @@ export class StudioService {
         }
     }
 
-    public async findAll(paginationOptions?: PaginationOptions) {
+    public async findAll(paginationOptions?: CursorPaginationOptions) {
         try {
             const { take, cursor, field, type } = paginationOptions
             const edges = await this.prisma.studio.findMany({

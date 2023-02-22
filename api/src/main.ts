@@ -76,22 +76,24 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
 
     app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector))
 
-    app.useGlobalPipes(new ValidationPipe({
-        exceptionFactory: (errors: ValidationError[]) => {
-            const result = {}
+    app.useGlobalPipes(
+        new ValidationPipe({
+            exceptionFactory: (errors: ValidationError[]) => {
+                const result = {}
 
-            errors.forEach(error => {
-              const constraints = Object.values(error.constraints);
-              result[error.property] = constraints[0];
-            })
-            
-            throw new HttpException({
-                statusCode: 400,
-                message: 'Input data validation failed',
-                errors: result, 
-            }, HttpStatus.BAD_REQUEST);
-        }
-    }))
+                errors.forEach(error => {
+                    const constraints = Object.values(error.constraints)
+                    result[error.property] = constraints[0]
+                })
+                
+                throw new HttpException({
+                    statusCode: 400,
+                    message: 'Input data validation failed',
+                    errors: result
+                }, HttpStatus.BAD_REQUEST)
+            }
+        })
+    )
 
     const port = Number(configService.get('api.port')) || 4000
 

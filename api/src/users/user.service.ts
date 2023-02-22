@@ -5,7 +5,7 @@ import { User } from '@prisma/client'
 import { PrismaService } from '../../database/prisma.service'
 import { CreateUserInput, UpdateUserInput } from '../common/dtos'
 import { isPrismaError } from '../common/utils'
-import { PaginationOptions } from '../common/types'
+import { CursorPaginationOptions } from '../common/types'
 
 interface findOneByFieldOptions {
     throwError?: boolean
@@ -86,7 +86,7 @@ export class UserService {
         }
     }
 
-    public async findAll(paginationOptions?: PaginationOptions) {
+    public async findAll(paginationOptions?: CursorPaginationOptions) {
         try {
             const { take, cursor, field, type } = paginationOptions
             const edges = await this.prisma.user.findMany({

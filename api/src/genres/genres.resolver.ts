@@ -5,7 +5,9 @@ import { Role } from '@prisma/client'
 import { SessionGuard, Roles, RolesGuard } from '../common/guards'
 import { Genre } from '../common/entities'
 import { CreateGenreInput } from '../common/dtos'
-import { OffsetPaginationOptions, PaginatedGenres, PaginatedStudios } from '../common/types'
+import { 
+    OffsetPaginationOptions, OffsetPaginatedGenres 
+} from '../common/types'
 import { GenreService } from './genres.service'
 
 @Resolver(() => Genre)
@@ -29,7 +31,7 @@ export class GenreResolver {
         }
     }
 
-    @Query(() => PaginatedGenres, { name: 'genres' })
+    @Query(() => OffsetPaginatedGenres, { name: 'genres' })
     public async getGenres(@Args('paginationOptions') paginationOptions: OffsetPaginationOptions): Promise<any> {
         const { edges, pageInfo } = await this.genreService.findAll(paginationOptions)
             

@@ -4,7 +4,11 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { SessionGuard } from '../common/guards'
 import { CreateUserInput, UpdateUserInput } from '../common/dtos'
 import { User } from '../common/entities'
-import { GqlFastifyContext, PaginatedUsers, PaginationOptions } from '../common/types'
+import { 
+    GqlFastifyContext, 
+    CursorPaginatedUsers, 
+    CursorPaginationOptions 
+} from '../common/types'
 import { UserService } from './user.service'
 
 @Resolver(() => User)
@@ -44,8 +48,8 @@ export class UserResolver {
         }
     }
 
-    @Query(() => PaginatedUsers, { name: 'users' })
-    public async getUsers(@Args('paginationOptions') paginationOptions: PaginationOptions): Promise<PaginatedUsers> {
+    @Query(() => CursorPaginatedUsers, { name: 'users' })
+    public async getUsers(@Args('paginationOptions') paginationOptions: CursorPaginationOptions): Promise<CursorPaginatedUsers> {
         try {
             const { edges, pageInfo } = await this.userService.findAll(paginationOptions)
 

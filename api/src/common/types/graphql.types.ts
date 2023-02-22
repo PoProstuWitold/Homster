@@ -11,7 +11,7 @@ export interface GqlFastifyContext {
 
 
 @ObjectType()
-export class PageInfo {
+export class CursorPageInfo {
     @Field()
     hasPrevious: boolean
 
@@ -25,23 +25,6 @@ export class PageInfo {
     nextCursor: string
 }
 
-@ObjectType()
-export class PaginatedUsers {
-    @Field(() => [User], { nullable: true })
-    edges?: User[]
-
-    @Field(() => PageInfo)
-    pageInfo: PageInfo
-}
-
-@ObjectType()
-export class PaginatedStudios {
-    @Field(() => [Studio], { nullable: true })
-    edges?: Studio[]
-
-    @Field(() => PageInfo)
-    pageInfo: PageInfo
-}
 
 @ObjectType()
 export class OffsetPageInfo {
@@ -55,35 +38,10 @@ export class OffsetPageInfo {
     totalCount: number
 }
 
-@ObjectType()
-export class PaginatedGenres {
-    @Field(() => [Genre], { nullable: true })
-    edges?: Genre[]
 
-    @Field(() => OffsetPageInfo, { nullable: true })
-    pageInfo?: OffsetPageInfo
-}
-
-@ObjectType()
-export class PaginatedTags {
-    @Field(() => [Tag], { nullable: true })
-    edges?: Tag[]
-
-    @Field(() => OffsetPageInfo, { nullable: true })
-    pageInfo?: OffsetPageInfo
-}
-
-@ObjectType()
-export class PaginatedGames {
-    @Field(() => [Game], { nullable: true })
-    edges?: Game[]
-
-    @Field(() => PageInfo)
-    pageInfo: PageInfo
-}
 
 @InputType()
-export class PaginationOptions {
+export class CursorPaginationOptions {
     @Field()
     take: number
     @Field()
@@ -104,4 +62,50 @@ export class OffsetPaginationOptions {
     field: string
     @Field()
     type: 'asc' | 'desc'
+}
+
+@ObjectType()
+export class CursorPaginatedUsers {
+    @Field(() => [User], { nullable: true })
+    edges?: User[]
+
+    @Field(() => CursorPageInfo)
+    pageInfo: CursorPageInfo
+}
+
+@ObjectType()
+export class CursorPaginatedStudios {
+    @Field(() => [Studio], { nullable: true })
+    edges?: Studio[]
+
+    @Field(() => CursorPageInfo)
+    pageInfo: CursorPageInfo
+}
+
+
+@ObjectType()
+export class OffsetPaginatedGenres {
+    @Field(() => [Genre], { nullable: true })
+    edges?: Genre[]
+
+    @Field(() => OffsetPageInfo, { nullable: true })
+    pageInfo?: OffsetPageInfo
+}
+
+@ObjectType()
+export class OffsetPaginatedTags {
+    @Field(() => [Tag], { nullable: true })
+    edges?: Tag[]
+
+    @Field(() => OffsetPageInfo, { nullable: true })
+    pageInfo?: OffsetPageInfo
+}
+
+@ObjectType()
+export class CursorPaginatedGames {
+    @Field(() => [Game], { nullable: true })
+    edges?: Game[]
+
+    @Field(() => CursorPageInfo)
+    pageInfo: CursorPageInfo
 }

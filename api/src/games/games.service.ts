@@ -4,7 +4,7 @@ import { isUUID } from 'class-validator'
 
 import { PrismaService } from '../../database/prisma.service'
 import { AssignOrRevokeToGameInput, CreateGameInput } from '../common/dtos'
-import { PaginationOptions } from '../common/types'
+import { CursorPaginationOptions } from '../common/types'
 import { isPrismaError } from '../common/utils'
 
 @Injectable()
@@ -76,7 +76,7 @@ export class GameService {
         }
     }
 
-    public async findAll(paginationOptions?: PaginationOptions) {
+    public async findAll(paginationOptions?: CursorPaginationOptions) {
         try {
             const { take, cursor, field, type } = paginationOptions
             const edges = await this.prisma.game.findMany({

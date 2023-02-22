@@ -5,7 +5,10 @@ import { Role } from '@prisma/client'
 import { SessionGuard, Roles, RolesGuard } from '../common/guards'
 import { Tag } from '../common/entities'
 import { CreateTagInput } from '../common/dtos'
-import { OffsetPaginationOptions, PaginatedTags } from '../common/types'
+import { 
+    OffsetPaginationOptions, 
+    OffsetPaginatedTags 
+} from '../common/types'
 import { TagService } from './tags.service'
 
 @Resolver(() => Tag)
@@ -29,8 +32,8 @@ export class TagResolver {
         }
     }
 
-    @Query(() => PaginatedTags, { name: 'tags' })
-    public async getTags(@Args('paginationOptions') paginationOptions: OffsetPaginationOptions): Promise<any> {
+    @Query(() => OffsetPaginatedTags, { name: 'tags' })
+    public async getTags(@Args('paginationOptions') paginationOptions: OffsetPaginationOptions): Promise<OffsetPaginatedTags> {
         try {
             const { edges, pageInfo } = await this.tagService.findAll(paginationOptions)
 
