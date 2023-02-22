@@ -75,14 +75,22 @@ const fakerUser = (role?: Role): any => ({
 const fakerGame = () => {
     const { basicPrice, price } = Seeder.getRandomPrices(50)
 
+    const status = Seeder.getRandomType<GameStatus>(GameStatus)
+    let releasedAt: Date
+    if(status !== GameStatus['Released']) {
+        releasedAt = new Date(Seeder.getRandomDate('2023-03-10', '2023-12-31'))
+    } else {
+        releasedAt = new Date(Seeder.getRandomDate('2011-01-01', '2023-12-31'))
+    }
+
     return {
         name: faker.random.words(3),
         description: faker.random.words(40),
         basicPrice,
         price,
-        status: Seeder.getRandomType<GameStatus>(GameStatus),
+        status,
         type: Seeder.getRandomType<GameType>(GameType),
-        releasedAt: new Date(Seeder.getRandomDate('2011-01-01', '2023-12-31')),
+        releasedAt,
         adultOnly: Seeder.getRandomBoolean()
     }
 }
@@ -331,37 +339,42 @@ async function main() {
         }
 
         console.log('Seeding Games...')
+        const gamesDb = await prisma.game.findMany()
+
         for(const gameData of gameSeed) {
-            const randomTags = Seeder.getRandomRecords<Tag>(tags, 5).map((randomTag) => ({
-                id: randomTag.id
-            }))
-
-            const randomGenres = Seeder.getRandomRecords<Genre>(genres, 3).map((randomGenre) => ({
-                id: randomGenre.id
-            }))
-
-            const game = await tx.game.create({
-                data:  {
-                    ...gameData,
-                    genres: {
-                        connect: randomGenres
-                    },
-                    tags: {
-                        connect: randomTags
+            const gameExists = gamesDb.some(game => game.name === gameData.name)
+            if(!gameExists) {
+                const randomTags = Seeder.getRandomRecords<Tag>(tags, 5).map((randomTag) => ({
+                    id: randomTag.id
+                }))
+    
+                const randomGenres = Seeder.getRandomRecords<Genre>(genres, 3).map((randomGenre) => ({
+                    id: randomGenre.id
+                }))
+    
+                const game = await tx.game.create({
+                    data:  {
+                        ...gameData,
+                        genres: {
+                            connect: randomGenres
+                        },
+                        tags: {
+                            connect: randomTags
+                        }
                     }
-                }
-            })
-
-            const randomStudios = Seeder.getRandomRecords<Studio>(studios, 3).map((studio) => ({
-                studioId: studio.id,
-                gameId: game.id,
-                contribution: Seeder.getRandomType<StudioType>(StudioType)
-            }))
-
-            await tx.gameStudio.createMany({
-                skipDuplicates: true,
-                data: randomStudios
-            })
+                })
+    
+                const randomStudios = Seeder.getRandomRecords<Studio>(studios, 3).map((studio) => ({
+                    studioId: studio.id,
+                    gameId: game.id,
+                    contribution: Seeder.getRandomType<StudioType>(StudioType)
+                }))
+    
+                await tx.gameStudio.createMany({
+                    skipDuplicates: true,
+                    data: randomStudios
+                })
+            }
         }
     })
 }
