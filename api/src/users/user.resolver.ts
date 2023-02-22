@@ -1,11 +1,10 @@
 import { UseGuards } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 import { SessionGuard } from '../common/guards'
-import { GqlContext, GqlFastifyContext } from '../common/decorators'
 import { CreateUserInput, UpdateUserInput } from '../common/dtos'
 import { User } from '../common/entities'
-import { PaginatedUsers, PaginationOptions } from '../common/types'
+import { GqlFastifyContext, PaginatedUsers, PaginationOptions } from '../common/types'
 import { UserService } from './user.service'
 
 @Resolver(() => User)
@@ -32,7 +31,7 @@ export class UserResolver {
     @Mutation(() => User)
     public async updateUser(
         @Args('values') values: UpdateUserInput,
-        @GqlContext() ctx: GqlFastifyContext
+        @Context() ctx: GqlFastifyContext
     ): Promise<User> {
         try {
             const session = await ctx.req.session.get('user')

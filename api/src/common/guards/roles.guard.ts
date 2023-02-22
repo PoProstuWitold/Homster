@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable, SetMetadata, UnauthorizedException } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { GqlExecutionContext } from '@nestjs/graphql'
+import { FastifyRequest } from 'fastify'
 
-import { UserRequest } from '../decorators'
 import { User } from '../entities'
 
 export const Roles = (...roles: string[]) => SetMetadata('roles', roles)
@@ -24,7 +24,7 @@ export class RolesGuard implements CanActivate {
             }
 
             const ctx = GqlExecutionContext.create(context)
-            const req: UserRequest = ctx.getContext().req
+            const req: FastifyRequest = ctx.getContext().req
 
             const user: User = req.session.get('user')
             const includeRole = roles.includes(user.role)

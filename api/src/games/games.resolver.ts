@@ -3,7 +3,6 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { Role } from '@prisma/client'
 
 import { Roles, RolesGuard, SessionGuard } from '../common/guards'
-import { GqlContext, GqlFastifyContext } from '../common/decorators'
 import { Game } from '../common/entities'
 import { PaginatedGames, PaginationOptions } from '../common/types'
 import { AssignOrRevokeToGameInput, CreateGameInput } from '../common/dtos'
@@ -19,8 +18,7 @@ export class GameResolver {
     @UseGuards(SessionGuard, RolesGuard)
     @Mutation(() => Game)
     public async createGame(
-        @Args('createGameInput') data: CreateGameInput,
-        @GqlContext() ctx: GqlFastifyContext
+        @Args('createGameInput') data: CreateGameInput
     ): Promise<any> {
         try {
             const game = await this.gameService.create(data)
@@ -49,8 +47,7 @@ export class GameResolver {
     @UseGuards(SessionGuard, RolesGuard)
     @Mutation(() => Game)
     public async assign(
-        @Args('assignToGameInput') data: AssignOrRevokeToGameInput,
-        @GqlContext() ctx: GqlFastifyContext
+        @Args('assignToGameInput') data: AssignOrRevokeToGameInput
     ): Promise<any> {
         try {
             const game = await this.gameService.assignOrRevoke(data)

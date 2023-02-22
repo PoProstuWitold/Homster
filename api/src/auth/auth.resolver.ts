@@ -1,7 +1,7 @@
 import { UseGuards } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { GqlContext, GqlFastifyContext } from '../common/decorators'
+import { GqlFastifyContext } from '../common/types'
 import { AuthResult, CreateUserInput, CredentialsInput } from '../common/dtos'
 import { SessionGuard } from '../common/guards'
 import { AuthService } from './auth.service'
@@ -15,7 +15,7 @@ export class AuthResolver {
     @Mutation(() => AuthResult)
     public async register(
         @Args('createUserInput') data: CreateUserInput,
-        @GqlContext() ctx: GqlFastifyContext
+        @Context() ctx: GqlFastifyContext
     ) {
         const result = await this.authService.register(data)
         ctx.req.session.set('user', result.profile)
@@ -26,7 +26,7 @@ export class AuthResolver {
     @Mutation(() => AuthResult)
     public async login(
         @Args('credentialsInput') data: CredentialsInput,
-        @GqlContext() ctx: GqlFastifyContext
+        @Context() ctx: GqlFastifyContext
     ) {
         const result = await this.authService.login(data)
         ctx.req.session.set('user', result.profile)
@@ -37,7 +37,7 @@ export class AuthResolver {
     @UseGuards(SessionGuard)
     @Query(() => AuthResult)
     public async me(
-        @GqlContext() ctx: GqlFastifyContext,
+        @Context() ctx: GqlFastifyContext,
     ) {
         const profile = await this.authService.serializeSession(ctx.req.session.get('user'))
 
@@ -51,7 +51,7 @@ export class AuthResolver {
     @UseGuards(SessionGuard)
     @Mutation(() => AuthResult)
     public async logout(
-        @GqlContext() ctx: GqlFastifyContext,
+        @Context() ctx: GqlFastifyContext,
     ) {
         ctx.req.session.delete()
         

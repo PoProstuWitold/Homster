@@ -1,12 +1,11 @@
 import { UseGuards } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { Role } from '@prisma/client'
 
 import { SessionGuard, Roles, RolesGuard } from '../common/guards'
-import { GqlContext, GqlFastifyContext } from '../common/decorators'
 import { Studio } from '../common/entities'
 import { CreateStudioInput } from '../common/dtos'
-import { PaginatedStudios, PaginationOptions } from '../common/types'
+import { GqlFastifyContext, PaginatedStudios, PaginationOptions } from '../common/types'
 import { StudioService } from './studio.service'
 
 @Resolver(() => Studio)
@@ -20,7 +19,7 @@ export class StudioResolver {
     @Mutation(() => Studio)
     public async createStudio(
         @Args('createStudioInput') data: CreateStudioInput,
-        @GqlContext() ctx: GqlFastifyContext
+        @Context() ctx: GqlFastifyContext
     ): Promise<any> {
         try {
             const studio = await this.studioService.create(data, ctx.req.session.get('user'))

@@ -1,7 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common'
 import { GqlExecutionContext } from '@nestjs/graphql'
-
-import { UserRequest } from '../decorators'
+import { FastifyRequest } from 'fastify'
 
 @Injectable()
 export class SessionGuard implements CanActivate {
@@ -11,7 +10,7 @@ export class SessionGuard implements CanActivate {
     ): Promise<any> {
         try {
             const ctx = GqlExecutionContext.create(context)
-            const req: UserRequest = ctx.getContext().req
+            const req: FastifyRequest = ctx.getContext().req
 
             const userSession = req.session.get('user')
 
