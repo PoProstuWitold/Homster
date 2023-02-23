@@ -1,11 +1,30 @@
 import { Field, Float, GraphQLISODateTime, Int, ObjectType } from '@nestjs/graphql'
-import { Game as GameDB, GameStatus, GameType } from '@prisma/client'
+import { 
+    Game as GameDB, GameStatus, GameType, 
+    GameMedia as GameMediaDB,
+    MediaType 
+} from '@prisma/client'
 
 import { BaseEntity } from './base.entity'
 import { Genre } from './genre.entity'
 import { GameStudio } from './studio.entity'
 import { Tag } from './tag.entity'
 import { User } from './user.entity'
+
+@ObjectType()
+export class GameMedia extends BaseEntity {
+    @Field(() => String)
+    name: GameMediaDB['name']
+
+    @Field(() => String)
+    description: GameMediaDB['description']
+
+    @Field(() => String)
+    status: MediaType
+
+    @Field(() => String)
+    url: string
+}
 
 @ObjectType()
 export class Game extends BaseEntity {
@@ -30,8 +49,11 @@ export class Game extends BaseEntity {
     @Field(() => [GameStudio], { nullable: true })
     studios?: GameStudio[]
 
-    @Field(() => GraphQLISODateTime)
-    releasedAt: Date
+    @Field(() => [GameMedia], { nullable: true })
+    media?: GameMedia[]
+
+    @Field(() => GraphQLISODateTime, { nullable: true })
+    releaseDate?: Date
 
     @Field(() => Int)
     recentReviews: GameDB['recentReviews']

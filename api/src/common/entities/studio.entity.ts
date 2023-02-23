@@ -18,6 +18,9 @@ export class Studio extends BaseEntity {
 	@Field(() => String)
     type: StudioType
 
+    @Field(() => String, { nullable: true })
+    avatar: StudioDB['avatar']
+
 	@Field(() => [GameStudio], { nullable: true })
     games?: GameStudio[]
 

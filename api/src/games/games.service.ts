@@ -16,7 +16,7 @@ export class GameService {
     public async create(data: CreateGameInput) {
         try {
             let {
-                name, description, status, type, releasedAt, basicPrice,
+                name, description, status, type, releaseDate, basicPrice,
                 developers, publishers,
                 tags, genres
             } = data
@@ -26,7 +26,7 @@ export class GameService {
 
             const game = await this.prisma.game.create({
                 data: {
-                    name, description, status, type, releasedAt,
+                    name, description, status, type, releaseDate,
                     ...(basicPrice && {
                         basicPrice,
                         price: basicPrice

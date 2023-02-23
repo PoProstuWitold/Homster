@@ -21,6 +21,7 @@ model User {
 	id          	String      @id @default(uuid())
 	createdAt   	DateTime  	@default(now())
 	updatedAt   	DateTime  	@updatedAt
+	avatar			String?
 	role			Role		@default(USER)
 	email    		String		@unique
 	displayName 	String		@unique
@@ -72,7 +73,7 @@ model Game {
 	status			GameStatus	@default(Released)
 	type			GameType	@default(Game)
 	studios			GameStudio[]
-	releasedAt		DateTime
+	releaseDate		DateTime?
 	recentReviews 	Int			@default(0)
 	allReviews		Int			@default(0)
 	recentRating	Float		@default(0)
@@ -81,6 +82,25 @@ model Game {
 	genres			Genre[]
 	users			User[]
 	adultOnly		Boolean		@default(false)
+	media           GameMedia[]
+	coverImage		String?
+}
+
+enum MediaType {
+	Image
+	Video
+}
+
+model GameMedia {
+	id              String        @id @default(uuid())
+	createdAt       DateTime      @default(now())
+	updatedAt       DateTime      @updatedAt
+	name            String?
+	description     String?
+	type            MediaType
+	url             String
+	game            Game          @relation(fields: [gameId], references: [id])
+	gameId          String
 }
 
 enum StudioType {
@@ -99,6 +119,7 @@ model Studio {
 	id          	String      @id @default(uuid())
 	createdAt   	DateTime  	@default(now())
 	updatedAt   	DateTime  	@updatedAt
+	avatar			String?
 	name			String		@unique
 	type			StudioType	@default(DeveloperAndPublisher)
 	games			GameStudio[]

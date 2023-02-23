@@ -76,11 +76,11 @@ const fakerGame = () => {
     const { basicPrice, price } = Seeder.getRandomPrices(50)
 
     const status = Seeder.getRandomType<GameStatus>(GameStatus)
-    let releasedAt: Date
+    let releaseDate: Date
     if(status !== GameStatus['Released']) {
-        releasedAt = new Date(Seeder.getRandomDate('2023-03-10', '2023-12-31'))
+        releaseDate = new Date(Seeder.getRandomDate('2023-03-10', '2023-12-31'))
     } else {
-        releasedAt = new Date(Seeder.getRandomDate('2011-01-01', '2023-12-31'))
+        releaseDate = new Date(Seeder.getRandomDate('2011-01-01', '2023-12-31'))
     }
 
     return {
@@ -90,7 +90,7 @@ const fakerGame = () => {
         price,
         status,
         type: Seeder.getRandomType<GameType>(GameType),
-        releasedAt,
+        releaseDate,
         adultOnly: Seeder.getRandomBoolean()
     }
 }
@@ -229,7 +229,7 @@ const gameSeed = [
         price: 0,
         status: GameStatus['EarlyAccess'],
         type: GameType['Game'],
-        releasedAt: new Date('2023-12-20'),
+        releaseDate: new Date('2023-12-20'),
         adultOnly: true
     },
     {
@@ -239,7 +239,7 @@ const gameSeed = [
         price: 0,
         status: GameStatus['Released'],
         type: GameType['Game'],
-        releasedAt: new Date('2023-02-07'),
+        releaseDate: new Date('2023-02-07'),
     },
     {
         name: 'Homsterix 2',
@@ -248,8 +248,64 @@ const gameSeed = [
         price: 5,
         status: GameStatus['NotReleased'],
         type: GameType['Game'],
-        releasedAt: new Date('2023-04-26'),
+        releaseDate: new Date('2023-04-26'),
     },
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
+    fakerGame(),
     fakerGame(),
     fakerGame(),
     fakerGame(),

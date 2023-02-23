@@ -177,8 +177,8 @@ export class CreateGameInput {
     @IsDate({
         message: 'Release date must be valid date'
     })
-    @Field(() => GraphQLISODateTime)
-    releasedAt: Date
+    @Field(() => GraphQLISODateTime, { nullable: true })
+    releaseDate: Date
 
     @IsEnum(GameType, {
         message: `Game type must be one of these: Game, DLC`

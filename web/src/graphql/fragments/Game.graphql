@@ -8,7 +8,7 @@ fragment Game on Game {
     price
     status
     type
-    releasedAt
+    releaseDate
     name
     description
     type

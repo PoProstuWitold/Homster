@@ -49,7 +49,7 @@ export const GameCard = memo(({game}: any) => {
 			<div className="w-1/2">
 				<p className="font-semibold">release date:</p>
 				<div className="flex flex-row flex-wrap">
-					{dayjs(new Date(game.releasedAt)).format('DD MMMM YYYY')}
+					{dayjs(new Date(game.releaseDate)).format('DD MMMM YYYY')}
 				</div>
 			</div>
 		</div>

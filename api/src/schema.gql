@@ -22,6 +22,7 @@ type Studio {
   updatedAt: DateTime!
   name: String!
   type: String!
+  avatar: String
   games: [GameStudio!]
   employees: [StudioEmployee!]
 }
@@ -53,6 +54,16 @@ type Tag {
   games: [Game!]
 }
 
+type GameMedia {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  description: String!
+  status: String!
+  url: String!
+}
+
 type Game {
   id: ID!
   createdAt: DateTime!
@@ -64,7 +75,8 @@ type Game {
   status: String!
   type: String!
   studios: [GameStudio!]
-  releasedAt: DateTime!
+  media: [GameMedia!]
+  releaseDate: DateTime
   recentReviews: Int!
   allReviews: Int!
   recentRating: Float!
@@ -81,6 +93,7 @@ type User {
   updatedAt: DateTime!
   displayName: String!
   fullName: String!
+  avatar: String
   role: String!
   email: String!
   games: [Game!]
@@ -93,6 +106,7 @@ type Profile {
   updatedAt: DateTime!
   displayName: String!
   fullName: String!
+  avatar: String
   role: String!
   email: String!
   games: [Game!]
@@ -214,7 +228,7 @@ input CreateGameInput {
   name: String!
   description: String!
   status: String!
-  releasedAt: DateTime!
+  releaseDate: DateTime
   type: String!
   developers: [String!]!
   publishers: [String!]!

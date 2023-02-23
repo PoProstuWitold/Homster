@@ -3,6 +3,7 @@ fragment User on User {
     id
     displayName
     fullName
+    avatar
     email
     role
     createdAt
@@ -14,6 +15,7 @@ fragment Profile on Profile {
     id
     displayName
     fullName
+    avatar
     email
     role
     createdAt
