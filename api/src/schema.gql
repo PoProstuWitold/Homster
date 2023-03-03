@@ -158,9 +158,11 @@ type CursorPaginatedGames {
 }
 
 type UploadResult {
-  name: String!
-  description: String!
-  image: String!
+  name: String
+  description: String
+  imageRaw: String
+  imageFormatted: String
+  url: String
 }
 
 type Query {

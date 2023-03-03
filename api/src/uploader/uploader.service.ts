@@ -9,7 +9,7 @@ import { CreateUploadInput, FileUpload, FileUploadDto } from './uploader.types'
 
 export enum Mimetype {
     PNG = 'image/png',
-    JPG = 'image/jpg',
+    JPG = 'image/jpeg',
     GIF = 'image/gif',
     SVG = 'image/svg+xml',
     TEXT = 'text/plain',
@@ -19,6 +19,10 @@ export enum Mimetype {
 
 @Injectable()
 export class UploaderService {
+    private getServerAddress() {
+        return `http://localhost:4000/public/uploads`
+    }
+
     public async uploadFile(values: CreateUploadInput, file: FileUpload, mimetype: Mimetype[]) {
         try {
             await this.validateFile(file, mimetype)
@@ -28,8 +32,8 @@ export class UploaderService {
             console.log(`size: ${this.bytesForHuman(size)}`)
 
             const id = randomUUID() 
-            
-            const path = join('public', 'uploads', `${id}__${filename}`)
+            const imageFormatted = `${id}__${filename}`
+            const path = join('public', 'uploads', imageFormatted)
 
             let uploaded = 0
 
@@ -47,10 +51,14 @@ export class UploaderService {
                 .on('error', rej)
             )
 
+            
+
             return {
                 name: values.name,
                 description: values.description,
-                image: file.filename
+                imageRaw: file.filename,
+                imageFormatted,
+                url: `${this.getServerAddress()}/${imageFormatted}`
             }
         } catch (err) {
             throw err

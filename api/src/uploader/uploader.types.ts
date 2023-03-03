@@ -19,14 +19,20 @@ export class CreateUploadInput {
 
 @ObjectType()
 export class UploadResult {
-    @Field(() => String)
-    name: string;
+    @Field(() => String, { nullable: true })
+    name?: string;
 
-    @Field(() => String)
-    description: string;
+    @Field(() => String, { nullable: true })
+    description?: string;
 
-    @Field(() => String)
-    image: string;
+    @Field(() => String, { nullable: true })
+    imageRaw?: string;
+
+    @Field(() => String, { nullable: true })
+    imageFormatted?: string;
+
+    @Field(() => String, { nullable: true })
+    url?: string;
 }
 
 export interface FileUpload {
@@ -64,23 +70,12 @@ export class FileUploadRaw {
 export const GraphQLUpload = new GraphQLScalarType({
     name: 'Upload',
     description: 'The `Upload` scalar type represents a file upload.',
-    async parseValue(value: Promise<FileUploadRaw>): Promise<FileUpload> {
-        const upload = await value
-        const filename = upload.file.filename
-        const mimetype = upload.file.mimetype
-        const encoding = upload.file.encoding
-        const createReadStream = () => upload.file.createReadStream()
-
-        const fileUpload = {
-            filename,
-            mimetype,
-            encoding,
-            createReadStream
+    async parseValue(value: FileUploadRaw): Promise<FileUpload> {
+        if(value.file) {
+            return value.file
         }
-
-        return fileUpload
     },
-    parseLiteral(ast) {
+    parseLiteral(ast) { 
         throw new GraphQLError('Upload literal unsupported.', ast)
     },
     serialize() {
