@@ -3,7 +3,6 @@ import { getStudios } from '@/utils/getStudios'
 import Link from 'next/link'
 import { formatString } from '@/utils/formatString'
 import dayjs from 'dayjs'
-dayjs().format()
 
 export const GameCard = memo(({game}: any) => {
 	GameCard.displayName = 'GameItem'
