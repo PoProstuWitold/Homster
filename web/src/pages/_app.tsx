@@ -20,9 +20,11 @@ export default function App({ Component, pageProps }: AppProps) {
 				<ThemeProvider
 					defaultTheme="system"
 				>
-					{router.pathname !== '/login' ? <NavBar /> : null}
-					<Component {...pageProps} />
-					<Toaster/>
+					<main className="ease-in-out transition-all">
+						{router.pathname !== '/login' ? <NavBar /> : null}
+						<Component {...pageProps} />
+						<Toaster/>
+					</main>
 				</ThemeProvider>
 			</UrqlProvider>
 		</>

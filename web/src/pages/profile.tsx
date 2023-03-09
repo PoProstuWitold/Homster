@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { GiInfo } from 'react-icons/gi'
 import { IoGameControllerOutline } from 'react-icons/io5'
 import { IoMdStats } from 'react-icons/io'
-import { GiPartyPopper } from 'react-icons/gi'
+import { GiPartyPopper, GiCakeSlice } from 'react-icons/gi'
 import { MdOutlineDescription } from 'react-icons/md'
 import { AiOutlineEdit } from 'react-icons/ai'
 
@@ -27,7 +27,7 @@ function Profile() {
 				<title>Your profile</title>
 			</Head>
             <main>
-                <div className="flex flex-col min-h-screen p-10">
+                <div className="flex flex-col min-h-screen md:p-10 p-4">
                     {data && data.me && data.me.profile &&
                         <>
                         {/* PROFILE PAGE HEADER */}
@@ -88,13 +88,20 @@ function Profile() {
                                     </div>
                                 </div>
                                 {/* Member since   */}
-                                <div className="flex flex-col bg-base-300 rounded-lg shadow-md p-5 gap-4">
+                                <div className="flex flex-col bg-base-300 rounded-lg shadow-md p-5 gap-6">
                                     <div className="flex flex-row gap-2 text-center items-center">
                                         <h2 className="text-lg font-bold flex flex-row items-center gap-2">
                                             <GiPartyPopper className="w-5 h-5"/>
                                             <p>Joined</p>
                                         </h2>
                                         <p className="italic">{dayjs(new Date(data.me.profile.createdAt)).format('DD MMMM YYYY')}</p>
+                                    </div>
+                                    <div className="flex flex-row gap-2 text-center items-center">
+                                        <h2 className="text-lg font-bold flex flex-row items-center gap-2">
+                                            <GiCakeSlice className="w-5 h-5"/>
+                                            <p>Cake day</p>
+                                        </h2>
+                                        <p className="italic">{dayjs(new Date('2003-04-26')).format('DD MMMM YYYY')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -144,12 +151,12 @@ function Profile() {
                                     </div>
                                 </div>
                                 {/* About me */}
-                                <div className="bg-base-300 rounded-lg shadow-md p-5 md:h-44">
+                                <div className="bg-base-300 rounded-lg shadow-md p-5 md:h-[14.25rem]">
                                     <h2 className="text-lg font-bold flex flex-row items-center gap-2">
                                         <MdOutlineDescription className="w-5 h-5"/>
                                         <p>About me</p>
                                     </h2>
-                                    <p className="md:line-clamp-4 line-clamp-[8]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nunc eu nisi fermentum tristique. Nullam vel ex odio. Duis venenatis nunc sapien, sit amet fringilla velit porttitor in. Maecenas nec lacus sagittis, pharetra sapien vel, finibus mauris. Praesent non dolor sit amet elit pellentesque facilisis. Suspendisse vel libero ut mauris suscipit sodales ut sit amet metus. Vestibulum dignissim a sapien vel tincidunt. Ut eu dapibus lectus, a gravida risus. Quisque semper efficitur felis, id semper quam feugiat sit amet. Vivamus luctus libero vel nisl venenatis, quis efficitur lectus gravida. Aliquam facilisis orci eu sapien tincidunt elementum. Fusce et orci sem.</p>
+                                    <p className="md:line-clamp-[7] line-clamp-[8]">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam malesuada erat at convallis fringilla. Nam id auctor ex, in malesuada magna. Nunc eget ante rhoncus, placerat libero eu, ultricies turpis. Nullam consectetur mi vitae ex vulputate consequat. Nunc sollicitudin, nisl ornare faucibus tempus, leo mauris facilisis ipsum, at ultrices metus leo eget lectus. Ut a est arcu. Nunc non nulla odio. Nulla at scelerisque erat. Duis tincidunt molestie auctor. Nulla luctus, ligula semper ullamcorper consequat, arcu massa dignissim augue, quis pretium odio tellus ac orci. Aenean eu sollicitudin nulla, at mollis nibh. Pellentesque congue neque quis mollis varius. Donec ut dolor varius nisl dignissim iaculis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam ultrices ipsum vitae neque malesuada pharetra nec vitae enim. Nunc imperdiet felis tempus nulla dapibus ultricies. Donec consectetur consequat orci. Etiam accumsan lacinia odio id convallis. Suspendisse in nisl mollis, feugiat dolor id, fringilla tellus. Praesent laoreet velit at orci posuere, sit amet porttitor sapien rhoncus.</p>
                                 </div>
                                 {/* Edit */}
                                 <div className="bg-base-300 rounded-lg shadow-md p-1">
