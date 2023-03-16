@@ -1,12 +1,10 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql'
 import { Game, Genre, Studio, Tag, User } from '../entities'
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { PubSub } from 'mercurius'
 
 export interface GqlFastifyContext {
     req: FastifyRequest
     reply: FastifyReply
-    pubsub: PubSub
 }
 
 
