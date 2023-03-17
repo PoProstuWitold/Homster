@@ -1,7 +1,8 @@
-import { HttpException, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
-import { MercuriusDriver, MercuriusDriverConfig } from '@nestjs/mercurius'
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
+import { GraphQLError, GraphQLFormattedError } from 'graphql'
 import { join } from 'path'
 
 import { UserModule } from './users/user.module'
@@ -17,30 +18,26 @@ import { UploaderModule } from './uploader/uploader.module'
 		ConfigModule.forRoot({
             isGlobal: true
         }),
-		GraphQLModule.forRoot<MercuriusDriverConfig>({
-			driver: MercuriusDriver,
-			graphiql: true,
+		GraphQLModule.forRoot<ApolloDriverConfig>({
+			driver: ApolloDriver,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-            subscription: true,
             buildSchemaOptions: {
                 dateScalarMode: 'isoDate'
             },
-            errorFormatter: execution => {
-                const [error] = execution.errors
-                const originalError = error?.originalError
-                if (originalError instanceof HttpException) {
-                    return {
-                        statusCode: originalError.getStatus(),
-                        response: {
-                            data: {
-                                error: originalError.getResponse() as any
-                            }
-                        }
-                    }
-                }         
-                    
-                return { statusCode: 500, response: execution }
-            }
+            autoTransformHttpErrors: false,
+            includeStacktraceInErrorResponses: false,
+            formatError: (error: GraphQLError) => {
+                const graphQLFormattedError: GraphQLFormattedError = {
+                    //@ts-ignore
+                    message: error.extensions?.message || error.message || 'Internal server error',
+                    statusCode: error.extensions?.statusCode || error.extensions.code || 500,
+                    errors: error.extensions?.errors || {}
+                };
+                return graphQLFormattedError;
+            },
+            introspection: true,
+            playground: true,
+            csrfPrevention: false
 		}),
         AuthModule,
 		UserModule,

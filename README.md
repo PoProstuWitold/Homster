@@ -64,7 +64,7 @@ next dev
 - Backend:
     - Nest.js (Fastify)
     - PostgreSQL (Prisma)
-    - GraphQL (Mercurius)
+    - GraphQL (Apollo)
 - Frontend
     - Next.js
     - Tailwind & DaisyUI

@@ -1,14 +1,16 @@
-import { HttpException, HttpStatus } from '@nestjs/common'
+import { UserInputError } from '@nestjs/apollo'
 
-export class InvalidCredentials extends HttpException {
+export class InvalidCredentials extends UserInputError {
     constructor() {
-        super({
-            statusCode: 400,
-            message: 'Invalid credentials', 
-            errors: {
-                password: 'Invalid credentials',
-                email: 'Invalid credentials'
+        super('INVALID_CREDENTIALS', {
+            extensions: {
+                statusCode: 400,
+                message: 'Invalid credentials', 
+                errors: {
+                    password: 'Invalid credentials',
+                    email: 'Invalid credentials'
+                }
             }
-        }, HttpStatus.BAD_REQUEST)
+        })
     }
 }

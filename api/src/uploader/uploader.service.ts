@@ -23,13 +23,23 @@ export class UploaderService {
         return `http://localhost:4000/public/uploads`
     }
 
+    public async uploadFiles(values: CreateUploadInput, files: FileUpload[], mimetype: Mimetype[]) {
+        return {
+            name: values.name,
+            description: values.description,
+            imageRaw: files.join(', '),
+            imageFormatted: files.join(', '),
+            url: `${this.getServerAddress()}/hello`
+        }
+    }
+
     public async uploadFile(values: CreateUploadInput, file: FileUpload, mimetype: Mimetype[]) {
         try {
             await this.validateFile(file, mimetype)
             const { createReadStream, filename } = file
             
-            const size = await this.calculateFileSize(createReadStream())
-            console.log(`size: ${this.bytesForHuman(size)}`)
+            // const size = await this.calculateFileSize(createReadStream())
+            // console.log(`size: ${this.bytesForHuman(size)}`)
 
             const id = randomUUID() 
             const imageFormatted = `${id}__${filename}`
@@ -50,8 +60,6 @@ export class UploaderService {
                 .on('finish', res)
                 .on('error', rej)
             )
-
-            
 
             return {
                 name: values.name,

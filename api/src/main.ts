@@ -1,13 +1,14 @@
 import { join } from 'path'
 import { NestFactory, Reflector } from '@nestjs/core'
-import { ClassSerializerInterceptor, HttpException, HttpStatus, ValidationPipe } from '@nestjs/common'
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { UserInputError } from '@nestjs/apollo'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import { fastifyHelmet } from '@fastify/helmet'
 import fastifyCookie from '@fastify/cookie'
 import fastifySecureSession from '@fastify/secure-session'
 import { ValidationError } from 'class-validator'
-import mercuriusUpload from 'mercurius-upload'
+import { processRequest } from 'graphql-upload-minimal'
 
 import { AppModule } from './app.module'
 
@@ -72,12 +73,28 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
         }
     })
 
-    await app.register(mercuriusUpload)
+    // Format the request body to follow graphql-upload's
+    await app.getHttpAdapter().getInstance()
+        .addContentTypeParser('multipart', (request, payload, done) => {
+            request.isMultipart = true
+            done()
+        })
+    
+    await app.getHttpAdapter().getInstance()
+        .addHook('preValidation', async function (request, reply) {
+            if (!request.isMultipart) {
+                return
+            }
+            console.log(processRequest)
+            request.body = await processRequest(request.raw, reply.raw)
+        })
 
     app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector))
 
     app.useGlobalPipes(
         new ValidationPipe({
+            transform: true,
+            stopAtFirstError: false,
             exceptionFactory: (errors: ValidationError[]) => {
                 const result = {}
 
@@ -85,12 +102,14 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
                     const constraints = Object.values(error.constraints)
                     result[error.property] = constraints[0]
                 })
-                
-                throw new HttpException({
-                    statusCode: 400,
-                    message: 'Input data validation failed',
-                    errors: result
-                }, HttpStatus.BAD_REQUEST)
+
+                throw new UserInputError('VALIDATION_ERROR', {
+                    extensions: {
+                        statusCode: 400,
+                        message: 'Input data validation failed',
+                        errors: result,
+                    }
+                })
             }
         })
     )

@@ -352,9 +352,11 @@ export type UpdateUserInput = {
 
 export type UploadResult = {
   __typename?: 'UploadResult';
-  description: Scalars['String'];
-  image: Scalars['String'];
-  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  imageFormatted?: Maybe<Scalars['String']>;
+  imageRaw?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
 };
 
 export type User = {

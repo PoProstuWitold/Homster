@@ -261,5 +261,5 @@ input CreateUploadInput {
   description: String!
 }
 
-"""The `Upload` scalar type represents a file upload."""
+"""The `Upload` scalar type represents a file upload"""
 scalar Upload

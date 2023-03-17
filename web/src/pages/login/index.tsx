@@ -64,10 +64,11 @@ function Login() {
 	const handleLogin = async (data: any) => {
 		try {
 			const res = await login(data)
+            console.log(res.error?.graphQLErrors[0].originalError)
 			//@ts-ignore
-			if(res.data && res.data.error) {
+			if(!res.data && res.error?.graphQLErrors[0].originalError) {
                 //@ts-ignore
-                setApiErrors(res.data.error.errors)
+                setApiErrors(res.error?.graphQLErrors[0].originalError.errors)
                 setTimeout(() => {
                     setApiErrors([])
                 }, 5000)
@@ -93,9 +94,9 @@ function Login() {
 		try {
 			const res = await register(data)
 			//@ts-ignore
-			if(res.data && res.data.error) {
+			if(!res.data && res.error?.graphQLErrors[0].originalError) {
                 //@ts-ignore
-                setApiErrors(res.data.error.errors)
+                setApiErrors(res.error?.graphQLErrors[0].originalError.errors)
                 setTimeout(() => {
                     setApiErrors([])
                 }, 5000)

@@ -1,8 +1,9 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { Exclude } from 'class-transformer'
 import { IsMimeType, IsNotEmpty, IsString } from 'class-validator'
-import { GraphQLError, GraphQLScalarType } from 'graphql'
+import { GraphQLScalarType } from 'graphql'
 import { Readable } from 'stream'
+import { GraphQLUpload } from 'graphql-upload-minimal'
 
 @InputType()
 export class CreateUploadInput {
@@ -58,27 +59,20 @@ export class FileUploadDto implements FileUpload {
     createReadStream: () => Readable;
 }
 
-export class FileUploadRaw {
-    file: {
-        filename: string
-        mimetype: string
-        encoding: string
-        createReadStream: () => Readable
-    }
-}
-
-export const GraphQLUpload = new GraphQLScalarType({
+export const UploadScalar = new GraphQLScalarType({
     name: 'Upload',
-    description: 'The `Upload` scalar type represents a file upload.',
-    async parseValue(value: FileUploadRaw): Promise<FileUpload> {
-        if(value.file) {
-            return value.file
-        }
+    description: 'The `Upload` scalar type represents a file upload',
+
+    parseValue(value) {
+        return GraphQLUpload.parseValue(value);
     },
-    parseLiteral(ast) { 
-        throw new GraphQLError('Upload literal unsupported.', ast)
+    
+    serialize(value) {
+        return GraphQLUpload.serialize(value);
     },
-    serialize() {
-        throw new GraphQLError('Upload serialization unsupported.')
-    },
+    
+    parseLiteral(ast) {
+        //@ts-ignore
+        return GraphQLUpload.parseLiteral(ast, ast.value);
+    }
 })

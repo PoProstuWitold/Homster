@@ -1,13 +1,15 @@
-import { HttpException, HttpStatus } from '@nestjs/common'
+import { UserInputError } from '@nestjs/apollo'
 
-export class UniqueViolation extends HttpException {
+export class UniqueViolation extends UserInputError {
     constructor(field: string) {
-        super({
-            statusCode: 400,
-            message: 'Unique violation', 
-            errors: {
-                [field]: `Field ${field} already exists`
+        super('UNIQUE_VIOLATION', {
+            extensions: {
+                statusCode: 400,
+                message: 'Unique violation', 
+                errors: {
+                    [field]: `Field ${field} already exists`
+                }
             }
-        }, HttpStatus.BAD_REQUEST)
+        })
     }
 }
