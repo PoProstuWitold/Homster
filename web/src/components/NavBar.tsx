@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { Popover } from '@headlessui/react'
 import Link from 'next/link'
 import { AiOutlineUser, AiOutlineClose, AiOutlineShoppingCart, AiOutlineMenu } from  'react-icons/ai'
+import { toast } from 'react-hot-toast'
+import { useRouter } from 'next/router'
 
 import { useLogoutMutation, useMeQuery } from '@/generated/graphql'
 import { ThemeChanger } from './ThemeChanger'
 import { TopHeader } from './TopHeader'
-import { toast } from 'react-hot-toast'
 
 interface NavBarProps {
 
 }
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
+    const router = useRouter()
     const [mounted, setMounted] = useState<boolean>(false)
 
     const [{ data }] = useMeQuery({
@@ -58,7 +60,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     
     return (
         <>
-           <div className="sticky top-0 w-full bg-white">
+           <div className="sticky top-0 w-full z-50 shadow-lg">
       
             {/* STORE NAVIGATION (SMALL DEVICE) */}
             <div className="md:hidden">
@@ -203,7 +205,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                     <div className="px-4 border-l-2 border-primary dropdown dropdown-end">
                             <label tabIndex={0}><AiOutlineUser className="w-6 h-6 cursor-pointer"/></label>
                             <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-200 rounded-box w-52 mt-4">
-                                {mounted && data && !data.me &&
+                                {mounted && data && data.me && !data.me.profile &&
                                     <>
                                         <li><Link href={`/login`}>Log in</Link></li>
                                     </>
@@ -221,11 +223,34 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                                                 onClick={() => { 
                                                     logout({})
                                                     toast.success('Logged out') 
+                                                    if(router.pathname === '/profile') {
+                                                        router.push('/')
+                                                    }
                                                 }}
                                             >
                                             Log out
                                             </button>
                                         </li>
+                                        {data.me.profile.role === 'DEVELOPER' &&
+                                            <>
+                                                <div className="divider">Developer</div>
+                                                <li><Link href={`/studio`}>Studio</Link></li>
+                                            </>
+                                        }
+                                        {data.me.profile.role === 'MOD' &&
+                                            <>
+                                                <div className="divider">Moderator</div>
+                                                <li><Link href={`/studio`}>Studio</Link></li>
+                                                <li><Link href={`/moderation`}>Moderation</Link></li>
+                                            </>
+                                        }
+                                        {data.me.profile.role === 'ADMIN' &&
+                                            <>
+                                                <div className="divider">Admin</div>
+                                                <li><Link href={`/studio`}>Studio</Link></li>
+                                                <li><Link href={`/admin`}>Administration</Link></li>
+                                            </>
+                                        }
                                     </>
                                 }
                             </ul>

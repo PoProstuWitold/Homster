@@ -5,6 +5,7 @@ import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'react-hot-toast'
 import dayjs from 'dayjs'
+import NextNProgress from 'nextjs-progressbar'
 
 import { NavBar } from '@/components/NavBar'
 import UrqlProvider from '@/lib/urql/UrqlProvider'
@@ -21,6 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
 					defaultTheme="system"
 				>
 					<main className="ease-in-out transition-all">
+						<NextNProgress />
 						{router.pathname !== '/login' ? <NavBar /> : null}
 						<Component {...pageProps} />
 						<Toaster/>

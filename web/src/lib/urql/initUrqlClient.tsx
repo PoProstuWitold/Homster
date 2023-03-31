@@ -1,24 +1,88 @@
 import {
-    cacheExchange,
     Client,
+    Exchange,
     createClient,
     dedupExchange,
     fetchExchange,
-    ssrExchange,
-    Exchange
+    ssrExchange
 } from 'urql'
-import { retryExchange } from '@urql/exchange-retry'
-import { NextUrqlClientConfig } from 'next-urql' 
+import { retryExchange, RetryExchangeOptions } from '@urql/exchange-retry'
+import { 
+    cacheExchange, 
+    CacheExchangeOpts 
+} from '@urql/exchange-graphcache'
+import { NextUrqlClientConfig } from 'next-urql'
+import { betterUpdateQuery } from './betterUpdateQuery'
+import { LoginMutation, LogoutMutation, MeDocument, MeQuery, RegisterMutation } from '@/generated/graphql'
 
 let urqlClient: Client | null = null
 let ssrCache: ReturnType<typeof ssrExchange> | null = null
 const isServer = typeof window === 'undefined'
 
-const options = {
+const retryOptions: RetryExchangeOptions = {
     initialDelayMs: 1000,
     maxDelayMs: 1000,
     randomDelay: true,
     retryIf: (err: any) => err && err.networkError,
+}
+
+const cacheOptions: CacheExchangeOpts = {
+    keys: {
+        CursorPaginatedUsers: _ => null,
+        CursorPaginatedGames: _ => null,
+        GameStudio: _ => null,
+        AuthResult: (data: any) => data.profile ? data.profile.id : null
+    },
+    updates: {
+        Mutation: {
+            login: (_result, args, cache, info) => {
+                betterUpdateQuery<LoginMutation, MeQuery>(
+                    cache, 
+                    { query: MeDocument },
+                    _result,
+                    (result, query) => {
+                        console.log('result', result)
+                        console.log('query', query)
+                        if(result.login.statusCode !== 200) {
+                            return query
+                        } else {
+                            return {
+                                me: result.login
+                            }
+                        }
+                    }
+                )
+            },
+            register: (_result, args, cache, info) => {
+                betterUpdateQuery<RegisterMutation, MeQuery>(
+                    cache, 
+                    { query: MeDocument },
+                    _result,
+                    (result, query) => {
+                        if(result.register.statusCode !== 200) {
+                            return query
+                        } else {
+                            return {
+                                me: result.register
+                            }
+                        }
+                    }
+                )
+            },
+            logout: (_result, args, cache, info) => {
+                betterUpdateQuery<LogoutMutation, MeQuery>(
+                    cache,
+                    { query: MeDocument },
+                    _result,
+                    (result, query) => {
+                        return {
+                            me: result.logout
+                        }
+                    }
+                )
+            },
+        }
+    }
 }
 
 /**
@@ -37,9 +101,9 @@ export function initUrqlClient(url: string, initialState?: any) {
             requestPolicy: 'cache-and-network',
             exchanges: [
                 dedupExchange,
-                cacheExchange,
+                cacheExchange(cacheOptions) as Exchange,
                 ssrCache, // Add `ssr` in front of the `fetchExchange`
-                retryExchange(options),
+                retryExchange(retryOptions) as Exchange,
                 fetchExchange,
             ],
             fetchOptions: () => {
@@ -61,17 +125,17 @@ export function initUrqlClient(url: string, initialState?: any) {
 
 export const urqlClientSsr: NextUrqlClientConfig = (ssrExchange: Exchange) => ({
 	url: 'http://localhost:4000/graphql',
-	requestPolicy: 'cache-and-network',
+    requestPolicy: 'cache-and-network',
 	exchanges: [
 		dedupExchange,
-		cacheExchange,
+		cacheExchange(cacheOptions) as Exchange,
 		ssrExchange,
-        retryExchange(options),
+        retryExchange(retryOptions) as Exchange,
 		fetchExchange
 	],
 	fetchOptions: () => {
 		return {
-			credentials: 'include'
+			credentials: 'include' as const
 		}
 	},
 })

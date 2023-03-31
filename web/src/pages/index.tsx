@@ -22,6 +22,8 @@ const UserItem = memo(({user, index}: any) => {
 
 function Home() {
 	const scrollRef = useRef<HTMLDivElement>(null)
+
+	const [mounted, setMounted] = useState<boolean>(false)
 	const [users, setUsers] = useState<any>([])
 	const [cursor, setCursor] = useState<string>('')
 	const [variables, setVariables] = useState({
@@ -39,7 +41,21 @@ function Home() {
 	})
 
 	useEffect(() => {
-		if (data && data.users.edges) {
+		async function firstLoad() {
+			if (data && data.users.edges) {
+				setCursor(data.users.pageInfo.nextCursor)
+				setHasNextPage(data.users.pageInfo.hasNext)
+				setUsers(data.users.edges)
+				// it has to be slowed down a bit so we can avoid duplicate data on first load
+				await new Promise(resolve => setTimeout(resolve, 250))
+				setMounted(true)
+			}
+		}
+		firstLoad()
+	}, [])
+
+	useEffect(() => {
+		if (data && data.users.edges && mounted) {
 			setCursor(data.users.pageInfo.nextCursor)
 			setHasNextPage(data.users.pageInfo.hasNext)
 			if(cursor) {

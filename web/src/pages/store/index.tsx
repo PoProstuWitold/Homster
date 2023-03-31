@@ -10,6 +10,8 @@ import { GameCard } from '@/components/GameCard'
 
 function Home() {
 	const scrollRef = useRef<HTMLDivElement>(null)
+
+	const [mounted, setMounted] = useState<boolean>(false)
 	const [games, setGames] = useState<any>([])
 	const [cursor, setCursor] = useState<string>('')
 	const [variables, setVariables] = useState({
@@ -26,9 +28,22 @@ function Home() {
 		variables
 	})
 
+	useEffect(() => {
+		async function firstLoad() {
+			if (data && data.games.edges) {
+				setCursor(data.games.pageInfo.nextCursor)
+				setHasNextPage(data.games.pageInfo.hasNext)
+				setGames(data.games.edges)
+				// it has to be slowed down a bit so we can avoid duplicate data on first load
+				await new Promise(resolve => setTimeout(resolve, 250))
+				setMounted(true)
+			}
+		}
+		firstLoad()
+	}, [])
 
 	useEffect(() => {
-		if (data && data.games.edges) {
+		if (data && data.games.edges && mounted) {
 			setCursor(data.games.pageInfo.nextCursor)
 			setHasNextPage(data.games.pageInfo.hasNext)
 			if(cursor) {

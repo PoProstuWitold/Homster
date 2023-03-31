@@ -12,6 +12,8 @@ import { AiOutlineEdit } from 'react-icons/ai'
 import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
 import { useMeQuery } from '@/generated/graphql'
 
+const imageUrl = `http://localhost:4000/public/uploads/f4f014d8-0972-408a-ab3f-5d894b6f9f77__pollub-logo.png`
+
 function Profile() {
     const handleSaveChanges = () => {
         // Handle saving changes
@@ -119,7 +121,7 @@ function Profile() {
                                                 className="bg-gray-200 rounded-lg h-full w-full"
                                                 width={384} height={96}
                                                 alt={`Game Image`}
-                                                src={`http://localhost:4000/public/uploads/0b5082f8-7d32-41b6-80b0-3459efa329bd__dog.jpg`} 
+                                                src={imageUrl} 
                                             />
                                         </div>
                                         <div className="bg-gray-300 rounded-lg h-24">
@@ -127,7 +129,7 @@ function Profile() {
                                                 className="bg-gray-200 rounded-lg h-full w-full"
                                                 width={384} height={96}
                                                 alt={`Game Image`}
-                                                src={`http://localhost:4000/public/uploads/0b5082f8-7d32-41b6-80b0-3459efa329bd__dog.jpg`} 
+                                                src={imageUrl} 
                                             />
                                         </div>
                                         <div className="bg-gray-200 rounded-lg h-24">
@@ -135,7 +137,7 @@ function Profile() {
                                                 className="bg-gray-200 rounded-lg h-full w-full"
                                                 width={384} height={96}
                                                 alt={`Game Image`}
-                                                src={`http://localhost:4000/public/uploads/0b5082f8-7d32-41b6-80b0-3459efa329bd__dog.jpg`} 
+                                                src={imageUrl} 
                                             />
                                         </div>
                                         <div className="rounded-lg h-24">
@@ -143,7 +145,7 @@ function Profile() {
                                                 className="bg-gray-200 rounded-lg h-full w-full"
                                                 width={1920} height={1080}
                                                 alt={`Game Image`}
-                                                src={`http://localhost:4000/public/uploads/0b5082f8-7d32-41b6-80b0-3459efa329bd__dog.jpg`} 
+                                                src={imageUrl} 
                                             />
                                         </div>
                                         <div className="bg-gray-200 rounded-lg h-24"></div>
@@ -195,4 +197,4 @@ function Profile() {
     )
 }
 
-export default withUrqlClient(urqlClientSsr, { ssr: true })(Profile)
+export default withUrqlClient(urqlClientSsr, { ssr: true, staleWhileRevalidate: true })(Profile)
