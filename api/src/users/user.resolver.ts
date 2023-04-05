@@ -3,7 +3,7 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 import { SessionGuard } from '../common/guards'
 import { CreateUserInput, UpdateUserInput } from '../common/dtos'
-import { User } from '../common/entities'
+import { Profile, User } from '../common/entities'
 import { 
     GqlFastifyContext, 
     CursorPaginatedUsers, 
@@ -32,7 +32,7 @@ export class UserResolver {
     }
 
     @UseGuards(SessionGuard)
-    @Mutation(() => User)
+    @Mutation(() => Profile)
     public async updateUser(
         @Args('values') values: UpdateUserInput,
         @Context() ctx: GqlFastifyContext

@@ -860,7 +860,7 @@ export default {
               "kind": "NON_NULL",
               "ofType": {
                 "kind": "OBJECT",
-                "name": "User",
+                "name": "Profile",
                 "ofType": null
               }
             },

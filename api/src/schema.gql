@@ -193,7 +193,7 @@ type Mutation {
   register(createUserInput: CreateUserInput!): AuthResult!
   login(credentialsInput: CredentialsInput!): AuthResult!
   logout: AuthResult!
-  updateUser(values: UpdateUserInput!): User!
+  updateUser(values: UpdateUserInput!): Profile!
   createUser(createUserInput: CreateUserInput!): User!
   createStudio(createStudioInput: CreateStudioInput!): Studio!
   createGame(createGameInput: CreateGameInput!): Game!

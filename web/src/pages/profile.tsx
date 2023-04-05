@@ -1,6 +1,7 @@
 import { withUrqlClient } from 'next-urql'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useState } from 'react'
 import dayjs from 'dayjs'
 import { GiInfo } from 'react-icons/gi'
 import { IoGameControllerOutline } from 'react-icons/io5'
@@ -8,20 +9,71 @@ import { IoMdStats } from 'react-icons/io'
 import { GiPartyPopper, GiCakeSlice } from 'react-icons/gi'
 import { MdOutlineDescription } from 'react-icons/md'
 import { AiOutlineEdit } from 'react-icons/ai'
+import { toast } from 'react-hot-toast'
+import { useForm } from 'react-hook-form'
 
 import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
-import { useMeQuery } from '@/generated/graphql'
+import { useMeQuery, useUpdateUserMutation } from '@/generated/graphql'
 
 const imageUrl = `http://localhost:4000/public/uploads/f4f014d8-0972-408a-ab3f-5d894b6f9f77__pollub-logo.png`
 
 function Profile() {
-    const handleSaveChanges = () => {
-        // Handle saving changes
-    }
+	const [ApiError, setApiError] = useState<any>('')
     
     const [{
         data
     }] = useMeQuery()
+
+    const [, updateUser] = useUpdateUserMutation()
+
+    const handleProfileUpdate = async (data: any) => {
+        try {
+            const res = await updateUser({
+                values: {
+                    ...data
+                }
+            })
+            console.log('res', res)
+			if(!res.data || res.error?.graphQLErrors[0].originalError) {
+                setApiError('Failed to update profile')
+                toast.error(ApiError || 'Failed to update profile', {
+                    duration: 3000
+                })
+            }
+            if(res && res.data && res.data.updateUser) {
+                toast.success('Profile updated', {
+                    duration: 3000
+                })
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const options = {
+		fullName: { 
+            required: 'Full name is required' 
+        },
+		displayName: { 
+            required: 'Display name is required' 
+        }
+	}
+
+    const { 
+		register: updateReq, handleSubmit: handleLoginSubmit, 
+		formState: { 
+			errors: updateErrors, 
+			isSubmitting: isLoginSubmitting, 
+		},
+		clearErrors: clearUpdateErrors
+	} = useForm()
+
+    const errorUpdate = (errors: any) => {
+		console.log(errors)
+		setTimeout(() => {
+			clearUpdateErrors()
+		}, 5000)
+	}
 
     return (
         <>
@@ -101,9 +153,9 @@ function Profile() {
                                     <div className="flex flex-row gap-2 text-center items-center">
                                         <h2 className="text-lg font-bold flex flex-row items-center gap-2">
                                             <GiCakeSlice className="w-5 h-5"/>
-                                            <p>Cake day</p>
+                                            <p>Last active</p>
                                         </h2>
-                                        <p className="italic">{dayjs(new Date('2003-04-26')).format('DD MMMM YYYY')}</p>
+                                        <p className="italic">{dayjs(new Date(data.me.profile.updatedAt)).format('DD MMMM YYYY')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -168,22 +220,36 @@ function Profile() {
                                             <AiOutlineEdit className="w-5 h-5"/>
                                             <p>Edit</p>
                                         </h2>
-                                        <div className="collapse-content flex flex-col gap-6">
-                                            <div>
-                                                <label className="block font-bold" htmlFor="fullName">
-                                                Full Name
-                                                </label>
-                                                <input className="input w-full" type="text" id="fullName" value={data.me.profile.fullName} onChange={(e) => console.log(e)} />
-                                            </div>
-                                            <div>
-                                                <label className="block font-bold" htmlFor="displayName">
-                                                Display name
-                                                </label>
-                                                <input className="input w-full" type="text" id="displayName" value={data.me.profile.displayName} onChange={(e) => console.log(e)} />
-                                            </div>
-                                            <button className="btn btn-outline" onClick={handleSaveChanges}>
-                                            Save Changes
-                                            </button>
+                                        <div className="collapse-content">
+                                            <form className="flex flex-col gap-6" onSubmit={handleLoginSubmit(handleProfileUpdate, errorUpdate)}>
+                                                <div className="form-control">
+                                                    <label className="label font-bold font-lg">
+                                                        <span className="label-text">Full Name</span>
+                                                    </label>
+                                                    <input 
+                                                        {...updateReq('fullName', options.fullName)} 
+                                                        defaultValue={data.me.profile.fullName}
+                                                        type="text" name="fullName" 
+                                                        className={`w-full p-3 transition duration-200 rounded input`}
+                                                    />  
+                                                    {updateErrors && updateErrors.fullName && <span className="text-error">{updateErrors.fullName.message?.toString()}</span>}
+                                                </div>
+                                                <div className="form-control">
+                                                    <label className="label font-bold font-lg">
+                                                        <span className="label-text">Display Name</span>
+                                                    </label>
+                                                    <input 
+                                                        {...updateReq('displayName', options.displayName)} 
+                                                        defaultValue={data.me.profile.displayName}
+                                                        type="text" name="displayName" 
+                                                        className={`w-full p-3 transition duration-200 rounded input`}
+                                                    />  
+                                                    {updateErrors && updateErrors.displayName && <span className="text-error">{updateErrors.displayName.message?.toString()}</span>}
+                                                </div>
+                                                <button type="submit" disabled={isLoginSubmitting} className={`w-full btn ${isLoginSubmitting ? 'btn-outline' : ''}`}>
+                                                    Submit
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

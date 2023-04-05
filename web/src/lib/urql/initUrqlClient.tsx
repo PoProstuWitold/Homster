@@ -13,7 +13,11 @@ import {
 } from '@urql/exchange-graphcache'
 import { NextUrqlClientConfig } from 'next-urql'
 import { betterUpdateQuery } from './betterUpdateQuery'
-import { LoginMutation, LogoutMutation, MeDocument, MeQuery, RegisterMutation } from '@/generated/graphql'
+import { 
+    LoginMutation, LogoutMutation, 
+    MeDocument, MeQuery, 
+    RegisterMutation, UpdateUserMutation 
+} from '@/generated/graphql'
 
 let urqlClient: Client | null = null
 let ssrCache: ReturnType<typeof ssrExchange> | null = null
@@ -81,6 +85,22 @@ const cacheOptions: CacheExchangeOpts = {
                     }
                 )
             },
+            updateUser: (_result, args, cache, info) => {
+                betterUpdateQuery<UpdateUserMutation, MeQuery>(
+                    cache,
+                    { query: MeDocument },
+                    _result,
+                    (result, query) => {
+                        return {
+                            me: {
+                                ...query.me,
+                                message: 'Profile updated',
+                                profile: result.updateUser
+                            }
+                        }
+                    }
+                )
+            }
         }
     }
 }

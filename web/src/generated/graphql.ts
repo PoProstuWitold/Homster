@@ -175,7 +175,7 @@ export type Mutation = {
   login: AuthResult;
   logout: AuthResult;
   register: AuthResult;
-  updateUser: User;
+  updateUser: Profile;
   uploadFile: UploadResult;
 };
 
@@ -410,6 +410,13 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, profile?: { __typename: 'Profile', id: string, displayName: string, fullName: string, avatar?: string | null, email: string, role: string, createdAt: any, updatedAt: any } | null } };
 
+export type UpdateUserMutationVariables = Exact<{
+  values: UpdateUserInput;
+}>;
+
+
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename: 'Profile', id: string, displayName: string, fullName: string, avatar?: string | null, email: string, role: string, createdAt: any, updatedAt: any } };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -581,6 +588,17 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($values: UpdateUserInput!) {
+  updateUser(values: $values) {
+    ...Profile
+  }
+}
+    ${ProfileFragmentDoc}`;
+
+export function useUpdateUserMutation() {
+  return Urql.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument);
 };
 export const MeDocument = gql`
     query Me {
