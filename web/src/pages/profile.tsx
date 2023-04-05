@@ -1,7 +1,6 @@
 import { withUrqlClient } from 'next-urql'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState } from 'react'
 import dayjs from 'dayjs'
 import { GiInfo } from 'react-icons/gi'
 import { IoGameControllerOutline } from 'react-icons/io5'
@@ -18,8 +17,6 @@ import { useMeQuery, useUpdateUserMutation } from '@/generated/graphql'
 const imageUrl = `http://localhost:4000/public/uploads/f4f014d8-0972-408a-ab3f-5d894b6f9f77__pollub-logo.png`
 
 function Profile() {
-	const [ApiError, setApiError] = useState<any>('')
-    
     const [{
         data
     }] = useMeQuery()
@@ -35,8 +32,10 @@ function Profile() {
             })
             console.log('res', res)
 			if(!res.data || res.error?.graphQLErrors[0].originalError) {
-                setApiError('Failed to update profile')
-                toast.error(ApiError || 'Failed to update profile', {
+                //@ts-ignore
+                const errors = res.error?.graphQLErrors[0].originalError.errors
+                
+                toast.error(errors.displayName || errors.fullName || 'Failed to update profile', {
                     duration: 3000
                 })
             }
@@ -63,7 +62,7 @@ function Profile() {
 		register: updateReq, handleSubmit: handleLoginSubmit, 
 		formState: { 
 			errors: updateErrors, 
-			isSubmitting: isLoginSubmitting, 
+			isSubmitting, 
 		},
 		clearErrors: clearUpdateErrors
 	} = useForm()
@@ -246,7 +245,7 @@ function Profile() {
                                                     />  
                                                     {updateErrors && updateErrors.displayName && <span className="text-error">{updateErrors.displayName.message?.toString()}</span>}
                                                 </div>
-                                                <button type="submit" disabled={isLoginSubmitting} className={`w-full btn ${isLoginSubmitting ? 'btn-outline' : ''}`}>
+                                                <button type="submit" disabled={isSubmitting} className={`w-full btn ${isSubmitting ? 'btn-outline' : ''}`}>
                                                     Submit
                                                 </button>
                                             </form>

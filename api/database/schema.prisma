@@ -22,6 +22,7 @@ model User {
 	createdAt   	DateTime  	@default(now())
 	updatedAt   	DateTime  	@updatedAt
 	avatar			String?
+	cover			String?
 	role			Role		@default(USER)
 	email    		String		@unique
 	displayName 	String		@unique
@@ -120,6 +121,7 @@ model Studio {
 	createdAt   	DateTime  	@default(now())
 	updatedAt   	DateTime  	@updatedAt
 	avatar			String?
+	cover			String?
 	name			String		@unique
 	type			StudioType	@default(DeveloperAndPublisher)
 	games			GameStudio[]
