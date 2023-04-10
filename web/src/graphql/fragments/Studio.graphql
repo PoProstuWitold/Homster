@@ -5,4 +5,8 @@ fragment Studio on Studio {
     updatedAt
     name
     type
+    _count {
+        games
+        employees
+    }
 }

@@ -35,6 +35,8 @@ const cacheOptions: CacheExchangeOpts = {
         CursorPaginatedUsers: _ => null,
         CursorPaginatedGames: _ => null,
         GameStudio: _ => null,
+        Count: _ => null,
+        CursorPaginatedStudios: _ => null,
         AuthResult: (data: any) => data.profile ? data.profile.id : null
     },
     updates: {

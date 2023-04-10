@@ -21,6 +21,7 @@ model User {
 	id          	String      @id @default(uuid())
 	createdAt   	DateTime  	@default(now())
 	updatedAt   	DateTime  	@updatedAt
+	bio				String?
 	avatar			String?
 	cover			String?
 	role			Role		@default(USER)
@@ -120,6 +121,7 @@ model Studio {
 	id          	String      @id @default(uuid())
 	createdAt   	DateTime  	@default(now())
 	updatedAt   	DateTime  	@updatedAt
+	description		String?
 	avatar			String?
 	cover			String?
 	name			String		@unique

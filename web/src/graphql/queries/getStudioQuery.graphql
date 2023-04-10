@@ -1,0 +1,19 @@
+query GetStudio($studio: GetStudioArgs!) {
+    studio(getStudioArgs: $studio) {
+        ...Studio
+        employees {
+            employee {
+            	fullName
+                id
+                displayName
+            }
+        }
+        games {
+            game {
+                id
+                name
+                description
+            }
+        }
+    }
+}

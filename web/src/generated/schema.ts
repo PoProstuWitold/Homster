@@ -43,6 +43,29 @@ export default {
       },
       {
         "kind": "OBJECT",
+        "name": "Count",
+        "fields": [
+          {
+            "name": "employees",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "games",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          }
+        ],
+        "interfaces": []
+      },
+      {
+        "kind": "OBJECT",
         "name": "CursorPageInfo",
         "fields": [
           {
@@ -1197,6 +1220,29 @@ export default {
             "args": []
           },
           {
+            "name": "studio",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Studio",
+                "ofType": null
+              }
+            },
+            "args": [
+              {
+                "name": "getStudioArgs",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
             "name": "studios",
             "type": {
               "kind": "NON_NULL",
@@ -1306,7 +1352,24 @@ export default {
         "name": "Studio",
         "fields": [
           {
+            "name": "_count",
+            "type": {
+              "kind": "OBJECT",
+              "name": "Count",
+              "ofType": null
+            },
+            "args": []
+          },
+          {
             "name": "avatar",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "cover",
             "type": {
               "kind": "SCALAR",
               "name": "Any"

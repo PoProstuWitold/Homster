@@ -16,6 +16,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Count {
+  games: Int
+  employees: Int
+}
+
 type Studio {
   id: ID!
   createdAt: DateTime!
@@ -23,8 +28,10 @@ type Studio {
   name: String!
   type: String!
   avatar: String
+  cover: String
   games: [GameStudio!]
   employees: [StudioEmployee!]
+  _count: Count
 }
 
 type StudioEmployee {
@@ -170,6 +177,7 @@ type Query {
   user(field: String!, value: String!): User!
   users(paginationOptions: CursorPaginationOptions!): CursorPaginatedUsers!
   studios(paginationOptions: CursorPaginationOptions!): CursorPaginatedStudios!
+  studio(getStudioArgs: GetStudioArgs!): Studio!
   games(paginationOptions: CursorPaginationOptions!): CursorPaginatedGames!
   tags(paginationOptions: OffsetPaginationOptions!): OffsetPaginatedTags!
   genres(paginationOptions: OffsetPaginationOptions!): OffsetPaginatedGenres!
@@ -180,6 +188,10 @@ input CursorPaginationOptions {
   cursor: String!
   field: String!
   type: String!
+}
+
+input GetStudioArgs {
+  name: String!
 }
 
 input OffsetPaginationOptions {

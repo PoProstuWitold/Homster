@@ -31,6 +31,12 @@ export type AuthResult = {
   statusCode?: Maybe<Scalars['Int']>;
 };
 
+export type Count = {
+  __typename?: 'Count';
+  employees?: Maybe<Scalars['Int']>;
+  games?: Maybe<Scalars['Int']>;
+};
+
 export type CreateGameInput = {
   basicPrice?: InputMaybe<Scalars['Float']>;
   description: Scalars['String'];
@@ -164,6 +170,10 @@ export type Genre = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type GetStudioArgs = {
+  name: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   assign: Game;
@@ -275,6 +285,7 @@ export type Query = {
   games: CursorPaginatedGames;
   genres: OffsetPaginatedGenres;
   me: AuthResult;
+  studio: Studio;
   studios: CursorPaginatedStudios;
   tags: OffsetPaginatedTags;
   user: User;
@@ -289,6 +300,11 @@ export type QueryGamesArgs = {
 
 export type QueryGenresArgs = {
   paginationOptions: OffsetPaginationOptions;
+};
+
+
+export type QueryStudioArgs = {
+  getStudioArgs: GetStudioArgs;
 };
 
 
@@ -314,7 +330,9 @@ export type QueryUsersArgs = {
 
 export type Studio = {
   __typename?: 'Studio';
+  _count?: Maybe<Count>;
   avatar?: Maybe<Scalars['String']>;
+  cover?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   employees?: Maybe<Array<StudioEmployee>>;
   games?: Maybe<Array<GameStudio>>;
@@ -375,11 +393,11 @@ export type User = {
 
 export type CursorPageFragment = { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string };
 
-export type GameFragment = { __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, type: string } | null }> | null };
+export type GameFragment = { __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } | null }> | null };
 
 export type GenreFragment = { __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null };
 
-export type StudioFragment = { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, type: string };
+export type StudioFragment = { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null };
 
 export type TagFragment = { __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null };
 
@@ -427,7 +445,14 @@ export type GetAllGamesQueryVariables = Exact<{
 }>;
 
 
-export type GetAllGamesQuery = { __typename?: 'Query', games: { __typename?: 'CursorPaginatedGames', edges?: Array<{ __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, type: string } | null }> | null }> | null, pageInfo: { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
+export type GetAllGamesQuery = { __typename?: 'Query', games: { __typename?: 'CursorPaginatedGames', edges?: Array<{ __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } | null }> | null }> | null, pageInfo: { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
+
+export type GetAllStudiosQueryVariables = Exact<{
+  pagination: CursorPaginationOptions;
+}>;
+
+
+export type GetAllStudiosQuery = { __typename?: 'Query', studios: { __typename?: 'CursorPaginatedStudios', edges?: Array<{ __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null }> | null, pageInfo: { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
 
 export type GetAllUsersQueryVariables = Exact<{
   pagination: CursorPaginationOptions;
@@ -435,6 +460,13 @@ export type GetAllUsersQueryVariables = Exact<{
 
 
 export type GetAllUsersQuery = { __typename?: 'Query', users: { __typename?: 'CursorPaginatedUsers', edges?: Array<{ __typename: 'User', id: string, displayName: string, fullName: string, avatar?: string | null, email: string, role: string, createdAt: any, updatedAt: any }> | null, pageInfo: { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
+
+export type GetStudioQueryVariables = Exact<{
+  studio: GetStudioArgs;
+}>;
+
+
+export type GetStudioQuery = { __typename?: 'Query', studio: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, type: string, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename?: 'User', fullName: string, id: string, displayName: string } | null }> | null, games?: Array<{ __typename?: 'GameStudio', game?: { __typename?: 'Game', id: string, name: string, description: string } | null }> | null, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } };
 
 export type GetUserQueryVariables = Exact<{
   field: Scalars['String'];
@@ -480,6 +512,10 @@ export const StudioFragmentDoc = gql`
   updatedAt
   name
   type
+  _count {
+    games
+    employees
+  }
 }
     `;
 export const GameFragmentDoc = gql`
@@ -633,6 +669,23 @@ ${CursorPageFragmentDoc}`;
 export function useGetAllGamesQuery(options: Omit<Urql.UseQueryArgs<GetAllGamesQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllGamesQuery, GetAllGamesQueryVariables>({ query: GetAllGamesDocument, ...options });
 };
+export const GetAllStudiosDocument = gql`
+    query GetAllStudios($pagination: CursorPaginationOptions!) {
+  studios(paginationOptions: $pagination) {
+    edges {
+      ...Studio
+    }
+    pageInfo {
+      ...CursorPage
+    }
+  }
+}
+    ${StudioFragmentDoc}
+${CursorPageFragmentDoc}`;
+
+export function useGetAllStudiosQuery(options: Omit<Urql.UseQueryArgs<GetAllStudiosQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetAllStudiosQuery, GetAllStudiosQueryVariables>({ query: GetAllStudiosDocument, ...options });
+};
 export const GetAllUsersDocument = gql`
     query GetAllUsers($pagination: CursorPaginationOptions!) {
   users(paginationOptions: $pagination) {
@@ -649,6 +702,31 @@ ${CursorPageFragmentDoc}`;
 
 export function useGetAllUsersQuery(options: Omit<Urql.UseQueryArgs<GetAllUsersQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllUsersQuery, GetAllUsersQueryVariables>({ query: GetAllUsersDocument, ...options });
+};
+export const GetStudioDocument = gql`
+    query GetStudio($studio: GetStudioArgs!) {
+  studio(getStudioArgs: $studio) {
+    ...Studio
+    employees {
+      employee {
+        fullName
+        id
+        displayName
+      }
+    }
+    games {
+      game {
+        id
+        name
+        description
+      }
+    }
+  }
+}
+    ${StudioFragmentDoc}`;
+
+export function useGetStudioQuery(options: Omit<Urql.UseQueryArgs<GetStudioQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetStudioQuery, GetStudioQueryVariables>({ query: GetStudioDocument, ...options });
 };
 export const GetUserDocument = gql`
     query GetUser($field: String!, $value: String!) {

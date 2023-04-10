@@ -1,0 +1,10 @@
+query GetAllStudios($pagination: CursorPaginationOptions!) {
+    studios(paginationOptions: $pagination) {
+        edges {
+            ...Studio
+        }
+        pageInfo {
+            ...CursorPage
+        }
+    }
+}

@@ -3,7 +3,7 @@ import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { Role } from '@prisma/client'
 
 import { SessionGuard, Roles, RolesGuard } from '../common/guards'
-import { Studio } from '../common/entities'
+import { GetStudioArgs, Studio } from '../common/entities'
 import { CreateStudioInput } from '../common/dtos'
 import { 
     GqlFastifyContext, 
@@ -48,4 +48,16 @@ export class StudioResolver {
         }
     }
 
+    @Query(() => Studio, { name: 'studio' })
+    public async getStudio(
+        @Args('getStudioArgs') data: GetStudioArgs,
+        @Context() ctx: GqlFastifyContext
+    ): Promise<any> {
+        try {
+            const studio = await this.studioService.findOne(data)
+            return studio
+        } catch (err) {
+            throw err
+        }
+    }
 }

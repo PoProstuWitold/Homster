@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { CursorPaginationOptions } from '../common/types'
 import { CreateStudioInput } from '../common/dtos'
 import { isPrismaError } from '../common/utils'
-import { User } from '../common/entities'
+import { GetStudioArgs, Studio, User } from '../common/entities'
 import { PrismaService } from '../../database/prisma.service'
 
 @Injectable()
@@ -122,6 +122,12 @@ export class StudioService {
                             },
                             studio: true
                         }
+                    },
+                    _count: {
+                        select: {
+                            employees: true,
+                            games: true
+                        }
                     }
                 }
             })
@@ -140,6 +146,38 @@ export class StudioService {
                 edges,
                 pageInfo
             }
+        } catch (err) {
+            throw err
+        }
+    }
+
+    public async findOne(data: GetStudioArgs): Promise<Studio> {
+        try {
+            const studio = await this.prisma.studio.findUniqueOrThrow({
+                where: {
+                    name: data.name
+                },
+                include: {
+                    _count: {
+                        select: {
+                            employees: true,
+                            games: true
+                        }
+                    },
+                    employees: {
+                        include: {
+                            employee: true
+                        }
+                    },
+                    games: {
+                        include: {
+                            game: true
+                        }
+                    }
+                }
+            })
+
+            return studio
         } catch (err) {
             throw err
         }
