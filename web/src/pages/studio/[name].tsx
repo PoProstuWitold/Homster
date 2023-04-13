@@ -44,7 +44,11 @@ function StudioName() {
                             <div 
                                 className="flex lg:flex-row flex-col gap-6 lg:px-10 mt-16 lg:items-end lg:justify-start lg:text-left justify-center items-center text-center my-4"
                             >
-                                <Image className='rounded-2xl z-40' src={data.studio.avatar!}  width={256} height={256} alt={"gowno"}/>
+                                <div className="avatar z-40">
+                                    <div className="w-64 rounded-2xl">
+                                        <Image src={data.studio.avatar!}  width={256} height={256} alt={"studio image"}/>
+                                    </div>
+                                </div>
                                 <div className="flex lg:flex-row flex-col gap-2 lg:gap-6 items-center w-full">
                                     <div className='z-40 min-w-fit'>
                                         <h1 className="text-4xl font-bold">{data.studio.name}</h1>
