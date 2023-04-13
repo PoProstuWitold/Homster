@@ -29,6 +29,7 @@ type Studio {
   type: String!
   avatar: String
   cover: String
+  description: String
   games: [GameStudio!]
   employees: [StudioEmployee!]
   _count: Count
@@ -77,6 +78,7 @@ type Game {
   updatedAt: DateTime!
   name: String!
   description: String!
+  coverImage: String
   basicPrice: Float!
   price: Float!
   status: String!
@@ -100,6 +102,8 @@ type User {
   updatedAt: DateTime!
   displayName: String!
   fullName: String!
+  bio: String
+  cover: String
   avatar: String
   role: String!
   email: String!
@@ -113,6 +117,8 @@ type Profile {
   updatedAt: DateTime!
   displayName: String!
   fullName: String!
+  bio: String
+  cover: String
   avatar: String
   role: String!
   email: String!
@@ -230,6 +236,7 @@ input CredentialsInput {
 input UpdateUserInput {
   displayName: String
   fullName: String
+  bio: String
 }
 
 input CreateStudioInput {

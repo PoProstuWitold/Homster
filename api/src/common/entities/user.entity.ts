@@ -14,6 +14,12 @@ export class User extends BaseEntity {
     fullName: UserDB['fullName']
 
     @Field(() => String, { nullable: true })
+    bio: UserDB['bio']
+
+    @Field(() => String, { nullable: true })
+    cover: UserDB['cover']
+
+    @Field(() => String, { nullable: true })
     avatar: UserDB['avatar']
 
     @Field()

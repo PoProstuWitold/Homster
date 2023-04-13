@@ -19,6 +19,8 @@ export class StudioService {
             const studio = await this.prisma.studio.create({ 
                 data: {
                     name,
+                    avatar: `https://api.dicebear.com/6.x/initials/svg?seed=${data.name}`,
+                    cover: `https://random.imagecdn.app/820/360`,
                     type
                 }
             })

@@ -27,6 +27,7 @@ export class GameService {
             const game = await this.prisma.game.create({
                 data: {
                     name, description, status, type, releaseDate,
+                    coverImage: `https://random.imagecdn.app/820/360`,
                     ...(basicPrice && {
                         basicPrice,
                         price: basicPrice

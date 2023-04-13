@@ -85,6 +85,16 @@ export class UpdateUserInput {
     })
     @Field(() => String, { nullable: true })
     fullName?: string
+
+    @IsOptional()
+    @IsNotEmpty({
+        message: 'Bio cannot be empty or whitespace'
+    })
+    @Length(10, 512, {
+        message: 'Bio must be between 10 and 512 characters long'
+    })
+    @Field(() => String, { nullable: true })
+    bio?: string
 }
 
 @InputType()

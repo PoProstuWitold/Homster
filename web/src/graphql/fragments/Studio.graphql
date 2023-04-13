@@ -4,6 +4,9 @@ fragment Studio on Studio {
     createdAt
     updatedAt
     name
+    description
+    cover
+    avatar
     type
     _count {
         games

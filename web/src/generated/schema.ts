@@ -266,6 +266,14 @@ export default {
             "args": []
           },
           {
+            "name": "coverImage",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
             "name": "createdAt",
             "type": {
               "kind": "NON_NULL",
@@ -1048,6 +1056,22 @@ export default {
             "args": []
           },
           {
+            "name": "bio",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "cover",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
             "name": "createdAt",
             "type": {
               "kind": "NON_NULL",
@@ -1388,6 +1412,14 @@ export default {
             "args": []
           },
           {
+            "name": "description",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
             "name": "employees",
             "type": {
               "kind": "LIST",
@@ -1671,6 +1703,22 @@ export default {
         "fields": [
           {
             "name": "avatar",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "bio",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Any"
+            },
+            "args": []
+          },
+          {
+            "name": "cover",
             "type": {
               "kind": "SCALAR",
               "name": "Any"

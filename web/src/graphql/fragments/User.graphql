@@ -1,6 +1,9 @@
 fragment User on User {
     __typename
     id
+    avatar
+    cover
+    bio
     displayName
     fullName
     avatar
@@ -13,6 +16,9 @@ fragment User on User {
 fragment Profile on Profile {
     __typename
     id
+    avatar
+    cover
+    bio
     displayName
     fullName
     avatar

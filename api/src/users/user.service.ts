@@ -22,6 +22,8 @@ export class UserService {
         try {
             const user = await this.prisma.user.create({ data: {
                 ...data,
+                avatar: `https://api.dicebear.com/6.x/initials/svg?seed=${data.displayName}`,
+                cover: `https://random.imagecdn.app/820/360`,
                 password: await hash(data.password)
             }})
 

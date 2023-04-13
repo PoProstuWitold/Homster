@@ -3,6 +3,7 @@ import { getStudios } from '@/utils/getStudios'
 import Link from 'next/link'
 import { formatString } from '@/utils/formatString'
 import dayjs from 'dayjs'
+import Image from 'next/image'
 
 export const GameCard = memo(({game}: any) => {
 	GameCard.displayName = 'GameItem'
@@ -17,6 +18,9 @@ export const GameCard = memo(({game}: any) => {
 				</span>
 			}
 		</div>
+		{game && game.coverImage &&
+			<Image className='w-96 h-36 border-b-2 my-2 border-base-100' src={game.coverImage} alt="game image" width={860} height={360}/>
+		}
         <p className="text-base h-[4.5rem] line-clamp-3">{game.description}</p>
 		<div className="flex flex-row text-sm">
 			<div className="w-1/2">

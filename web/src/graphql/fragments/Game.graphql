@@ -5,6 +5,7 @@ fragment Game on Game {
     updatedAt
     adultOnly
     basicPrice
+    coverImage
     price
     status
     type

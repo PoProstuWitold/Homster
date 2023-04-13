@@ -34,6 +34,9 @@ export class Game extends BaseEntity {
     @Field(() => String)
     description: GameDB['description']
 
+    @Field(() => String, { nullable: true })
+    coverImage: GameDB['coverImage']
+
     @Field(() => Float)
     basicPrice: GameDB['basicPrice']
 

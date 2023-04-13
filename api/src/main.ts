@@ -85,7 +85,6 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
             if (!request.isMultipart) {
                 return
             }
-            console.log(processRequest)
             request.body = await processRequest(request.raw, reply.raw)
         })
 

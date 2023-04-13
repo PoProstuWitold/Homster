@@ -34,6 +34,7 @@ function Home() {
 				setCursor(data.games.pageInfo.nextCursor)
 				setHasNextPage(data.games.pageInfo.hasNext)
 				setGames(data.games.edges)
+				console.log(data.games.edges)
 				// it has to be slowed down a bit so we can avoid duplicate data on first load
 				await new Promise(resolve => setTimeout(resolve, 250))
 				setMounted(true)
