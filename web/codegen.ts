@@ -16,6 +16,11 @@ const config: CodegenConfig = {
 		'src/generated/schema.ts': {
 			plugins: ['urql-introspection']
 		}
+	},
+	config: {
+		scalars: {
+			Upload: "File"
+		}
 	}
 }
 

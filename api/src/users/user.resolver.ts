@@ -10,11 +10,16 @@ import {
     CursorPaginationOptions 
 } from '../common/types'
 import { UserService } from './user.service'
+// import { UploadScalar } from '../uploader/uploader.types'
+import { UploaderService } from '../uploader/uploader.service'
+import { Mimetype } from '../uploader/uploader.service'
+import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal'
 
 @Resolver(() => User)
 export class UserResolver {
-    constructor(
-        private readonly userService: UserService
+    constructor( 
+        private readonly userService: UserService,
+        private readonly uploaderService: UploaderService 
     ) {}
 
     @Query(() => User, { name: 'user' })
@@ -35,16 +40,36 @@ export class UserResolver {
     @Mutation(() => Profile)
     public async updateUser(
         @Args('values') values: UpdateUserInput,
+        @Args({name: 'avatar', type: () => GraphQLUpload, nullable: true}) avatar: FileUpload,
+        @Args({name: 'cover', type: () => GraphQLUpload, nullable: true}) cover: FileUpload,
         @Context() ctx: GqlFastifyContext
     ): Promise<User> {
         try {
+            console.log('avatar', avatar)
             const session = await ctx.req.session.get('user')
+
+            if(avatar) {
+                const avatarFile = await this.uploaderService.uploadFile({
+                    name: 'User avatar',
+                    description: 'New user avatar'
+                }, avatar, [Mimetype.PNG, Mimetype.JPG])
+                values.avatar = avatarFile.url
+            }
+
+            if(cover) { 
+                const coverUrl = await this.uploaderService.uploadFile({
+                    name: 'Cover',
+                    description: 'Cover image of user'
+                }, cover, [Mimetype.PNG, Mimetype.JPG])
+                values.cover = coverUrl.url
+            }
+            
             const user = await this.userService.update(session.id, values)
             ctx.req.session.set('user', user)
 
             return user
         } catch (err) {
-            throw err
+            console.error(err)
         }
     }
 

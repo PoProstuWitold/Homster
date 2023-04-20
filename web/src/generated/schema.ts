@@ -897,6 +897,20 @@ export default {
             },
             "args": [
               {
+                "name": "avatar",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
+                "name": "cover",
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Any"
+                }
+              },
+              {
                 "name": "values",
                 "type": {
                   "kind": "NON_NULL",

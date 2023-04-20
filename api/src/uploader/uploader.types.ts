@@ -1,9 +1,8 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
-import { Exclude } from 'class-transformer'
 import { IsMimeType, IsNotEmpty, IsString } from 'class-validator'
 import { GraphQLScalarType } from 'graphql'
-import { Readable } from 'stream'
-import { GraphQLUpload } from 'graphql-upload-minimal'
+import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal'
+import { ReadStream } from 'node:fs'
 
 @InputType()
 export class CreateUploadInput {
@@ -33,17 +32,9 @@ export class UploadResult {
     imageFormatted?: string;
 
     @Field(() => String, { nullable: true })
-    url?: string;
+    url?: string | URL;
 }
 
-export interface FileUpload {
-    filename: string
-    mimetype: string
-    encoding: string
-    createReadStream: () => Readable
-}
-
-@InputType()
 export class FileUploadDto implements FileUpload {
     @IsString()
     filename: string;
@@ -55,24 +46,26 @@ export class FileUploadDto implements FileUpload {
     @IsString()
     encoding: string;
 
-    @Exclude()
-    createReadStream: () => Readable;
+    @IsString()
+    fieldName: string
+
+    createReadStream!: () => ReadStream;
 }
 
-export const UploadScalar = new GraphQLScalarType({
-    name: 'Upload',
-    description: 'The `Upload` scalar type represents a file upload',
+// export const UploadScalar = new GraphQLScalarType({
+//     name: 'Upload',
+//     description: 'The `Upload` scalar type represents a file upload',
 
-    parseValue(value) {
-        return GraphQLUpload.parseValue(value);
-    },
+//     parseValue(value) {
+//         return GraphQLUpload.parseValue(value);
+//     },
     
-    serialize(value) {
-        return GraphQLUpload.serialize(value);
-    },
+//     serialize(value) {
+//         return GraphQLUpload.serialize(value);
+//     },
     
-    parseLiteral(ast) {
-        //@ts-ignore
-        return GraphQLUpload.parseLiteral(ast, ast.value);
-    }
-})
+//     parseLiteral(ast) {
+//         //@ts-ignore
+//         return GraphQLUpload.parseLiteral(ast, ast.value);
+//     }
+// })

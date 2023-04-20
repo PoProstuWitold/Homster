@@ -211,14 +211,14 @@ type Mutation {
   register(createUserInput: CreateUserInput!): AuthResult!
   login(credentialsInput: CredentialsInput!): AuthResult!
   logout: AuthResult!
-  updateUser(values: UpdateUserInput!): Profile!
+  updateUser(values: UpdateUserInput!, avatar: Upload, cover: Upload): Profile!
   createUser(createUserInput: CreateUserInput!): User!
+  uploadFile(values: CreateUploadInput!, file: Upload): UploadResult!
   createStudio(createStudioInput: CreateStudioInput!): Studio!
   createGame(createGameInput: CreateGameInput!): Game!
   assign(assignToGameInput: AssignOrRevokeToGameInput!): Game!
   createTag(createTagInput: CreateTagInput!): Tag!
   createGenre(createGenreInput: CreateGenreInput!): Genre!
-  uploadFile(values: CreateUploadInput!, file: Upload): UploadResult!
 }
 
 input CreateUserInput {
@@ -237,6 +237,14 @@ input UpdateUserInput {
   displayName: String
   fullName: String
   bio: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input CreateUploadInput {
+  name: String!
+  description: String!
 }
 
 input CreateStudioInput {
@@ -274,11 +282,3 @@ input CreateGenreInput {
   name: String!
   description: String
 }
-
-input CreateUploadInput {
-  name: String!
-  description: String!
-}
-
-"""The `Upload` scalar type represents a file upload"""
-scalar Upload

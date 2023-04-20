@@ -16,6 +16,17 @@ services:
     networks:
       - app-network
     restart: unless-stopped
+  queues:
+    container_name: homster-queues
+    image: redis:latest
+    ports:
+      - 6379:6379
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-volume:/data/redis
+    networks:
+      - app-network
+    restart: unless-stopped
     
 networks:
   app-network:
@@ -23,3 +34,4 @@ networks:
 
 volumes:
   db-volume:
+  redis-volume:

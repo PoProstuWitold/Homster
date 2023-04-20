@@ -95,6 +95,10 @@ export class UpdateUserInput {
     })
     @Field(() => String, { nullable: true })
     bio?: string
+
+    avatar?: string
+
+    cover?: string
 }
 
 @InputType()

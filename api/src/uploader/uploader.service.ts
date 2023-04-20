@@ -1,11 +1,14 @@
+import { createWriteStream, unlink } from 'node:fs'
+import { join } from 'node:path'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { validate } from 'class-validator'
 import { randomUUID } from 'crypto'
-import { createWriteStream } from 'fs'
-import { join } from 'path'
+import { InjectQueue } from '@nestjs/bull'
+import { Queue } from 'bull'
 import { Readable } from 'stream'
 
-import { CreateUploadInput, FileUpload, FileUploadDto } from './uploader.types'
+import { CreateUploadInput, FileUploadDto } from './uploader.types'
+import { FileUpload } from 'graphql-upload-minimal'
 
 export enum Mimetype {
     PNG = 'image/png',
@@ -19,9 +22,11 @@ export enum Mimetype {
 
 @Injectable()
 export class UploaderService {
-    private getServerAddress() {
-        return `http://localhost:4000/public/uploads`
-    }
+
+    constructor(
+        @InjectQueue('files') private uploadsQueue: Queue,
+        // private url = `http://localhost:4000/public/uploads/hello`
+    ) {}
 
     public async uploadFiles(values: CreateUploadInput, files: FileUpload[], mimetype: Mimetype[]) {
         return {
@@ -29,48 +34,77 @@ export class UploaderService {
             description: values.description,
             imageRaw: files.join(', '),
             imageFormatted: files.join(', '),
-            url: `${this.getServerAddress()}/hello`
+            url: `http://localhost:4000/public/uploads/`
+        }
+    }
+
+    public async addJobToQueue(values: CreateUploadInput, file: Promise<FileUpload>, mimetype: Mimetype[]) {
+        try {
+            // await this.validateFile(file, mimetype)
+            await this.uploadsQueue.add('upload', { values, file, mimetype })
+        } catch (err) {
+            throw err
         }
     }
 
     public async uploadFile(values: CreateUploadInput, file: FileUpload, mimetype: Mimetype[]) {
         try {
-            await this.validateFile(file, mimetype)
             const { createReadStream, filename } = file
             
-            // const size = await this.calculateFileSize(createReadStream())
-            // console.log(`size: ${this.bytesForHuman(size)}`)
+            const stream = createReadStream()
 
             const id = randomUUID() 
             const imageFormatted = `${id}__${filename}`
+            const url = new URL(imageFormatted, `http://localhost:4000/public/uploads/`)
             const path = join('public', 'uploads', imageFormatted)
 
             let uploaded = 0
 
-            await new Promise((res, rej) =>
-              createReadStream()
-                .on('data', (chunk) => {
-                    uploaded += chunk.length
-                    // this.progress(uploaded, size)
-                })
-                .pipe(
-                     /* upload to a file service or something in this line */
-                    createWriteStream(path)
-                ) 
-                .on('finish', res)
-                .on('error', rej)
-            )
+            await new Promise((resolve, reject) => {
+                // Create a stream to which the upload will be written.
+                const writeStream = createWriteStream(path)
+            
+                // When the upload is fully written, resolve the promise.
+                writeStream.on('finish', resolve)
+            
+                // If there's an error writing the file, remove the partially written file
+                // and reject the promise.
+                writeStream.on('error', (error) => {
+                    unlink(url, () => {
+                        reject(error)
+                    });
+                });
+            
+                // In Node.js <= v13, errors are not automatically propagated between piped
+                // streams. If there is an error receiving the upload, destroy the write
+                // stream with the corresponding error.
+                stream.on('error', (error) => writeStream.destroy(error))
+            
+                // Pipe the upload into the write stream.
+                stream.pipe(writeStream)
+            })
 
             return {
                 name: values.name,
                 description: values.description,
-                imageRaw: file.filename,
+                imageRaw: filename,
                 imageFormatted,
-                url: `${this.getServerAddress()}/${imageFormatted}`
+                url: `http://localhost:4000/public/uploads/${imageFormatted}`
             }
         } catch (err) {
             throw err
         }
+    }
+
+    private async streamToBuffer(stream: Readable): Promise<Buffer> {
+        const buffer = []
+    
+        return new Promise((resolve, reject) =>
+            stream
+                .on('error', (error) => reject(error))
+                .on('data', (data) => buffer.push(data))
+                .on('end', () => resolve(Buffer.concat(buffer)))
+        )
     }
 
     private async calculateFileSize(readStream: Readable): Promise<number> {

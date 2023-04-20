@@ -25,19 +25,35 @@ function Profile() {
 
     const handleProfileUpdate = async (data: any) => {
         try {
+            console.log(data.avatar)
             const res = await updateUser({
                 values: {
-                    ...data
-                }
+                    bio: data.bio,
+                    displayName: data.displayName,
+                    fullName: data.fullName
+                },
+                ...(data.avatar.length && {
+                    avatar: data.avatar[0]
+                }),
+                ...(data.cover.length && {
+                    cover: data.cover[0]
+                }),
             })
             console.log('res', res)
-			if(!res.data || res.error?.graphQLErrors[0].originalError) {
-                //@ts-ignore
-                const errors = res.error?.graphQLErrors[0].originalError.errors
-                
-                toast.error(errors.displayName || errors.fullName || errors.bio || 'Failed to update profile', {
-                    duration: 3000
-                })
+			if(!res.data || res.error) {
+                if(res.error && res.error.graphQLErrors[0] && res.error.graphQLErrors[0].originalError) {
+                    //@ts-ignore
+                    const errors = res.error?.graphQLErrors[0].originalError.errors
+                    
+                    toast.error(errors.avatar || errors.displayName || errors.fullName || errors.bio || 'Failed to update profile', {
+                        duration: 3000
+                    })
+                }
+                if(!res.data || res.error) {
+                    toast.error('Failed to update profile', {
+                        duration: 3000
+                    })
+                }
             }
             if(res && res.data && res.data.updateUser) {
                 toast.success('Profile updated', {
@@ -168,6 +184,45 @@ function Profile() {
                                         </h2>
                                         <div className="collapse-content">
                                             <form className="flex flex-col gap-6" onSubmit={handleLoginSubmit(handleProfileUpdate, errorUpdate)}>
+                                                <div className="form-control">
+                                                    <label className="label font-bold font-lg">
+                                                        <span className="label-text">Avatar</span>
+                                                    </label>
+                                                    <input 
+                                                        {...updateReq('avatar', {
+                                                            required: false,
+                                                            onChange: ({
+                                                                target: {
+                                                                  validity,
+                                                                  files: [file]
+                                                                }
+                                                            }: any) => {
+                                                                console.log('validity.valid', validity.valid)
+                                                                console.log('file', file)
+                                                            }
+                                                        })}
+                                                        type="file" name="avatar" 
+                                                        accept="image/*"
+                                                        title='avatar'
+
+                                                        className={`w-full p-3 transition duration-200 rounded input`}
+                                                    />  
+                                                    {updateErrors && updateErrors.avatar && <span className="text-error">{updateErrors.avatar.message?.toString()}</span>}
+                                                </div>
+                                                <div className="form-control">
+                                                    <label className="label font-bold font-lg">
+                                                        <span className="label-text">Cover</span>
+                                                    </label>
+                                                    <input 
+                                                        {...updateReq('cover', {
+                                                            required: false
+                                                        })} 
+                                                        type="file" name="cover" 
+                                                        accept="image/*"
+                                                        className={`w-full p-3 transition duration-200 rounded input`}
+                                                    />  
+                                                    {updateErrors && updateErrors.cover && <span className="text-error">{updateErrors.cover.message?.toString()}</span>}
+                                                </div>
                                                 <div className="form-control">
                                                     <label className="label font-bold font-lg">
                                                         <span className="label-text">Full Name</span>

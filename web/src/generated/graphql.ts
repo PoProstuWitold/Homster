@@ -14,7 +14,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
-  Upload: any;
+  Upload: File;
 };
 
 export type AssignOrRevokeToGameInput = {
@@ -232,6 +232,8 @@ export type MutationRegisterArgs = {
 
 
 export type MutationUpdateUserArgs = {
+  avatar?: InputMaybe<Scalars['Upload']>;
+  cover?: InputMaybe<Scalars['Upload']>;
   values: UpdateUserInput;
 };
 
@@ -368,6 +370,7 @@ export type Tag = {
 };
 
 export type UpdateUserInput = {
+  bio?: InputMaybe<Scalars['String']>;
   displayName?: InputMaybe<Scalars['String']>;
   fullName?: InputMaybe<Scalars['String']>;
 };
@@ -436,6 +439,8 @@ export type RegisterMutation = { __typename?: 'Mutation', register: { __typename
 
 export type UpdateUserMutationVariables = Exact<{
   values: UpdateUserInput;
+  avatar?: InputMaybe<Scalars['Upload']>;
+  cover?: InputMaybe<Scalars['Upload']>;
 }>;
 
 
@@ -642,8 +647,8 @@ export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
 export const UpdateUserDocument = gql`
-    mutation UpdateUser($values: UpdateUserInput!) {
-  updateUser(values: $values) {
+    mutation UpdateUser($values: UpdateUserInput!, $avatar: Upload, $cover: Upload) {
+  updateUser(values: $values, avatar: $avatar, cover: $cover) {
     ...Profile
   }
 }

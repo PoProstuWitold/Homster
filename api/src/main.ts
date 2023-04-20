@@ -35,7 +35,7 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
         credentials: true,
         origin: [
 			configService.get('web.origin'),
-            configService.get('NODE_ENV') === 'development' ? 'http://localhost/' : productionDomain
+            configService.get('NODE_ENV') === 'development' ? 'http://localhost:3000' : productionDomain
 		],
         optionsSuccessStatus: 200,
 		methods: ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE']

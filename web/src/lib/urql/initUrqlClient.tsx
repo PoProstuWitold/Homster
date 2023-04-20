@@ -2,7 +2,6 @@ import {
     Client,
     Exchange,
     createClient,
-    dedupExchange,
     fetchExchange,
     ssrExchange
 } from 'urql'
@@ -120,12 +119,11 @@ export function initUrqlClient(url: string, initialState?: any) {
     
         urqlClient = createClient({
             url: url,
-            requestPolicy: 'cache-and-network',
+            requestPolicy: 'network-only',
             exchanges: [
-                dedupExchange,
                 cacheExchange(cacheOptions) as Exchange,
                 ssrCache, // Add `ssr` in front of the `fetchExchange`
-                retryExchange(retryOptions) as Exchange,
+                // retryExchange(retryOptions) as Exchange,
                 fetchExchange,
             ],
             fetchOptions: () => {
@@ -147,12 +145,11 @@ export function initUrqlClient(url: string, initialState?: any) {
 
 export const urqlClientSsr: NextUrqlClientConfig = (ssrExchange: Exchange) => ({
 	url: 'http://localhost:4000/graphql',
-    requestPolicy: 'cache-and-network',
+    requestPolicy: 'network-only',
 	exchanges: [
-		dedupExchange,
 		cacheExchange(cacheOptions) as Exchange,
 		ssrExchange,
-        retryExchange(retryOptions) as Exchange,
+        // retryExchange(retryOptions) as Exchange,
 		fetchExchange
 	],
 	fetchOptions: () => {

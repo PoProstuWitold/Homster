@@ -1,5 +1,5 @@
-mutation UpdateUser($values: UpdateUserInput!) {
-    updateUser(values: $values) {
+mutation UpdateUser($values: UpdateUserInput!, $avatar: Upload, $cover: Upload) {
+    updateUser(values: $values, avatar: $avatar, cover: $cover) {
         ...Profile
     }
 }
