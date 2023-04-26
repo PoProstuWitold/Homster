@@ -3,8 +3,6 @@ import { join } from 'node:path'
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { validate } from 'class-validator'
 import { randomUUID } from 'crypto'
-import { InjectQueue } from '@nestjs/bull'
-import { Queue } from 'bull'
 import { Readable } from 'stream'
 
 import { CreateUploadInput, FileUploadDto } from './uploader.types'
@@ -24,7 +22,6 @@ export enum Mimetype {
 export class UploaderService {
 
     constructor(
-        @InjectQueue('files') private uploadsQueue: Queue,
         // private url = `http://localhost:4000/public/uploads/hello`
     ) {}
 
@@ -35,15 +32,6 @@ export class UploaderService {
             imageRaw: files.join(', '),
             imageFormatted: files.join(', '),
             url: `http://localhost:4000/public/uploads/`
-        }
-    }
-
-    public async addJobToQueue(values: CreateUploadInput, file: Promise<FileUpload>, mimetype: Mimetype[]) {
-        try {
-            // await this.validateFile(file, mimetype)
-            await this.uploadsQueue.add('upload', { values, file, mimetype })
-        } catch (err) {
-            throw err
         }
     }
 

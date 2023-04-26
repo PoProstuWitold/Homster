@@ -119,11 +119,11 @@ export function initUrqlClient(url: string, initialState?: any) {
     
         urqlClient = createClient({
             url: url,
-            requestPolicy: 'network-only',
+            requestPolicy: 'cache-and-network',
             exchanges: [
                 cacheExchange(cacheOptions) as Exchange,
                 ssrCache, // Add `ssr` in front of the `fetchExchange`
-                // retryExchange(retryOptions) as Exchange,
+                retryExchange(retryOptions) as Exchange,
                 fetchExchange,
             ],
             fetchOptions: () => {
@@ -145,11 +145,11 @@ export function initUrqlClient(url: string, initialState?: any) {
 
 export const urqlClientSsr: NextUrqlClientConfig = (ssrExchange: Exchange) => ({
 	url: 'http://localhost:4000/graphql',
-    requestPolicy: 'network-only',
+    requestPolicy: 'cache-and-network',
 	exchanges: [
 		cacheExchange(cacheOptions) as Exchange,
 		ssrExchange,
-        // retryExchange(retryOptions) as Exchange,
+        retryExchange(retryOptions) as Exchange,
 		fetchExchange
 	],
 	fetchOptions: () => {
