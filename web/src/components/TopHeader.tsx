@@ -8,7 +8,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({}) => {
     return (
         <>
               {/* ::Top Header */}
-              <div className="relative py-2 px-4 w-full flex justify-between items-center bg-secondary">
+              <div className="relative px-4 w-full flex justify-between items-center bg-secondary">
                 {/* :::Language select */}
                 <div>
                     <label htmlFor="language" className="sr-only">Select your language</label>
@@ -18,9 +18,10 @@ export const TopHeader: React.FC<TopHeaderProps> = ({}) => {
                     </select>
                 </div>
                 {/* :::Promo text */}
-                <p className="hidden md:block lg:absolute lg:top-1/2 lg:left-1/2 text-sm font-semibold transform lg:-translate-y-1/2 lg:-translate-x-1/2">Winter sale! Check our recommendations</p>
+                <p className="block lg:absolute lg:top-1/2 lg:left-1/2 text-sm font-semibold transform lg:-translate-y-1/2 lg:-translate-x-1/2">Winter sale! Check our recommendations</p>
                 {/* :::SignIn/SignUp & Search bar */}
-                <div className="inline-flex items-center">
+                
+                {/*<div className="inline-flex items-center">
                     <p className="mr-4 text-sm">
                     <a href="#goToSignin" className="mr-2 font-semibold hover:underline">
                         <span className="hidden md:inline">Sign In</span>
@@ -30,8 +31,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({}) => {
                         <span className="hidden md:inline">Sign Up</span>
                     </a>
                     </p>
-                    {/* SearchInput */}
-                </div>
+                </div> */}
                 </div>
         </>
     )

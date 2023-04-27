@@ -74,18 +74,18 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                 <div className="flex flex-col">
                     {/* Close menu button */}
                     
-                    <div className="flex justify-between">
-                        <a href="/" className="flex items-center pt-2">
-                            <div className="w-10 h-10 inline-flex justify-center items-center rounded-full">
-                            <svg className="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 10.031v-6.423l-6.036-3.608-5.964 3.569v6.499l-6 3.224v7.216l6.136 3.492 5.864-3.393 5.864 3.393 6.136-3.492v-7.177l-6-3.3zm-1.143.036l-4.321 2.384v-4.956l4.321-2.539v5.111zm-4.895-8.71l4.272 2.596-4.268 2.509-4.176-2.554 4.172-2.551zm-10.172 12.274l4.778-2.53 4.237 2.417-4.668 2.667-4.347-2.554zm4.917 3.587l4.722-2.697v5.056l-4.722 2.757v-5.116zm6.512-3.746l4.247-2.39 4.769 2.594-4.367 2.509-4.649-2.713zm9.638 6.323l-4.421 2.539v-5.116l4.421-2.538v5.115z"/></svg>
+                    <div className="flex items-center mt-4">
+                        <span className="flex">
+                            <button onClick={() => setIsMenuOpen(false)}>
+                                <AiOutlineClose className="mx-4 w-6 h-6"/>
+                            </button>
+                        </span>
+                        <a href="/" className="flex items-center">
+                            <div className="w-10 h-10 mx-2 inline-flex justify-center items-center rounded-full">
+                            <Image src={`/images/Logo_Homster.png`} alt={''} width={100} height={100}/>
                             </div>
                             <span className="text-base font-medium">Homster</span>
                         </a>
-                    <span className="p-5 flex">
-                        <button onClick={() => setIsMenuOpen(false)}>
-                        <AiOutlineClose className="w-6 h-6"/>
-                        </button>
-                    </span>
                     </div>
                     {/* Tab button */}
                     <div className="grid grid-cols-2">
