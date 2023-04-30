@@ -1200,6 +1200,29 @@ export default {
         "name": "Query",
         "fields": [
           {
+            "name": "game",
+            "type": {
+              "kind": "NON_NULL",
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Game",
+                "ofType": null
+              }
+            },
+            "args": [
+              {
+                "name": "data",
+                "type": {
+                  "kind": "NON_NULL",
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Any"
+                  }
+                }
+              }
+            ]
+          },
+          {
             "name": "games",
             "type": {
               "kind": "NON_NULL",

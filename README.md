@@ -50,14 +50,19 @@ next dev
     - [ ] GitHub Actions
 - [ ] UI & UX
     - [X] Navbar & Themes
-    - [ ] Landing page
+    - [X] Landing page
     - [X] Auth Pages
         - [X] Login & Register page
     - [ ] Store pages
-        - [ ] Home
+        - [X] Home
         - [ ] Wishlist
         - [ ] News
         - [ ] About
+        - [ ] Single game
+    - [ ] Special pages
+        - [ ] Studio
+        - [ ] Admin
+        - [ ] Moderation
 
 
 ## Tech stack

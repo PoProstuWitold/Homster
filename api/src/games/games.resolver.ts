@@ -7,7 +7,7 @@ import { Game } from '../common/entities'
 import { 
     CursorPaginatedGames, CursorPaginationOptions
 } from '../common/types'
-import { AssignOrRevokeToGameInput, CreateGameInput } from '../common/dtos'
+import { AssignOrRevokeToGameInput, CreateGameInput, FindGameArgs } from '../common/dtos'
 import { GameService } from './games.service'
 
 @Resolver(() => Game)
@@ -24,6 +24,19 @@ export class GameResolver {
     ): Promise<any> {
         try {
             const game = await this.gameService.create(data)
+            
+            return game
+        } catch (err) {
+            throw err
+        }
+    }
+
+    @Query(() => Game, { name: 'game' })
+    public async getGame(
+        @Args('data') data: FindGameArgs
+    ): Promise<any> {
+        try {
+            const game = await this.gameService.findOne(data)
             
             return game
         } catch (err) {

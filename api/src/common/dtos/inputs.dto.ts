@@ -1,5 +1,5 @@
 import { 
-    Field, GraphQLISODateTime, InputType, Int, ObjectType 
+    Field, GraphQLISODateTime, ID, InputType, Int, ObjectType 
 } from '@nestjs/graphql'
 import { 
     IsNotEmpty, NotContains, Length, Matches, 
@@ -315,4 +315,15 @@ export class CreateGenreInput {
     })
     @Field(() => String, { nullable: true })
     description?: GenreDB['description']
+}
+
+@InputType()
+export class FindGameArgs {
+    @IsOptional()
+    @Field(() => String, { nullable: true })
+    name?: string
+
+    @IsOptional()
+    @Field(() => ID, { nullable: true })
+    id?: string
 }

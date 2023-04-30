@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { Popover } from '@headlessui/react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import Image from 'next/image'
 import { AiOutlineUser, AiOutlineClose, AiOutlineShoppingCart, AiOutlineMenu } from  'react-icons/ai'
 import { toast } from 'react-hot-toast'
-import { useRouter } from 'next/router'
+import { Popover } from '@headlessui/react'
 
 import { useLogoutMutation, useMeQuery } from '@/generated/graphql'
 import { ThemeChanger } from './ThemeChanger'
 import { TopHeader } from './TopHeader'
-import Image from 'next/image'
 
 interface NavBarProps {
 
@@ -218,7 +218,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
                                 }
                                 {mounted && data && data.me && data.me.profile &&
                                     <>
-                                        <li><Link href={`/profile`}>{data.me.profile.displayName}</Link></li>
+                                        <li><Link href={`/user/${data.me.profile.displayName}`}>{data.me.profile.displayName}</Link></li>
                                         <li>
                                             <button 
                                                 onClick={() => { 

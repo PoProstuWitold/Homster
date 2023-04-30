@@ -3,7 +3,7 @@ import { GameStudio, StudioType } from '@prisma/client'
 import { isUUID } from 'class-validator'
 
 import { PrismaService } from '../../database/prisma.service'
-import { AssignOrRevokeToGameInput, CreateGameInput } from '../common/dtos'
+import { AssignOrRevokeToGameInput, CreateGameInput, FindGameArgs } from '../common/dtos'
 import { CursorPaginationOptions } from '../common/types'
 import { isPrismaError } from '../common/utils'
 
@@ -13,6 +13,27 @@ export class GameService {
         private prisma: PrismaService
     ) {}
     
+    public async findOne(data: FindGameArgs) {
+        try {
+            const game = await this.prisma.game.findFirst({
+                where: {
+                    OR: [
+                        {
+                            name: data.name
+                        },
+                        {
+                            id: data.id
+                        }
+                    ]
+                }
+            })
+            return game
+        } catch (err) {
+            isPrismaError(err)
+            throw err
+        }
+    }
+
     public async create(data: CreateGameInput) {
         try {
             let {

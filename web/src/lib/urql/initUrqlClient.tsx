@@ -36,7 +36,8 @@ const cacheOptions: CacheExchangeOpts = {
         GameStudio: _ => null,
         Count: _ => null,
         CursorPaginatedStudios: _ => null,
-        AuthResult: (data: any) => data.profile ? data.profile.id : null
+        AuthResult: (data: any) => data.profile ? data.profile.id : null,
+        StudioEmployee: _ => null
     },
     updates: {
         Mutation: {

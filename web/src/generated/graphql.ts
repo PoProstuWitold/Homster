@@ -116,6 +116,11 @@ export type CursorPaginationOptions = {
   type: Scalars['String'];
 };
 
+export type FindGameArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
 export type Game = {
   __typename?: 'Game';
   adultOnly: Scalars['Boolean'];
@@ -287,6 +292,7 @@ export type Profile = {
 
 export type Query = {
   __typename?: 'Query';
+  game: Game;
   games: CursorPaginatedGames;
   genres: OffsetPaginatedGenres;
   me: AuthResult;
@@ -295,6 +301,11 @@ export type Query = {
   tags: OffsetPaginatedTags;
   user: User;
   users: CursorPaginatedUsers;
+};
+
+
+export type QueryGameArgs = {
+  data: FindGameArgs;
 };
 
 
@@ -472,12 +483,27 @@ export type GetAllUsersQueryVariables = Exact<{
 
 export type GetAllUsersQuery = { __typename?: 'Query', users: { __typename?: 'CursorPaginatedUsers', edges?: Array<{ __typename: 'User', id: string, avatar?: string | null, cover?: string | null, bio?: string | null, displayName: string, fullName: string, email: string, role: string, createdAt: any, updatedAt: any }> | null, pageInfo: { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
 
+export type GetOneGameQueryVariables = Exact<{
+  data: FindGameArgs;
+}>;
+
+
+export type GetOneGameQuery = { __typename?: 'Query', game: { __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } | null }> | null } };
+
 export type GetStudioQueryVariables = Exact<{
   studio: GetStudioArgs;
 }>;
 
 
 export type GetStudioQuery = { __typename?: 'Query', studio: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename?: 'User', fullName: string, id: string, displayName: string } | null }> | null, games?: Array<{ __typename?: 'GameStudio', game?: { __typename?: 'Game', id: string, name: string, description: string } | null }> | null, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } };
+
+export type GetUserByFieldQueryVariables = Exact<{
+  field: Scalars['String'];
+  value: Scalars['String'];
+}>;
+
+
+export type GetUserByFieldQuery = { __typename?: 'Query', user: { __typename: 'User', id: string, avatar?: string | null, cover?: string | null, bio?: string | null, displayName: string, fullName: string, email: string, role: string, createdAt: any, updatedAt: any } };
 
 export type GetUserQueryVariables = Exact<{
   field: Scalars['String'];
@@ -724,6 +750,17 @@ ${CursorPageFragmentDoc}`;
 export function useGetAllUsersQuery(options: Omit<Urql.UseQueryArgs<GetAllUsersQueryVariables>, 'query'>) {
   return Urql.useQuery<GetAllUsersQuery, GetAllUsersQueryVariables>({ query: GetAllUsersDocument, ...options });
 };
+export const GetOneGameDocument = gql`
+    query GetOneGame($data: FindGameArgs!) {
+  game(data: $data) {
+    ...Game
+  }
+}
+    ${GameFragmentDoc}`;
+
+export function useGetOneGameQuery(options: Omit<Urql.UseQueryArgs<GetOneGameQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetOneGameQuery, GetOneGameQueryVariables>({ query: GetOneGameDocument, ...options });
+};
 export const GetStudioDocument = gql`
     query GetStudio($studio: GetStudioArgs!) {
   studio(getStudioArgs: $studio) {
@@ -748,6 +785,17 @@ export const GetStudioDocument = gql`
 
 export function useGetStudioQuery(options: Omit<Urql.UseQueryArgs<GetStudioQueryVariables>, 'query'>) {
   return Urql.useQuery<GetStudioQuery, GetStudioQueryVariables>({ query: GetStudioDocument, ...options });
+};
+export const GetUserByFieldDocument = gql`
+    query GetUserByField($field: String!, $value: String!) {
+  user(field: $field, value: $value) {
+    ...User
+  }
+}
+    ${UserFragmentDoc}`;
+
+export function useGetUserByFieldQuery(options: Omit<Urql.UseQueryArgs<GetUserByFieldQueryVariables>, 'query'>) {
+  return Urql.useQuery<GetUserByFieldQuery, GetUserByFieldQueryVariables>({ query: GetUserByFieldDocument, ...options });
 };
 export const GetUserDocument = gql`
     query GetUser($field: String!, $value: String!) {

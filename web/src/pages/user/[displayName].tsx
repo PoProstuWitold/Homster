@@ -1,10 +1,9 @@
 import { withUrqlClient } from 'next-urql'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import dayjs from 'dayjs'
 import { GiInfo } from 'react-icons/gi'
-import { IoGameControllerOutline } from 'react-icons/io5'
-import { IoMdStats } from 'react-icons/io'
 import { GiPartyPopper, GiCakeSlice } from 'react-icons/gi'
 import { MdOutlineDescription } from 'react-icons/md'
 import { AiOutlineEdit } from 'react-icons/ai'
@@ -12,13 +11,22 @@ import { toast } from 'react-hot-toast'
 import { useForm } from 'react-hook-form'
 
 import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
-import { useMeQuery, useUpdateUserMutation } from '@/generated/graphql'
-
-const imageUrl = `http://localhost:4000/public/uploads/f4f014d8-0972-408a-ab3f-5d894b6f9f77__pollub-logo.png`
+import { useGetUserByFieldQuery, useMeQuery, useUpdateUserMutation } from '@/generated/graphql'
 
 function Profile() {
+    const { query } = useRouter()
+
     const [{
         data
+    }, reexecute] = useGetUserByFieldQuery({
+        variables: {
+            field: 'displayName',
+            value: (query['displayName'] as string)
+        }
+    })
+
+    const [{
+        data: authData
     }] = useMeQuery()
 
     const [, updateUser] = useUpdateUserMutation()
@@ -39,23 +47,18 @@ function Profile() {
                     cover: data.cover[0]
                 }),
             })
-            console.log('res', res)
 			if(!res.data || res.error) {
                 if(res.error && res.error.graphQLErrors[0] && res.error.graphQLErrors[0].originalError) {
                     //@ts-ignore
                     const errors = res.error?.graphQLErrors[0].originalError.errors
-                    
+                    console.log(errors)
                     toast.error(errors.avatar || errors.displayName || errors.fullName || errors.bio || 'Failed to update profile', {
-                        duration: 3000
-                    })
-                }
-                if(!res.data || res.error) {
-                    toast.error('Failed to update profile', {
                         duration: 3000
                     })
                 }
             }
             if(res && res.data && res.data.updateUser) {
+                reexecute()
                 toast.success('Profile updated', {
                     duration: 3000
                 })
@@ -96,27 +99,32 @@ function Profile() {
     return (
         <>
             <Head>
-				<title>Your profile</title>
+				<title>{query['displayName']}</title>
 			</Head>
             <main>
+                {!data &&
+                    <>
+                        <p>User with display name of {query['displayName']} not found</p>
+                    </>
+                }
                 <div className="flex flex-col min-h-screen">
-                    {data && data.me && data.me.profile &&
+                    {data && data.user &&
                         <>
                         {/* PROFILE PAGE HEADER */}
                         <div className='bg-base-200'>
-                            <Image className='absolute w-full object-cover h-60' src={data.me.profile.cover!} width={840} height={360} alt="gowno"/>
+                            <Image className='absolute w-full object-cover h-60' src={data.user.cover!} width={840} height={360} alt="gowno"/>
                             <div 
                                 className="flex lg:flex-row flex-col gap-6 lg:px-10 mt-16 lg:items-end lg:justify-start lg:text-left justify-center items-center text-center my-4"
                             >
                                 <div className="avatar z-40">
                                     <div className="w-64 rounded-2xl">
-                                        <Image src={data.me.profile.avatar!}  width={256} height={256} alt={"user avatar"}/>
+                                        <Image src={data.user.avatar!}  width={256} height={256} alt={"user avatar"}/>
                                     </div>
                                 </div>
                                 <div className="flex lg:flex-row flex-col gap-2 lg:gap-6 items-center w-full">
                                     <div className='z-40 min-w-fit'>
-                                        <h1 className="text-4xl font-bold">{data.me.profile.displayName}</h1>
-                                        <h3 className="text-lg">{data.me.profile.role}</h3>
+                                        <h1 className="text-4xl font-bold">{data.user.displayName}</h1>
+                                        <h3 className="text-lg">{data.user.role}</h3>
                                     </div>
                                     <span className='divider lg:divider-horizontal m-0 p-0'></span>
                                     <div className='z-40 gap-4 btn-group flex-grow flex-auto md:mx-2 md:px-10 mx-5 px-5 lg:mx-0 lg:px-0 w-full'>
@@ -139,19 +147,19 @@ function Profile() {
                                     </h2>
                                     <div className="">
                                         <h3 className="text-md font-bold">Display name</h3>
-                                        <p>{data.me.profile.displayName}</p>
+                                        <p>{data.user.displayName}</p>
                                     </div>
                                     <div className="">
                                         <h3 className="text-md font-bold">Full Name</h3>
-                                        <p>{data.me.profile.fullName}</p>
+                                        <p>{data.user.fullName}</p>
                                     </div>
                                     <div className="">
                                         <h3 className="text-md font-bold">Email</h3>
-                                        <p>{data.me.profile.email}</p>
+                                        <p>{data.user.email}</p>
                                     </div>
                                     <div className="">
                                         <h3 className="text-md font-bold">Role</h3>
-                                        <p>{data.me.profile.role}</p>
+                                        <p>{data.user.role}</p>
                                     </div>
                                 </div>
                                 {/* Member since   */}
@@ -161,24 +169,27 @@ function Profile() {
                                             <GiPartyPopper className="w-5 h-5"/>
                                             <p>Joined</p>
                                         </h2>
-                                        <p className="italic">{dayjs(new Date(data.me.profile.createdAt)).format('DD MMMM YYYY')}</p>
+                                        <p className="italic">{dayjs(new Date(data.user.createdAt)).format('DD MMMM YYYY')}</p>
                                     </div>
                                     <div className="flex flex-row gap-2 text-center items-center">
                                         <h2 className="text-lg font-bold flex flex-row items-center gap-2">
                                             <GiCakeSlice className="w-5 h-5"/>
                                             <p>Last active</p>
                                         </h2>
-                                        <p className="italic">{dayjs(new Date(data.me.profile.updatedAt)).format('DD MMMM YYYY')}</p>
+                                        <p className="italic">{dayjs(new Date(data.user.updatedAt)).format('DD MMMM YYYY')}</p>
                                     </div>
                                 </div>
                             </div>
                             {/* Recent games, About me, Edit */}
                             <div className="flex flex-col lg:w-3/4 gap-6">
                                 {/* Edit */}
+                                {authData && authData.me && authData.me.profile && data.user.id === authData.me.profile.id &&
+                                        
+                                <>
                                 <div className="bg-base-300 rounded-lg shadow-md p-1">
                                     <div className="collapse collapse-arrow">
                                         <input type="checkbox" /> 
-                                        <h2 className="text-lg font-bold collapse-title flex flex-row items-center gap-2">
+                                            <h2 className="text-lg font-bold collapse-title flex flex-row items-center gap-2">
                                             <AiOutlineEdit className="w-5 h-5"/>
                                             <p>Edit</p>
                                         </h2>
@@ -205,7 +216,7 @@ function Profile() {
                                                         accept="image/*"
                                                         title='avatar'
 
-                                                        className={`w-full p-3 transition duration-200 rounded input`}
+                                                        className={`w-full file-input`}
                                                     />  
                                                     {updateErrors && updateErrors.avatar && <span className="text-error">{updateErrors.avatar.message?.toString()}</span>}
                                                 </div>
@@ -219,7 +230,7 @@ function Profile() {
                                                         })} 
                                                         type="file" name="cover" 
                                                         accept="image/*"
-                                                        className={`w-full p-3 transition duration-200 rounded input`}
+                                                        className={`file-input`}
                                                     />  
                                                     {updateErrors && updateErrors.cover && <span className="text-error">{updateErrors.cover.message?.toString()}</span>}
                                                 </div>
@@ -229,7 +240,7 @@ function Profile() {
                                                     </label>
                                                     <input 
                                                         {...updateReq('fullName', options.fullName)} 
-                                                        defaultValue={data.me.profile.fullName}
+                                                        defaultValue={authData.me.profile.fullName}
                                                         type="text" name="fullName" 
                                                         className={`w-full p-3 transition duration-200 rounded input`}
                                                     />  
@@ -241,7 +252,7 @@ function Profile() {
                                                     </label>
                                                     <input 
                                                         {...updateReq('displayName', options.displayName)} 
-                                                        defaultValue={data.me.profile.displayName}
+                                                        defaultValue={authData.me.profile.displayName}
                                                         type="text" name="displayName" 
                                                         className={`w-full p-3 transition duration-200 rounded input`}
                                                     />  
@@ -253,7 +264,7 @@ function Profile() {
                                                     </label>
                                                     <textarea 
                                                         {...updateReq('bio', options.bio)} 
-                                                        defaultValue={data.me.profile.bio || ''}
+                                                        defaultValue={authData.me.profile.bio || ''}
                                                         name="bio" 
                                                         className={`w-full p-3 transition duration-200 rounded textarea`}
                                                     />  
@@ -264,15 +275,18 @@ function Profile() {
                                                 </button>
                                             </form>
                                         </div>
+
+                                        
                                     </div>
                                 </div>
+                                </>}
                                 {/* About me */}
                                 <div className="bg-base-300 rounded-lg shadow-md p-5 md:h-[14.25rem]">
                                     <h2 className="text-lg font-bold flex flex-row items-center gap-2">
                                         <MdOutlineDescription className="w-5 h-5"/>
                                         <p>About me</p>
                                     </h2>
-                                    <p className="md:line-clamp-[7] line-clamp-[8]">{data.me.profile.bio || `This user hasn't added biography`}</p>
+                                    <p className="md:line-clamp-[7] line-clamp-[8]">{data.user.bio || `This user hasn't added biography`}</p>
                                 </div>
                             </div>
                         </div>

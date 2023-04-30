@@ -1,0 +1,5 @@
+query GetOneGame($data: FindGameArgs!) {
+    game(data: $data) {
+        ...Game
+    }
+}

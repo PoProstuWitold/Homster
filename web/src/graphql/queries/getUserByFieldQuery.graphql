@@ -1,0 +1,5 @@
+query GetUserByField($field: String!, $value: String!) {
+    user(field: $field, value: $value) {
+        ...User
+    }
+}

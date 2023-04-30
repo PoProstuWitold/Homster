@@ -184,6 +184,7 @@ type Query {
   users(paginationOptions: CursorPaginationOptions!): CursorPaginatedUsers!
   studios(paginationOptions: CursorPaginationOptions!): CursorPaginatedStudios!
   studio(getStudioArgs: GetStudioArgs!): Studio!
+  game(data: FindGameArgs!): Game!
   games(paginationOptions: CursorPaginationOptions!): CursorPaginatedGames!
   tags(paginationOptions: OffsetPaginationOptions!): OffsetPaginatedTags!
   genres(paginationOptions: OffsetPaginationOptions!): OffsetPaginatedGenres!
@@ -198,6 +199,11 @@ input CursorPaginationOptions {
 
 input GetStudioArgs {
   name: String!
+}
+
+input FindGameArgs {
+  name: String
+  id: ID
 }
 
 input OffsetPaginationOptions {

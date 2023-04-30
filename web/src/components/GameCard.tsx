@@ -1,15 +1,17 @@
 import { memo } from 'react'
-import { getStudios } from '@/utils/getStudios'
 import Link from 'next/link'
-import { formatString } from '@/utils/formatString'
 import dayjs from 'dayjs'
 import Image from 'next/image'
 
-export const GameCard = memo(({game}: any) => {
+import { formatString } from '@/utils/formatString'
+import { getStudios } from '@/utils/getStudios'
+import { Game } from '@/generated/graphql'
+
+export const GameCard = memo(({game}: { game: Game }) => {
 	GameCard.displayName = 'GameItem'
-    const [developers, publishers] = getStudios(game.studios)
+    const [developers, publishers] = getStudios(game.studios as any[])
 	return (
-	  <div key={`${game.id}:${Math.random()}`} className="flex flex-col p-5 w-[24rem] bg-base-300 m-5 h-86 gap-3 rounded-xl cursor-default">
+	  <div key={`${game.id}:${Math.random()}`} className="flex flex-col p-5 bg-base-300 m-5 h-86 gap-3 rounded-xl cursor-default hover:shadow-2xl duration-500 hover:cursor-pointer">
 		<div className="flex flex-row items-center justify-between border-b-2 pb-2 border-base-100">
 			<h3 className="text-2xl h-[2.4rem] line-clamp-1">{game.name}</h3>
 			{game.adultOnly &&
@@ -59,14 +61,14 @@ export const GameCard = memo(({game}: any) => {
 		<div className="flex flex-col text-sm gap-2 my-2">
 			<div className="flex flex-col flex-wrap">
 				<p className="font-semibold my-1">genres:</p>
-				{!game.genres.length && <p className="italic">No genres assigned</p>}
+				{!game.genres || game.genres.length && <p className="italic">No genres assigned</p>}
 				<div className="flex flex-row flex-wrap gap-2">
 					{game.genres && game.genres.map((genre: any) => <Link href={`/genres/${genre.name.replace(/ /g, "_")}`} className="font-semibold badge badge-outline min-w-fit rounded-sm hover:badge-primary hover:badge-outline" key={`${genre.id}:${Math.random()}`}>{genre.name}</Link>)}
 				</div>
 			</div>
 			<div className="flex flex-col flex-wrap my-2">
 				<p className="font-semibold my-1">tags:</p>
-				{!game.tags.length && <p className="italic">No tags assigned</p>}
+				{!game.tags || game.tags.length && <p className="italic">No tags assigned</p>}
 				<div className="flex flex-row flex-wrap gap-2">
 					{game.tags && game.tags.map((tag: any) => <Link href={`/tags/${tag.name.replace(/ /g, "_")}`} className="font-semibold badge badge-outline min-w-fit rounded-sm hover:badge-primary hover:badge-outline" key={`${tag.id}:${Math.random()}`}>{tag.name}</Link>)}
 				</div>
@@ -74,7 +76,7 @@ export const GameCard = memo(({game}: any) => {
 		</div>
 		<div className="flex justify-between mt-auto">
 			<div>
-				<Link href={`/app/${game.id}/${game.name.replace(/ /g, "_")}`} className="btn btn-outline btn-secondary rounded-sm">Visit Store page</Link>
+				<a href={`/app/${game.id}/${game.name.replace(/ /g, "_")}`} className="btn btn-outline btn-secondary rounded-sm">Visit Store page</a>
 			</div>
 			<div className="flex flex-col justify-center">
 				<div className="flex flex-col justify-center">
