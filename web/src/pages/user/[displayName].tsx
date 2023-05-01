@@ -14,7 +14,7 @@ import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
 import { useGetUserByFieldQuery, useMeQuery, useUpdateUserMutation } from '@/generated/graphql'
 
 function Profile() {
-    const { query } = useRouter()
+    const { query, replace } = useRouter()
 
     const [{
         data
@@ -34,30 +34,63 @@ function Profile() {
     const handleProfileUpdate = async (data: any) => {
         try {
             console.log(data.avatar)
-            const res = await updateUser({
-                values: {
-                    bio: data.bio,
-                    displayName: data.displayName,
-                    fullName: data.fullName
-                },
-                ...(data.avatar.length && {
-                    avatar: data.avatar[0]
-                }),
-                ...(data.cover.length && {
-                    cover: data.cover[0]
-                }),
-            })
+            let res
+            if(data.avatar[0] && data.cover[0]) {
+                await updateUser({
+                    values: {
+                        bio: data.bio,
+                        displayName: data.displayName,
+                        fullName: data.fullName
+                    },
+                    ...(data.cover.length && {
+                        cover: data.cover[0]
+                    }),
+                })
+                res = await updateUser({
+                    values: {
+                        bio: data.bio,
+                        displayName: data.displayName,
+                        fullName: data.fullName
+                    },
+                    ...(data.avatar.length && {
+                        avatar: data.avatar[0]
+                    })
+                })
+            } else if(data.avatar[0]) {
+                res = await updateUser({
+                    values: {
+                        bio: data.bio,
+                        displayName: data.displayName,
+                        fullName: data.fullName
+                    },
+                    ...(data.avatar.length && {
+                        avatar: data.avatar[0]
+                    })
+                })
+            } else {
+                res = await updateUser({
+                    values: {
+                        bio: data.bio,
+                        displayName: data.displayName,
+                        fullName: data.fullName
+                    },
+                    ...(data.cover.length && {
+                        cover: data.cover[0]
+                    }),
+                })
+            }
 			if(!res.data || res.error) {
                 if(res.error && res.error.graphQLErrors[0] && res.error.graphQLErrors[0].originalError) {
                     //@ts-ignore
                     const errors = res.error?.graphQLErrors[0].originalError.errors
                     console.log(errors)
-                    toast.error(errors.avatar || errors.displayName || errors.fullName || errors.bio || 'Failed to update profile', {
+                    toast.error(errors.avatar || errors.displayName || errors.fullName || errors.bio || 'Field displayName already exists', {
                         duration: 3000
                     })
                 }
             }
             if(res && res.data && res.data.updateUser) {
+                replace(`/user/${res.data.updateUser.displayName}`)
                 reexecute()
                 toast.success('Profile updated', {
                     duration: 3000

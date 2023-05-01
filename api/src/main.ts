@@ -85,7 +85,7 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
             if (!request.isMultipart) {
                 return
             }
-            request.body = await processRequest(request.raw, reply.raw)
+            request.body = await processRequest(request.raw, reply.raw, { maxFileSize: 50000000, maxFiles: 10 })
         })
 
     app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector))

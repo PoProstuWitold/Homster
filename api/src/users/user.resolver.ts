@@ -1,6 +1,8 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
-
+import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal'
+import * as fs from 'node:fs'
+import { join } from 'node:path'
 import { SessionGuard } from '../common/guards'
 import { CreateUserInput, UpdateUserInput } from '../common/dtos'
 import { Profile, User } from '../common/entities'
@@ -10,10 +12,8 @@ import {
     CursorPaginationOptions 
 } from '../common/types'
 import { UserService } from './user.service'
-// import { UploadScalar } from '../uploader/uploader.types'
 import { UploaderService } from '../uploader/uploader.service'
 import { Mimetype } from '../uploader/uploader.service'
-import { FileUpload, GraphQLUpload } from 'graphql-upload-minimal'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -45,10 +45,17 @@ export class UserResolver {
         @Context() ctx: GqlFastifyContext
     ): Promise<User> {
         try {
-            console.log('avatar', avatar)
             const session = await ctx.req.session.get('user')
 
             if(avatar) {
+                let oldAvatar = session.avatar.substring(session.avatar.lastIndexOf('/') + 1)
+                const path = join('public', 'uploads', oldAvatar)
+                if(oldAvatar && fs.existsSync(path)) {
+                    fs.unlink(path, (err) => {
+                        if(err) throw err
+                        console.log('Old avatar deleted succesfully')
+                    })
+                }
                 const avatarFile = await this.uploaderService.uploadFile({
                     name: 'User avatar',
                     description: 'New user avatar'
@@ -57,6 +64,14 @@ export class UserResolver {
             }
 
             if(cover) { 
+                let oldCover = session.cover.substring(session.cover.lastIndexOf('/') + 1)
+                const path = join('public', 'uploads', oldCover)
+                if(oldCover && fs.existsSync(path)) {
+                    fs.unlink(path, (err) => {
+                        if(err) throw err
+                        console.log('Old cover deleted succesfully')
+                    })
+                }
                 const coverUrl = await this.uploaderService.uploadFile({
                     name: 'Cover',
                     description: 'Cover image of user'

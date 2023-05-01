@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { formatString } from '@/utils/formatString'
 import { getStudios } from '@/utils/getStudios'
 import { Game } from '@/generated/graphql'
+import { Price } from './Price'
 
 export const GameCard = memo(({game}: { game: Game }) => {
 	GameCard.displayName = 'GameItem'
@@ -61,14 +62,14 @@ export const GameCard = memo(({game}: { game: Game }) => {
 		<div className="flex flex-col text-sm gap-2 my-2">
 			<div className="flex flex-col flex-wrap">
 				<p className="font-semibold my-1">genres:</p>
-				{!game.genres || game.genres.length && <p className="italic">No genres assigned</p>}
+				{!game.genres || !game.genres.length && <p className="italic">No genres assigned</p>}
 				<div className="flex flex-row flex-wrap gap-2">
 					{game.genres && game.genres.map((genre: any) => <Link href={`/genres/${genre.name.replace(/ /g, "_")}`} className="font-semibold badge badge-outline min-w-fit rounded-sm hover:badge-primary hover:badge-outline" key={`${genre.id}:${Math.random()}`}>{genre.name}</Link>)}
 				</div>
 			</div>
 			<div className="flex flex-col flex-wrap my-2">
 				<p className="font-semibold my-1">tags:</p>
-				{!game.tags || game.tags.length && <p className="italic">No tags assigned</p>}
+				{!game.tags || !game.tags.length && <p className="italic">No tags assigned</p>}
 				<div className="flex flex-row flex-wrap gap-2">
 					{game.tags && game.tags.map((tag: any) => <Link href={`/tags/${tag.name.replace(/ /g, "_")}`} className="font-semibold badge badge-outline min-w-fit rounded-sm hover:badge-primary hover:badge-outline" key={`${tag.id}:${Math.random()}`}>{tag.name}</Link>)}
 				</div>
@@ -79,18 +80,7 @@ export const GameCard = memo(({game}: { game: Game }) => {
 				<a href={`/app/${game.id}/${game.name.replace(/ /g, "_")}`} className="btn btn-outline btn-secondary rounded-sm">Visit Store page</a>
 			</div>
 			<div className="flex flex-col justify-center">
-				<div className="flex flex-col justify-center">
-					{game.price === 0 && game.price === game.basicPrice && <p className="font-semibold">Free to play</p>}
-					{game.price !== 0 && game.price === game.basicPrice && <p className="font-semibold">{game.price} USD</p>}
-					{game.price !== 0 && game.price !== game.basicPrice && <>
-						<p className="line-through text-sm">Basic price: {game.basicPrice} USD</p>
-						<p className="font-semibold">Current price: {game.price} USD</p>
-					</>}
-					{game.price === 0 && game.price !== game.basicPrice && <>
-						<p className="line-through text-sm">Basic price: {game.basicPrice} USD</p>
-						<p className="font-semibold">Current price: FREE</p>
-					</>}
-				</div>
+				<Price game={game} />
 			</div>
 		</div>
 	  </div>
