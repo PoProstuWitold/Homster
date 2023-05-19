@@ -1,4 +1,4 @@
-import { EmploymentType, GameStatus, GameType, Genre, PrismaClient, Role, Studio, StudioType, Tag, User } from '@prisma/client'
+import { EmploymentType, GameMedia, GameStatus, GameType, Genre, PrismaClient, Role, Studio, StudioType, Tag, User } from '@prisma/client'
 import { faker } from '@faker-js/faker'
 import { hash } from 'argon2'
 
@@ -64,6 +64,20 @@ class Seeder {
     }
 }
 
+const covers = [
+    'cover1.png',
+    'cover2.jpg',
+    'cover3.jpg',
+    'cover4.jpg',
+]
+
+const media = [
+    'media1.png',
+    'media2.png',
+    'media3.jpg',
+    'media4.jpg'
+]
+
 interface FakeUserData {
     role?: Role,
     email?: string,
@@ -81,13 +95,13 @@ const fakerUser = (data?: FakeUserData): any => {
         fullName: data?.fullName || faker.name.fullName(),
         displayName,
         avatar: `https://api.dicebear.com/6.x/initials/svg?seed=${displayName}`,
-        cover: `https://random.imagecdn.app/820/360`,
+        cover: `http://localhost:4000/public/images/covers/user-banner.jpg`,
         role: data?.role || Role['USER']
     }
 }
 
 const fakerGame = () => {
-    const { basicPrice, price } = Seeder.getRandomPrices(50)
+    const { basicPrice, price } = Seeder.getRandomPrices(100)
 
     const status = Seeder.getRandomType<GameStatus>(GameStatus)
     let releaseDate: Date
@@ -103,7 +117,7 @@ const fakerGame = () => {
         basicPrice,
         price,
         status,
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         type: Seeder.getRandomType<GameType>(GameType),
         releaseDate,
         adultOnly: Seeder.getRandomBoolean()
@@ -205,8 +219,8 @@ const genreSeed = [
         description: 'A game world that allows players to manipulate and create objects, often with a focus on player-driven content'
     },
     {
-        name: 'Real-Time Strategy (RTS)',
-        description: 'Make strategic decisions in real-time, often with a focus on resource management and base-building'
+        name: 'RTS',
+        description: 'Real Time Strategy! Make strategic decisions in real-time, often with a focus on resource management and base-building'
     },
     {
         name: 'Tower Defense',
@@ -354,22 +368,12 @@ const userSeed = [
     }),,
     fakerUser({
         role: Role['DEVELOPER']
-    }),,
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
-    fakerUser(),
+    }),
 ]
+
+for(let i = 0; i < 50; i++) {
+    userSeed.push(fakerUser())
+}
 
 interface FakerStudioData {
     name: string,
@@ -385,7 +389,7 @@ const fakerStudio = (data?: FakerStudioData): any => {
         name,
         type,
         avatar: `https://api.dicebear.com/6.x/initials/svg?seed=${data.name}`,
-        cover: `https://random.imagecdn.app/820/360`,
+        cover: `http://localhost:4000/public/images/covers/studio-banner.jpg`,
     }
 }
 
@@ -456,7 +460,7 @@ const gameSeed = [
         price: 0,
         status: GameStatus['EarlyAccess'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2023-12-20'),
         adultOnly: true
     },
@@ -467,7 +471,7 @@ const gameSeed = [
         price: 0,
         status: GameStatus['Released'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2023-02-07'),
     },
     {
@@ -477,7 +481,7 @@ const gameSeed = [
         price: 5,
         status: GameStatus['NotReleased'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2023-04-26'),
     },
     {
@@ -487,7 +491,7 @@ const gameSeed = [
         price: 10,
         status: GameStatus['Released'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2022-11-01'),
     },
     {
@@ -497,7 +501,7 @@ const gameSeed = [
         price: 25,
         status: GameStatus['Beta'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2023-07-15'),
     },
     {
@@ -507,7 +511,7 @@ const gameSeed = [
         price: 20,
         status: GameStatus['Released'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2022-06-12'),
     },
     {
@@ -517,7 +521,7 @@ const gameSeed = [
         price: 25,
         status: GameStatus['Released'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2022-09-20'),
     },
     {
@@ -527,7 +531,7 @@ const gameSeed = [
         price: 40,
         status: GameStatus['Released'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2021-12-08'),
     },
     {
@@ -537,7 +541,7 @@ const gameSeed = [
         price: 10,
         status: GameStatus['Released'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2022-04-23'),
     },
     {
@@ -547,7 +551,7 @@ const gameSeed = [
         price: 50,
         status: GameStatus['EarlyAccess'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2023-09-01'),
     },
     {
@@ -557,7 +561,7 @@ const gameSeed = [
         price: 30,
         status: GameStatus['Released'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2022-02-28'),
     },
     {
@@ -567,80 +571,33 @@ const gameSeed = [
         price: 20,
         status: GameStatus['Released'],
         type: GameType['Game'],
-        coverImage: `https://random.imagecdn.app/820/360`,
+        coverImage: `http://localhost:4000/public/images/covers/${Seeder.getRandomRecords(covers, 1)}`,
         releaseDate: new Date('2022-01-15'),
     },
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
-    fakerGame(),
+    fakerGame()
 ]
+
+for(let i = 0; i < 100; i++) {
+    gameSeed.push(fakerGame())
+}
+
+
+const fakerGameMedia = () => {
+    return {
+        name: faker.random.words(5),
+        description: faker.random.words(12),
+        url: `http://localhost:4000/public/images/media/${Seeder.getRandomRecords<string>(media, 1)}`,
+        type: 'Image',
+    }
+}
+
+const gameMediaSeed = [
+    fakerGameMedia()
+]
+
+for(let i = 0; i<50; i++) {
+    gameMediaSeed.push(fakerGameMedia())
+}
 
 async function main() {
     await prisma.$transaction(async (tx) => {
@@ -717,6 +674,7 @@ async function main() {
         console.log('Seeding Games...')
         const gamesDb = await prisma.game.findMany()
 
+        console.log('Seeding game medias...')
         for(const gameData of gameSeed) {
             const gameExists = gamesDb.some(game => game.name === gameData.name)
             if(!gameExists) {
@@ -749,6 +707,20 @@ async function main() {
                 await tx.gameStudio.createMany({
                     skipDuplicates: true,
                     data: randomStudios
+                })
+                
+                const randomGameMedia = Seeder.getRandomRecords<GameMedia>(gameMediaSeed, 4).map((gameMedia) => ({
+                    id: gameMedia.id,
+                    name: gameMedia.name,
+                    description: gameMedia.description,
+                    url: gameMedia.url,
+                    type: gameMedia.type,
+                    gameId: game.id,
+                }))
+
+                await tx.gameMedia.createMany({
+                    data: randomGameMedia,
+                    skipDuplicates: false
                 })
             }
         }

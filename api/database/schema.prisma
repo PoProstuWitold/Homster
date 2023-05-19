@@ -101,7 +101,7 @@ model GameMedia {
 	description     String?
 	type            MediaType
 	url             String
-	game            Game          @relation(fields: [gameId], references: [id])
+	game            Game          @relation(fields: [gameId], references: [id], onDelete: Cascade)
 	gameId          String
 }
 

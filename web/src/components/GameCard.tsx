@@ -22,7 +22,7 @@ export const GameCard = memo(({game}: { game: Game }) => {
 			}
 		</div>
 		{game && game.coverImage &&
-			<Image className='w-96 h-36 border-b-2 my-2 border-base-100' src={game.coverImage} alt="game image" width={860} height={360}/>
+			<Image className='w-full h-40 border-b-2 my-2 border-base-100' src={game.coverImage} alt="game image" width={900} height={400} style={{ objectFit: 'cover' }}/>
 		}
         <p className="text-base h-[4.5rem] line-clamp-3">{game.description}</p>
 		<div className="flex flex-row text-sm">

@@ -66,10 +66,10 @@ type GameMedia {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  name: String!
-  description: String!
-  status: String!
-  url: String!
+  name: String
+  description: String
+  type: String
+  url: String
 }
 
 type Game {
@@ -186,6 +186,8 @@ type Query {
   studio(getStudioArgs: GetStudioArgs!): Studio!
   game(data: FindGameArgs!): Game!
   games(paginationOptions: CursorPaginationOptions!): CursorPaginatedGames!
+  recommendations(userId: String): [Game!]!
+  specialOffers: [Game!]!
   tags(paginationOptions: OffsetPaginationOptions!): OffsetPaginatedTags!
   genres(paginationOptions: OffsetPaginationOptions!): OffsetPaginatedGenres!
 }

@@ -58,6 +58,30 @@ export class GameResolver {
         }
     }
 
+    @Query(() => [Game], { name: 'recommendations' })
+    public async getRecommendations(
+        @Args('userId', { nullable: true }) userId?: string
+    ): Promise<any> {
+        try {
+            const games = await this.gameService.getRecommendations(userId)
+            
+            return games
+        } catch (err) {
+            throw err
+        }
+    }
+
+    @Query(() => [Game], { name: 'specialOffers' })
+    public async getSpecialOffers(): Promise<any> {
+        try {
+            const games = await this.gameService.getSpecialOffers()
+            
+            return games
+        } catch (err) {
+            throw err
+        }
+    }
+
     @Roles(Role['ADMIN'], Role['MOD'])
     @UseGuards(SessionGuard, RolesGuard)
     @Mutation(() => Game)

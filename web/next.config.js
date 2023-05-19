@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   	reactStrictMode: true,
+	  i18n: {
+        locales: ["en"],
+        defaultLocale: "en",
+    },
 	images: {
 		dangerouslyAllowSVG: true,
 		remotePatterns: [
@@ -19,7 +23,8 @@ const nextConfig = {
 				hostname: 'api.dicebear.com'
 			}
 		],
-	}
+	},
+	productionBrowserSourceMaps: true
 }
 
 module.exports = nextConfig

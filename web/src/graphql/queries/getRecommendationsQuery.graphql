@@ -1,0 +1,5 @@
+query GetRecommendations($userId: String) {
+    recommendations(userId: $userId) {
+        ...Game
+    }
+}

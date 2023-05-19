@@ -25,4 +25,12 @@ fragment Game on Game {
             ...Studio
         }
     }
+    media {
+        __typename
+        id
+        name
+        description
+        type
+        url
+    }
 }

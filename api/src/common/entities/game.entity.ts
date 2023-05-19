@@ -13,16 +13,16 @@ import { User } from './user.entity'
 
 @ObjectType()
 export class GameMedia extends BaseEntity {
-    @Field(() => String)
+    @Field(() => String, { nullable: true })
     name: GameMediaDB['name']
 
-    @Field(() => String)
+    @Field(() => String, { nullable: true })
     description: GameMediaDB['description']
 
-    @Field(() => String)
-    status: MediaType
+    @Field(() => String, { nullable: true })
+    type: MediaType
 
-    @Field(() => String)
+    @Field(() => String, { nullable: true })
     url: string
 }
 

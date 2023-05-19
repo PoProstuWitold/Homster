@@ -25,6 +25,12 @@ export class GameService {
                             id: data.id
                         }
                     ]
+                },
+                include: {
+                    genres: true,
+                    tags: true,
+                    media: true,
+                    studios: true
                 }
             })
             return game
@@ -63,6 +69,12 @@ export class GameService {
                             connect: dbGenres
                         }
                     }),
+                },
+                include: {
+                    genres: true,
+                    tags: true,
+                    media: true,
+                    studios: true
                 }
             })
 
@@ -87,7 +99,8 @@ export class GameService {
                         }
                     },
                     tags: true,
-                    genres: true
+                    genres: true,
+                    media: true,
                 }
             })
 
@@ -120,7 +133,8 @@ export class GameService {
                     },
                     tags: true,
                     genres: true,
-                    users: true
+                    users: true,
+                    media: true
                 }
             })
             
@@ -194,7 +208,8 @@ export class GameService {
                         include: {
                             studio: true
                         }
-                    }
+                    },
+                    media: true
                 }
             })
 
@@ -299,6 +314,67 @@ export class GameService {
                 dbTags,
                 dbGenres
             ]
+        } catch (err) {
+            throw err
+        }
+    }
+
+    async getRecommendations(userId: string) {
+        try {
+            const games = await this.prisma.game.findMany({
+                take: 4,
+                orderBy: {
+                    createdAt: 'asc'
+                },
+                where: {
+                    price: {
+                        gte: 60
+                    }
+                },
+                include: {
+                    genres: true,
+                    media: true,
+                    tags: true,
+                    studios: {
+                        include: {
+                            studio: true
+                        }
+                    }
+                }
+            })
+            return games
+        } catch (err) {
+            throw err
+        }
+    }
+
+    async getSpecialOffers() {
+        try {
+            const games = await this.prisma.game.findMany({
+                take: 4,
+                orderBy: {
+                    price: 'asc',
+                },
+                where: {
+                    price: {
+                        lte: 10
+                    },
+                    basicPrice: {
+                        gte: 12
+                    }
+                },
+                include: {
+                    genres: true,
+                    media: true,
+                    tags: true,
+                    studios: {
+                        include: {
+                            studio: true
+                        }
+                    }
+                }
+            })
+            return games
         } catch (err) {
             throw err
         }

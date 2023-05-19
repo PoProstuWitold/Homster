@@ -7,8 +7,13 @@ import { StoreNavbar } from '@/components/StoreNavbar'
 import { InfiniteGameFeed } from '@/components/InfiniteGameFeed'
 import { Featured } from '@/components/Featured'
 import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
+import { Game, useGetSpecialOffersQuery } from '@/generated/graphql'
+
+import CoverImage from '../../public/images/homster0.jpg'
 
 function MainPage() {
+
+	const [{ data: offers }] = useGetSpecialOffersQuery()
 
 	return (
 		<>
@@ -17,8 +22,9 @@ function MainPage() {
 				<section className="relative h-0 md:h-full mb-[28rem] md:mb-2">
 					<Image 
 						className="z-[-5]"
-						src="/images/homster0.jpg"
+						src={CoverImage}
 						alt="layout bg"
+						placeholder='blur'
 						fill
 						priority
 						style={{
@@ -31,9 +37,10 @@ function MainPage() {
 						<div className="flex flex-col relative w-full h-60 lg:h-96">
 							<div className="md:hidden md:top-0 p-0 m-0 -z-10 w-full">
 								<Image
-									src="/images/homster0.jpg"
+									src={CoverImage}
 									alt="layout bg"
 									fill
+									placeholder='blur'
 									style={{
 										objectFit: 'cover'
 									}}
@@ -58,10 +65,11 @@ function MainPage() {
 				<article className='justify-items-center justify-between mx-3 md:mx-4 lg:mx-5 my-20'>
 					<h2 className='text-2xl font-bold my-4'>Special offers</h2>
 					<div className='grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 justify-items-center'>
-						<SpecialOffer />
-						<SpecialOffer />
-						<SpecialOffer />
-						<SpecialOffer />
+						{offers && offers.specialOffers.map((game) => {
+							return (
+								<SpecialOffer game={game as Game} key={`${game.id}`} />
+							)
+						})}
 					</div>
 				</article>
 				<article className='justify-items-center justify-between'>
