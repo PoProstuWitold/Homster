@@ -54,8 +54,6 @@ export const Featured: React.FC = () => {
 								<Tab.Group as={'div'} selectedIndex={active}>
 									<Tab.Panels className="mt-2 group delay-1000 transition-all">
 										{featured.recommendations.map((game, idx) => {
-											console.log('idx', idx, 'active', active)
-											console.log(idx == active)
 											return (
 												<Tab.Panel
 													key={idx}

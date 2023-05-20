@@ -30,7 +30,11 @@ export class GameService {
                     genres: true,
                     tags: true,
                     media: true,
-                    studios: true
+					studios: {
+                        include: {
+                            studio: true
+                        }
+                    },
                 }
             })
             return game
