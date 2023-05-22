@@ -1,0 +1,8 @@
+fragment Employee on StudioEmployee {
+    employee {
+		__typename
+		fullName
+		id
+		displayName
+	}
+}

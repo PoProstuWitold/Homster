@@ -12,4 +12,7 @@ fragment Studio on Studio {
         games
         employees
     }
+	employees {
+		...Employee
+	}
 }

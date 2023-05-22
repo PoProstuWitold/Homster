@@ -100,8 +100,12 @@ function Studios() {
 						</h1>
 					</section>
                     <div className="flex flex-row gap-2">
-						<Link className='btn btn-secondary' href={'/studio/create'}>
+						<Link className='btn btn-secondary btn-outline' href={'/studio/create'}>
 							Create studio
+							<AiOutlineArrowRight className='ml-3 w-5 h-5' />
+						</Link>
+						<Link className='btn btn-secondary' href={'/studio/publish'}>
+							Publish game
 							<AiOutlineArrowRight className='ml-3 w-5 h-5' />
 						</Link>
                     </div>

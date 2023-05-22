@@ -420,11 +420,13 @@ export type User = {
 
 export type CursorPageFragment = { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string };
 
-export type GameFragment = { __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } | null }> | null, media?: Array<{ __typename: 'GameMedia', id: string, name?: string | null, description?: string | null, type?: string | null, url?: string | null }> | null };
+export type EmployeeFragment = { __typename?: 'StudioEmployee', employee?: { __typename: 'User', fullName: string, id: string, displayName: string } | null };
+
+export type GameFragment = { __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename: 'User', fullName: string, id: string, displayName: string } | null }> | null } | null }> | null, media?: Array<{ __typename: 'GameMedia', id: string, name?: string | null, description?: string | null, type?: string | null, url?: string | null }> | null };
 
 export type GenreFragment = { __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null };
 
-export type StudioFragment = { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null };
+export type StudioFragment = { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename: 'User', fullName: string, id: string, displayName: string } | null }> | null };
 
 export type TagFragment = { __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null };
 
@@ -474,14 +476,14 @@ export type GetAllGamesQueryVariables = Exact<{
 }>;
 
 
-export type GetAllGamesQuery = { __typename?: 'Query', games: { __typename?: 'CursorPaginatedGames', edges?: Array<{ __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } | null }> | null, media?: Array<{ __typename: 'GameMedia', id: string, name?: string | null, description?: string | null, type?: string | null, url?: string | null }> | null }> | null, pageInfo: { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
+export type GetAllGamesQuery = { __typename?: 'Query', games: { __typename?: 'CursorPaginatedGames', edges?: Array<{ __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename: 'User', fullName: string, id: string, displayName: string } | null }> | null } | null }> | null, media?: Array<{ __typename: 'GameMedia', id: string, name?: string | null, description?: string | null, type?: string | null, url?: string | null }> | null }> | null, pageInfo: { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
 
 export type GetAllStudiosQueryVariables = Exact<{
   pagination: CursorPaginationOptions;
 }>;
 
 
-export type GetAllStudiosQuery = { __typename?: 'Query', studios: { __typename?: 'CursorPaginatedStudios', edges?: Array<{ __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null }> | null, pageInfo: { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
+export type GetAllStudiosQuery = { __typename?: 'Query', studios: { __typename?: 'CursorPaginatedStudios', edges?: Array<{ __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename: 'User', fullName: string, id: string, displayName: string } | null }> | null }> | null, pageInfo: { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string } } };
 
 export type GetAllUsersQueryVariables = Exact<{
   pagination: CursorPaginationOptions;
@@ -495,26 +497,26 @@ export type GetOneGameQueryVariables = Exact<{
 }>;
 
 
-export type GetOneGameQuery = { __typename?: 'Query', game: { __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } | null }> | null, media?: Array<{ __typename: 'GameMedia', id: string, name?: string | null, description?: string | null, type?: string | null, url?: string | null }> | null } };
+export type GetOneGameQuery = { __typename?: 'Query', game: { __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename: 'User', fullName: string, id: string, displayName: string } | null }> | null } | null }> | null, media?: Array<{ __typename: 'GameMedia', id: string, name?: string | null, description?: string | null, type?: string | null, url?: string | null }> | null } };
 
 export type GetRecommendationsQueryVariables = Exact<{
   userId?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetRecommendationsQuery = { __typename?: 'Query', recommendations: Array<{ __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } | null }> | null, media?: Array<{ __typename: 'GameMedia', id: string, name?: string | null, description?: string | null, type?: string | null, url?: string | null }> | null }> };
+export type GetRecommendationsQuery = { __typename?: 'Query', recommendations: Array<{ __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename: 'User', fullName: string, id: string, displayName: string } | null }> | null } | null }> | null, media?: Array<{ __typename: 'GameMedia', id: string, name?: string | null, description?: string | null, type?: string | null, url?: string | null }> | null }> };
 
 export type GetSpecialOffersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSpecialOffersQuery = { __typename?: 'Query', specialOffers: Array<{ __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } | null }> | null, media?: Array<{ __typename: 'GameMedia', id: string, name?: string | null, description?: string | null, type?: string | null, url?: string | null }> | null }> };
+export type GetSpecialOffersQuery = { __typename?: 'Query', specialOffers: Array<{ __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename: 'User', fullName: string, id: string, displayName: string } | null }> | null } | null }> | null, media?: Array<{ __typename: 'GameMedia', id: string, name?: string | null, description?: string | null, type?: string | null, url?: string | null }> | null }> };
 
 export type GetStudioQueryVariables = Exact<{
   studio: GetStudioArgs;
 }>;
 
 
-export type GetStudioQuery = { __typename?: 'Query', studio: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename?: 'User', fullName: string, id: string, displayName: string } | null }> | null, games?: Array<{ __typename?: 'GameStudio', game?: { __typename?: 'Game', id: string, name: string, description: string } | null }> | null, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } };
+export type GetStudioQuery = { __typename?: 'Query', studio: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename: 'User', fullName: string, id: string, displayName: string } | null }> | null, games?: Array<{ __typename?: 'GameStudio', game?: { __typename?: 'Game', id: string, name: string, description: string } | null }> | null, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } };
 
 export type GetUserByFieldQueryVariables = Exact<{
   field: Scalars['String'];
@@ -560,6 +562,16 @@ export const GenreFragmentDoc = gql`
   description
 }
     `;
+export const EmployeeFragmentDoc = gql`
+    fragment Employee on StudioEmployee {
+  employee {
+    __typename
+    fullName
+    id
+    displayName
+  }
+}
+    `;
 export const StudioFragmentDoc = gql`
     fragment Studio on Studio {
   __typename
@@ -575,8 +587,11 @@ export const StudioFragmentDoc = gql`
     games
     employees
   }
+  employees {
+    ...Employee
+  }
 }
-    `;
+    ${EmployeeFragmentDoc}`;
 export const GameFragmentDoc = gql`
     fragment Game on Game {
   __typename
