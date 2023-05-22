@@ -6,6 +6,7 @@ import { Game, useGetOneGameQuery } from '@/generated/graphql'
 import { urqlClientSsr } from '@/lib/urql/initUrqlClient'
 import { StoreNavbar } from '@/components/StoreNavbar'
 import { GameDetailedCard } from '@/components/GameDetailedCard'
+import { NextSeo } from 'next-seo'
 
 function GamePage() {
 	const router = useRouter()
@@ -28,6 +29,10 @@ function GamePage() {
 
 	return (
 		<>
+			<NextSeo 
+				title={`${data?.game.name}`}
+				description={`${data?.game.description}`}
+			/>
 			<main className='min-h-screen md:mb-20 mb-40'>
 				<StoreNavbar />
 				<div className="md:hidden flex flex-col relative w-full h-60 lg:h-96">
