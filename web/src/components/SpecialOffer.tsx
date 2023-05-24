@@ -1,6 +1,7 @@
 import { Game } from '@/generated/graphql'
 import { getStudios } from '@/utils/getStudios'
 import Image from 'next/image'
+import BlurImage from '../../public/images/homster2.jpg'
 
 interface SpecialOfferProps {
     game: Game
@@ -19,8 +20,10 @@ export const SpecialOffer: React.FC<SpecialOfferProps> = ({ game }) => {
             >
                 <Image
                     className="block group-hover:opacity-40 transition-opacity duration-500 h-[24rem] w-[22rem]"
-                    src="/images/homster2.jpg"
-                    alt="homster"
+                    alt="game cover image"
+					placeholder='blur'
+					blurDataURL={`${BlurImage}`}
+                    src={game.coverImage!}
                     width={470}
                     height={500}
                     style={{

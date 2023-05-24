@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Price } from './Price'
 import { Game, useGetRecommendationsQuery } from '@/generated/graphql'
 import LogoHomster from '../../public/images/Logo_Homster.png'
+import BlurImage from '../../public/images/homster4.jpg'
 
 function classNames(...classes: string[]) {
 	return classes.filter(Boolean).join(' ')
@@ -60,7 +61,7 @@ export const Featured: React.FC = () => {
 												>
 													<div className={`h-full md:h-[26rem] w-full flex flex-col md:flex-row`}>
 														<div className="w-full h-full flex md:w-2/3">
-															<Image placeholder="blur" blurDataURL={game.coverImage!} width={400} height={160} src={game.coverImage!} alt={`${game.name} image`} className="object-cover w-full" />
+															<Image placeholder="blur" blurDataURL={`${BlurImage}`} width={400} height={160} src={game.coverImage!} alt={`${game.name} image`} className="object-cover w-full" />
 														</div>
 														<div className="px-5 h-full w-full md:w-1/3 flex flex-col justify-between bg-base-300">
 															<div className="flex flex-col">
@@ -79,6 +80,7 @@ export const Featured: React.FC = () => {
 																			src={image.url}
 																			alt=""
 																			className="object-cover w-[44%]"
+																			placeholder="blur" blurDataURL={`${BlurImage}`}
 																		/>
 																	))}
 																</div>

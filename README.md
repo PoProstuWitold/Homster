@@ -58,7 +58,7 @@ next dev
         - [ ] Wishlist
         - [ ] News
         - [ ] About
-        - [ ] Single game
+        - [X] Single game
     - [ ] Special pages
         - [ ] Studio
         - [ ] Admin
