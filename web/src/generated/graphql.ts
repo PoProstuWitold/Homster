@@ -5,90 +5,92 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  DateTime: any;
-  Upload: File;
+  ID: { input: string | number; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
+  Upload: { input: File; output: File; }
 };
 
 export type AssignOrRevokeToGameInput = {
-  activity: Scalars['String'];
-  game: Scalars['String'];
-  genres?: InputMaybe<Array<Scalars['String']>>;
-  tags?: InputMaybe<Array<Scalars['String']>>;
+  activity: Scalars['String']['input'];
+  game: Scalars['String']['input'];
+  genres?: InputMaybe<Array<Scalars['String']['input']>>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type AuthResult = {
   __typename?: 'AuthResult';
-  message?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']['output']>;
   profile?: Maybe<Profile>;
-  statusCode?: Maybe<Scalars['Int']>;
+  statusCode?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Count = {
   __typename?: 'Count';
-  employees?: Maybe<Scalars['Int']>;
-  games?: Maybe<Scalars['Int']>;
+  employees?: Maybe<Scalars['Int']['output']>;
+  games?: Maybe<Scalars['Int']['output']>;
 };
 
 export type CreateGameInput = {
-  basicPrice?: InputMaybe<Scalars['Float']>;
-  description: Scalars['String'];
-  developers: Array<Scalars['String']>;
-  genres: Array<Scalars['String']>;
-  name: Scalars['String'];
-  publishers: Array<Scalars['String']>;
-  releaseDate?: InputMaybe<Scalars['DateTime']>;
-  status: Scalars['String'];
-  tags: Array<Scalars['String']>;
-  type: Scalars['String'];
+  basicPrice?: InputMaybe<Scalars['Float']['input']>;
+  description: Scalars['String']['input'];
+  developers: Array<Scalars['String']['input']>;
+  genres: Array<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  publishers: Array<Scalars['String']['input']>;
+  releaseDate?: InputMaybe<Scalars['DateTime']['input']>;
+  status: Scalars['String']['input'];
+  tags: Array<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
 };
 
 export type CreateGenreInput = {
-  description?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
 };
 
 export type CreateStudioInput = {
-  makeOwner?: InputMaybe<Scalars['Boolean']>;
-  name: Scalars['String'];
-  type?: InputMaybe<Scalars['String']>;
+  makeOwner?: InputMaybe<Scalars['Boolean']['input']>;
+  name: Scalars['String']['input'];
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateTagInput = {
-  description?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
 };
 
 export type CreateUploadInput = {
-  description: Scalars['String'];
-  name: Scalars['String'];
+  description: Scalars['String']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type CreateUserInput = {
-  displayName: Scalars['String'];
-  email: Scalars['String'];
-  fullName: Scalars['String'];
-  password: Scalars['String'];
+  displayName: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  fullName: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type CredentialsInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type CursorPageInfo = {
   __typename?: 'CursorPageInfo';
-  hasNext: Scalars['Boolean'];
-  hasPrevious: Scalars['Boolean'];
-  nextCursor: Scalars['String'];
-  previousCursor: Scalars['String'];
+  hasNext: Scalars['Boolean']['output'];
+  hasPrevious: Scalars['Boolean']['output'];
+  nextCursor: Scalars['String']['output'];
+  previousCursor: Scalars['String']['output'];
 };
 
 export type CursorPaginatedGames = {
@@ -110,74 +112,74 @@ export type CursorPaginatedUsers = {
 };
 
 export type CursorPaginationOptions = {
-  cursor: Scalars['String'];
-  field: Scalars['String'];
-  take: Scalars['Float'];
-  type: Scalars['String'];
+  cursor: Scalars['String']['input'];
+  field: Scalars['String']['input'];
+  take: Scalars['Float']['input'];
+  type: Scalars['String']['input'];
 };
 
 export type FindGameArgs = {
-  id?: InputMaybe<Scalars['ID']>;
-  name?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Game = {
   __typename?: 'Game';
-  adultOnly: Scalars['Boolean'];
-  allRating: Scalars['Float'];
-  allReviews: Scalars['Int'];
-  basicPrice: Scalars['Float'];
-  coverImage?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  description: Scalars['String'];
+  adultOnly: Scalars['Boolean']['output'];
+  allRating: Scalars['Float']['output'];
+  allReviews: Scalars['Int']['output'];
+  basicPrice: Scalars['Float']['output'];
+  coverImage?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  description: Scalars['String']['output'];
   genres?: Maybe<Array<Genre>>;
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   media?: Maybe<Array<GameMedia>>;
-  name: Scalars['String'];
-  price: Scalars['Float'];
-  recentRating: Scalars['Float'];
-  recentReviews: Scalars['Int'];
-  releaseDate?: Maybe<Scalars['DateTime']>;
-  status: Scalars['String'];
+  name: Scalars['String']['output'];
+  price: Scalars['Float']['output'];
+  recentRating: Scalars['Float']['output'];
+  recentReviews: Scalars['Int']['output'];
+  releaseDate?: Maybe<Scalars['DateTime']['output']>;
+  status: Scalars['String']['output'];
   studios?: Maybe<Array<GameStudio>>;
   tags?: Maybe<Array<Tag>>;
-  type: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  type: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
   users?: Maybe<Array<User>>;
 };
 
 export type GameMedia = {
   __typename?: 'GameMedia';
-  createdAt: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
-  updatedAt: Scalars['DateTime'];
-  url?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+  url?: Maybe<Scalars['String']['output']>;
 };
 
 export type GameStudio = {
   __typename?: 'GameStudio';
-  contribution: Scalars['String'];
+  contribution: Scalars['String']['output'];
   game?: Maybe<Game>;
-  gameId: Scalars['String'];
+  gameId: Scalars['String']['output'];
   studio?: Maybe<Studio>;
-  studioId: Scalars['String'];
+  studioId: Scalars['String']['output'];
 };
 
 export type Genre = {
   __typename?: 'Genre';
-  createdAt: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   games?: Maybe<Array<Game>>;
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type GetStudioArgs = {
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 };
 
 export type Mutation = {
@@ -237,22 +239,22 @@ export type MutationRegisterArgs = {
 
 
 export type MutationUpdateUserArgs = {
-  avatar?: InputMaybe<Scalars['Upload']>;
-  cover?: InputMaybe<Scalars['Upload']>;
+  avatar?: InputMaybe<Scalars['Upload']['input']>;
+  cover?: InputMaybe<Scalars['Upload']['input']>;
   values: UpdateUserInput;
 };
 
 
 export type MutationUploadFileArgs = {
-  file?: InputMaybe<Scalars['Upload']>;
+  file?: InputMaybe<Scalars['Upload']['input']>;
   values: CreateUploadInput;
 };
 
 export type OffsetPageInfo = {
   __typename?: 'OffsetPageInfo';
-  currentPage: Scalars['Int'];
-  totalCount: Scalars['Int'];
-  totalPages: Scalars['Int'];
+  currentPage: Scalars['Int']['output'];
+  totalCount: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
 };
 
 export type OffsetPaginatedGenres = {
@@ -268,26 +270,26 @@ export type OffsetPaginatedTags = {
 };
 
 export type OffsetPaginationOptions = {
-  field: Scalars['String'];
-  skip: Scalars['Float'];
-  take: Scalars['Float'];
-  type: Scalars['String'];
+  field: Scalars['String']['input'];
+  skip: Scalars['Float']['input'];
+  take: Scalars['Float']['input'];
+  type: Scalars['String']['input'];
 };
 
 export type Profile = {
   __typename?: 'Profile';
-  avatar?: Maybe<Scalars['String']>;
-  bio?: Maybe<Scalars['String']>;
-  cover?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  displayName: Scalars['String'];
-  email: Scalars['String'];
+  avatar?: Maybe<Scalars['String']['output']>;
+  bio?: Maybe<Scalars['String']['output']>;
+  cover?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  displayName: Scalars['String']['output'];
+  email: Scalars['String']['output'];
   employments?: Maybe<Array<StudioEmployee>>;
-  fullName: Scalars['String'];
+  fullName: Scalars['String']['output'];
   games?: Maybe<Array<Game>>;
-  id: Scalars['ID'];
-  role: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID']['output'];
+  role: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type Query = {
@@ -322,7 +324,7 @@ export type QueryGenresArgs = {
 
 
 export type QueryRecommendationsArgs = {
-  userId?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -342,8 +344,8 @@ export type QueryTagsArgs = {
 
 
 export type QueryUserArgs = {
-  field: Scalars['String'];
-  value: Scalars['String'];
+  field: Scalars['String']['input'];
+  value: Scalars['String']['input'];
 };
 
 
@@ -354,68 +356,68 @@ export type QueryUsersArgs = {
 export type Studio = {
   __typename?: 'Studio';
   _count?: Maybe<Count>;
-  avatar?: Maybe<Scalars['String']>;
-  cover?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
+  avatar?: Maybe<Scalars['String']['output']>;
+  cover?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   employees?: Maybe<Array<StudioEmployee>>;
   games?: Maybe<Array<GameStudio>>;
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  type: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type StudioEmployee = {
   __typename?: 'StudioEmployee';
-  assignedAt: Scalars['DateTime'];
-  assignedBy: Scalars['String'];
+  assignedAt: Scalars['DateTime']['output'];
+  assignedBy: Scalars['String']['output'];
   employee?: Maybe<User>;
-  employeeId: Scalars['String'];
-  employmentType: Scalars['String'];
+  employeeId: Scalars['String']['output'];
+  employmentType: Scalars['String']['output'];
   studio?: Maybe<Studio>;
-  studioId: Scalars['String'];
+  studioId: Scalars['String']['output'];
 };
 
 export type Tag = {
   __typename?: 'Tag';
-  createdAt: Scalars['DateTime'];
-  description?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   games?: Maybe<Array<Game>>;
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type UpdateUserInput = {
-  bio?: InputMaybe<Scalars['String']>;
-  displayName?: InputMaybe<Scalars['String']>;
-  fullName?: InputMaybe<Scalars['String']>;
+  bio?: InputMaybe<Scalars['String']['input']>;
+  displayName?: InputMaybe<Scalars['String']['input']>;
+  fullName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UploadResult = {
   __typename?: 'UploadResult';
-  description?: Maybe<Scalars['String']>;
-  imageFormatted?: Maybe<Scalars['String']>;
-  imageRaw?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  url?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']['output']>;
+  imageFormatted?: Maybe<Scalars['String']['output']>;
+  imageRaw?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
 };
 
 export type User = {
   __typename?: 'User';
-  avatar?: Maybe<Scalars['String']>;
-  bio?: Maybe<Scalars['String']>;
-  cover?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  displayName: Scalars['String'];
-  email: Scalars['String'];
+  avatar?: Maybe<Scalars['String']['output']>;
+  bio?: Maybe<Scalars['String']['output']>;
+  cover?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  displayName: Scalars['String']['output'];
+  email: Scalars['String']['output'];
   employments?: Maybe<Array<StudioEmployee>>;
-  fullName: Scalars['String'];
+  fullName: Scalars['String']['output'];
   games?: Maybe<Array<Game>>;
-  id: Scalars['ID'];
-  role: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  id: Scalars['ID']['output'];
+  role: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type CursorPageFragment = { __typename?: 'CursorPageInfo', hasNext: boolean, hasPrevious: boolean, previousCursor: string, nextCursor: string };
@@ -435,8 +437,8 @@ export type UserFragment = { __typename: 'User', id: string, avatar?: string | n
 export type ProfileFragment = { __typename: 'Profile', id: string, avatar?: string | null, cover?: string | null, bio?: string | null, displayName: string, fullName: string, email: string, role: string, createdAt: any, updatedAt: any };
 
 export type LoginMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 }>;
 
 
@@ -448,10 +450,10 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutMutation = { __typename?: 'Mutation', logout: { __typename: 'AuthResult', statusCode?: number | null, message?: string | null, profile?: { __typename: 'Profile', id: string, avatar?: string | null, cover?: string | null, bio?: string | null, displayName: string, fullName: string, email: string, role: string, createdAt: any, updatedAt: any } | null } };
 
 export type RegisterMutationVariables = Exact<{
-  fullName: Scalars['String'];
-  displayName: Scalars['String'];
-  email: Scalars['String'];
-  password: Scalars['String'];
+  fullName: Scalars['String']['input'];
+  displayName: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 }>;
 
 
@@ -459,8 +461,8 @@ export type RegisterMutation = { __typename?: 'Mutation', register: { __typename
 
 export type UpdateUserMutationVariables = Exact<{
   values: UpdateUserInput;
-  avatar?: InputMaybe<Scalars['Upload']>;
-  cover?: InputMaybe<Scalars['Upload']>;
+  avatar?: InputMaybe<Scalars['Upload']['input']>;
+  cover?: InputMaybe<Scalars['Upload']['input']>;
 }>;
 
 
@@ -500,7 +502,7 @@ export type GetOneGameQueryVariables = Exact<{
 export type GetOneGameQuery = { __typename?: 'Query', game: { __typename: 'Game', id: string, createdAt: any, updatedAt: any, adultOnly: boolean, basicPrice: number, coverImage?: string | null, price: number, status: string, type: string, releaseDate?: any | null, name: string, description: string, tags?: Array<{ __typename: 'Tag', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, genres?: Array<{ __typename: 'Genre', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null }> | null, studios?: Array<{ __typename?: 'GameStudio', contribution: string, studio?: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename: 'User', fullName: string, id: string, displayName: string } | null }> | null } | null }> | null, media?: Array<{ __typename: 'GameMedia', id: string, name?: string | null, description?: string | null, type?: string | null, url?: string | null }> | null } };
 
 export type GetRecommendationsQueryVariables = Exact<{
-  userId?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -519,16 +521,16 @@ export type GetStudioQueryVariables = Exact<{
 export type GetStudioQuery = { __typename?: 'Query', studio: { __typename: 'Studio', id: string, createdAt: any, updatedAt: any, name: string, description?: string | null, cover?: string | null, avatar?: string | null, type: string, employees?: Array<{ __typename?: 'StudioEmployee', employee?: { __typename: 'User', fullName: string, id: string, displayName: string } | null }> | null, games?: Array<{ __typename?: 'GameStudio', game?: { __typename?: 'Game', id: string, name: string, description: string } | null }> | null, _count?: { __typename?: 'Count', games?: number | null, employees?: number | null } | null } };
 
 export type GetUserByFieldQueryVariables = Exact<{
-  field: Scalars['String'];
-  value: Scalars['String'];
+  field: Scalars['String']['input'];
+  value: Scalars['String']['input'];
 }>;
 
 
 export type GetUserByFieldQuery = { __typename?: 'Query', user: { __typename: 'User', id: string, avatar?: string | null, cover?: string | null, bio?: string | null, displayName: string, fullName: string, email: string, role: string, createdAt: any, updatedAt: any } };
 
 export type GetUserQueryVariables = Exact<{
-  field: Scalars['String'];
-  value: Scalars['String'];
+  field: Scalars['String']['input'];
+  value: Scalars['String']['input'];
 }>;
 
 
