@@ -1,10 +1,10 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 
-import { GqlFastifyContext } from '../common/types'
 import { AuthResult, CreateUserInput, CredentialsInput } from '../common/dtos'
 import { SessionGuard } from '../common/guards'
 import { AuthService } from './auth.service'
+import { Request, request } from 'express'
 
 @Resolver('Auth')
 export class AuthResolver {
@@ -15,10 +15,10 @@ export class AuthResolver {
     @Mutation(() => AuthResult)
     public async register(
         @Args('createUserInput') data: CreateUserInput,
-        @Context() ctx: GqlFastifyContext
+        @Context('req') req: Request
     ) {
         const result = await this.authService.register(data)
-        ctx.req.session.set('user', result.profile)
+		req.session.user = result.profile
 
         return result
     }
@@ -26,10 +26,10 @@ export class AuthResolver {
     @Mutation(() => AuthResult)
     public async login(
         @Args('credentialsInput') data: CredentialsInput,
-        @Context() ctx: GqlFastifyContext
+        @Context('req') req: Request
     ) {
         const result = await this.authService.login(data)
-        ctx.req.session.set('user', result.profile)
+        req.session.user = result.profile
 
         return result
     }
@@ -37,9 +37,9 @@ export class AuthResolver {
     @UseGuards(SessionGuard)
     @Query(() => AuthResult)
     public async me(
-        @Context() ctx: GqlFastifyContext,
+        @Context('req') req: Request,
     ) {
-        const profile = await this.authService.serializeSession(ctx.req.session.get('user'))
+        const profile = await this.authService.serializeSession(req.session.user)
 
         return {
             statusCode: 200,
@@ -51,9 +51,9 @@ export class AuthResolver {
     @UseGuards(SessionGuard)
     @Mutation(() => AuthResult)
     public async logout(
-        @Context() ctx: GqlFastifyContext,
+        @Context('req') req: Request,
     ) {
-        ctx.req.session.delete()
+        req.session.user = null
         
         return {
             statusCode: 200,

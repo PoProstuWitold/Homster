@@ -92,7 +92,7 @@ const fakerUser = (data?: FakeUserData): any => {
     return {
         email: data?.email || faker.internet.email(),
         password: data?.password || faker.internet.password(),
-        fullName: data?.fullName || faker.name.fullName(),
+        fullName: data?.fullName || faker.person.fullName(),
         displayName,
         avatar: `https://api.dicebear.com/6.x/initials/svg?seed=${displayName}`,
         cover: `http://localhost:4000/public/images/covers/user-banner.jpg`,
@@ -112,8 +112,8 @@ const fakerGame = () => {
     }
 
     return {
-        name: faker.random.words(3),
-        description: faker.random.words(40),
+        name: faker.lorem.words(3),
+        description: faker.lorem.words(40),
         basicPrice,
         price,
         status,
@@ -584,8 +584,8 @@ for(let i = 0; i < 100; i++) {
 
 const fakerGameMedia = () => {
     return {
-        name: faker.random.words(5),
-        description: faker.random.words(12),
+        name: faker.lorem.words(5),
+        description: faker.lorem.words(12),
         url: `http://localhost:4000/public/images/media/${Seeder.getRandomRecords<string>(media, 1)}`,
         type: 'Image',
     }

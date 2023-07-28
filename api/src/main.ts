@@ -3,19 +3,27 @@ import { NestFactory, Reflector } from '@nestjs/core'
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { UserInputError } from '@nestjs/apollo'
-import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
-import { fastifyHelmet } from '@fastify/helmet'
-import fastifyCookie from '@fastify/cookie'
-import fastifySecureSession from '@fastify/secure-session'
+import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express'
+import helmet from 'helmet'
+import * as cookieParser from 'cookie-parser'
+import * as session from 'express-session'
 import { ValidationError } from 'class-validator'
-import { processRequest } from 'graphql-upload-minimal'
-
 import { AppModule } from './app.module'
+import { graphqlUploadExpress } from 'graphql-upload-minimal'
 
-export async function bootstrap(): Promise<NestFastifyApplication> {
-	const app = await NestFactory.create<NestFastifyApplication>(
+
+import 'express-session'
+import { Profile } from './common/entities'
+declare module 'express-session' {
+	interface SessionData {
+		user: Profile
+	}
+}
+
+export async function bootstrap(): Promise<NestExpressApplication> {
+	const app = await NestFactory.create<NestExpressApplication>(
 		AppModule,
-		new FastifyAdapter()
+		new ExpressAdapter()
 	)
 	
 	const configService = app.get<ConfigService>(ConfigService)
@@ -42,51 +50,48 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
     })
 
     const path = join(process.cwd(), 'public')
-    app.useStaticAssets({
-        root: path,
-        prefix: '/public/'
-    })
+	app.useStaticAssets(path, {
+		prefix: '/public/',
+		
+	})
 
-    await app.register(fastifyCookie, {
-        secret: configService.get('cookie.secret'),
-        parseOptions: {
-            secure: configService.get('NODE_ENV') === 'production' ? true : false,
-            httpOnly: true
-        }
-    })
+	app.use(cookieParser(
+		configService.get('cookie.secret')
+	))
     
-    await app.register(fastifyHelmet, { 
-        contentSecurityPolicy: (process.env.NODE_ENV === 'production') ? undefined : false 
-    })
+    app.use(helmet({
+		crossOriginEmbedderPolicy: false,
+		contentSecurityPolicy: {
+			directives: {
+				imgSrc: [`'self'`, 'data:', 'apollo-server-landing-page.cdn.apollographql.com'],
+				scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+				manifestSrc: [`'self'`, 'apollo-server-landing-page.cdn.apollographql.com'],
+				frameSrc: [`'self'`, 'sandbox.embed.apollographql.com'],
+			},
+		},
+	}))
 
-    await app.register(fastifySecureSession, {
-        key: [
-            Buffer.from(key1, 'hex'),
-            Buffer.from(key2, 'hex')
-        ],
-        cookieName: 'homster_session',
-        cookie: {
-            secure: configService.get('NODE_ENV') === 'production' ? true : false,
-            httpOnly: true,
-            sameSite: 'lax',
-            path: '/'
-        }
-    })
+	app.use(
+		session({
+			secret: [
+				Buffer.from(key1, 'hex').toString(),
+            	Buffer.from(key2, 'hex').toString()
+			],
+			resave: false,
+			saveUninitialized: false,
+			cookie: {
+				secure: configService.get('NODE_ENV') === 'production' ? true : false,
+				httpOnly: true,
+				sameSite: 'lax',
+            	path: '/',
+			},
+			name: 'homster-session'
+		})
+	)
 
-    // Format the request body to follow graphql-upload's
-    await app.getHttpAdapter().getInstance()
-        .addContentTypeParser('multipart', (request, payload, done) => {
-            request.isMultipart = true
-            done()
-        })
-    
-    await app.getHttpAdapter().getInstance()
-        .addHook('preValidation', async function (request, reply) {
-            if (!request.isMultipart) {
-                return
-            }
-            request.body = await processRequest(request.raw, reply.raw, { maxFileSize: 50000000, maxFiles: 10 })
-        })
+	app.use(graphqlUploadExpress({
+		maxFiles: 10
+	}))
 
     app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector))
 

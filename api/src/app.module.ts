@@ -12,6 +12,8 @@ import { GamesModule } from './games/games.module'
 import { TagModule } from './tags/tags.module'
 import { GenreModule } from './genres/genres.module'
 import { UploaderModule } from './uploader/uploader.module'
+import { Request, Response } from 'express'
+import { IContext } from './common/types'
 
 @Module({
 	imports: [
@@ -37,7 +39,11 @@ import { UploaderModule } from './uploader/uploader.module'
             },
             introspection: true,
             playground: true,
-            csrfPrevention: false
+            csrfPrevention: false,
+			context: ({ req, res }): IContext => ({
+				req,
+				res,
+			})
 		}),
         AuthModule,
 		UserModule,

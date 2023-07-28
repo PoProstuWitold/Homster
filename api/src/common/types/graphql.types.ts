@@ -1,12 +1,11 @@
 import { Field, InputType, Int, ObjectType } from '@nestjs/graphql'
 import { Game, Genre, Studio, Tag, User } from '../entities'
-import { FastifyRequest, FastifyReply } from 'fastify'
+import { Request, Response } from 'express'
 
-export interface GqlFastifyContext {
-    req: FastifyRequest
-    reply: FastifyReply
+export interface IContext {
+	req: Request
+	res: Response
 }
-
 
 @ObjectType()
 export class CursorPageInfo {

@@ -6,14 +6,14 @@ import { join } from 'node:path'
 import { SessionGuard } from '../common/guards'
 import { CreateUserInput, UpdateUserInput } from '../common/dtos'
 import { Profile, User } from '../common/entities'
-import { 
-    GqlFastifyContext, 
+import {
     CursorPaginatedUsers, 
     CursorPaginationOptions 
 } from '../common/types'
 import { UserService } from './user.service'
 import { UploaderService } from '../uploader/uploader.service'
 import { Mimetype } from '../uploader/uploader.service'
+import { Request } from 'express'
 
 @Resolver(() => User)
 export class UserResolver {
@@ -42,10 +42,10 @@ export class UserResolver {
         @Args('values') values: UpdateUserInput,
         @Args({name: 'avatar', type: () => GraphQLUpload, nullable: true}) avatar: FileUpload,
         @Args({name: 'cover', type: () => GraphQLUpload, nullable: true}) cover: FileUpload,
-        @Context() ctx: GqlFastifyContext
+        @Context('req') req: Request
     ): Promise<User> {
         try {
-            const session = await ctx.req.session.get('user')
+            const session = req.session.user
 
             if(avatar) {
                 let oldAvatar = session.avatar.substring(session.avatar.lastIndexOf('/') + 1)
@@ -80,7 +80,7 @@ export class UserResolver {
             }
             
             const user = await this.userService.update(session.id, values)
-            ctx.req.session.set('user', user)
+			req.session.user = user
 
             return user
         } catch (err) {
