@@ -37,11 +37,11 @@ next dev
 ## Features & to do
 - [ ] API:
     - [X] Auth
-    - [ ] Users
-    - [ ] Games
-    - [ ] Studio
-    - [ ] Tags
-    - [ ] Genres
+    - [X] Users
+    - [X] Games
+    - [X] Studio
+    - [X] Tags
+    - [X] Genres
     - [X] Dealing with file uploading
     - [ ] Tests
         - [ ] Unit
@@ -57,9 +57,9 @@ next dev
         - [X] Home
         - [ ] Wishlist
         - [ ] News
-        - [ ] About
         - [X] Single game
     - [ ] Special pages
+		- [X] User profile
         - [ ] Studio
         - [ ] Admin
         - [ ] Moderation
@@ -67,7 +67,7 @@ next dev
 
 ## Tech stack
 - Backend:
-    - Nest.js (Fastify)
+    - Nest.js
     - PostgreSQL (Prisma)
     - GraphQL (Apollo)
 - Frontend
