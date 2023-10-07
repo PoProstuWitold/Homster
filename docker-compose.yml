@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     container_name: homster-db
-    image: postgres:latest
+    image: postgres:15-alpine
     environment:
       POSTGRES_USER: admin-user
       POSTGRES_PASSWORD: admin-password

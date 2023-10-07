@@ -353,19 +353,19 @@ const userSeed = [
     }),
     fakerUser({
         role: Role['DEVELOPER']
-    }),,
+    }),
     fakerUser({
         role: Role['DEVELOPER']
-    }),,
+    }),
     fakerUser({
         role: Role['DEVELOPER']
-    }),,
+    }),
     fakerUser({
         role: Role['DEVELOPER']
-    }),,
+    }),
     fakerUser({
         role: Role['DEVELOPER']
-    }),,
+    }),
     fakerUser({
         role: Role['DEVELOPER']
     }),
