@@ -6,6 +6,11 @@ Fullstack game library app written in TypeScript & GraphQL that let you buy and 
 ## Development setup
 In order to follow **exact** setup guide you need Docker and Docker Compose installed, however this is not required to run the application.
 
+Homster comes with database seeding script for development purposes. You can run it by either "prisma db seed" or directly by command in `api` directory:
+```bash
+ts-node --transpile-only ./database/seed.ts
+```
+
 ###  0. Environmental variables
 Create **``.env``** file in **``api``** root directory and fill with following:
 ```code
