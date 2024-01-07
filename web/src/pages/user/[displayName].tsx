@@ -27,7 +27,9 @@ function Profile() {
 
     const [{
         data: authData
-    }] = useMeQuery()
+    }] = useMeQuery({
+		requestPolicy: 'network-only'
+	})
 
     const [, updateUser] = useUpdateUserMutation()
 
